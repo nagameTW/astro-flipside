@@ -1,0 +1,46 @@
+---
+// Dated single-line achievements: competitions, teaching, trainings,
+// community — same `.aside`/`.indicator` timeline structure as Timeline.astro
+// but with a single grouped-year label (markYears) instead of a start/end
+// pair, and no duties/entry-note.
+import type { HighlightEntry } from "@/data/sections";
+import { markYears } from "@/utils/timeline";
+
+interface Props {
+  title?: string;
+  entries: HighlightEntry[];
+}
+const { title, entries } = Astro.props;
+const ROWS = markYears(entries, (e) => e.date);
+---
+
+{
+  entries.length > 0 && (
+    <section class="ts-box">
+      <div class="ts-content">
+        {title && (
+          <h2 class="ts-header is-large is-heavy">
+            {title}
+            <span class="ts-divider" />
+          </h2>
+        )}
+        <div class="ts-timeline">
+          {ROWS.map(({ item: e, year }) => (
+            <div class="item">
+              <div class="aside ts-text is-description">{year}</div>
+              <div class="indicator">
+                <span class="ts-icon is-trophy-icon" />
+              </div>
+              <div class="content">
+                <div class="ts-text is-bold">{e.title}</div>
+                {e.subtitle && (
+                  <div class="ts-text is-secondary">{e.subtitle}</div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

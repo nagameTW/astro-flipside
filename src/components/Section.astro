@@ -1,0 +1,43 @@
+---
+import type { Section } from "@/data/sections";
+import Text from "@/components/blocks/Text.astro";
+import Chips from "@/components/blocks/Chips.astro";
+import Kv from "@/components/blocks/Kv.astro";
+import Timeline from "@/components/blocks/Timeline.astro";
+import Highlights from "@/components/blocks/Highlights.astro";
+import Cards from "@/components/blocks/Cards.astro";
+import Stats from "@/components/blocks/Stats.astro";
+import Links from "@/components/blocks/Links.astro";
+import Markdown from "@/components/blocks/Markdown.astro";
+import Steam from "@/components/blocks/Steam.astro";
+import Osu from "@/components/blocks/Osu.astro";
+import Music from "@/components/blocks/Music.astro";
+
+interface Props {
+  section: Section;
+}
+const { section } = Astro.props;
+const blocks = {
+  text: Text,
+  chips: Chips,
+  kv: Kv,
+  timeline: Timeline,
+  highlights: Highlights,
+  cards: Cards,
+  stats: Stats,
+  links: Links,
+  markdown: Markdown,
+  steam: Steam,
+  osu: Osu,
+  music: Music,
+} as const;
+const Block = blocks[section.type];
+---
+
+{
+  /* Each block's own Props type is checked everywhere it's used directly;
+   TS just can't dependently-type "the props matching this union member's
+   own variant" through a lookup-by-discriminant, so the spread needs the
+   cast. */
+}
+<Block {...section as any} />

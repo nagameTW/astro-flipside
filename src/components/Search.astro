@@ -1,0 +1,100 @@
+---
+// Search.astro — Pagefind-powered site search. Reuses Tocas's own
+// dialog.ts-modal + .content pattern (see Cards.astro's trophy-modal) rather
+// than hand-rolling a bordered/dimmed dialog: `is-large` is Tocas's built-in
+// 580px modal-width preset, so `.search-dialog` below only styles content
+// padding and `.search-results` only styles the result rows.
+import { t } from "@/locales";
+---
+
+<dialog
+  id="search-dialog"
+  class="ts-modal is-large search-dialog"
+  aria-label={t["search.open"]}
+>
+  <div class="content">
+    <input
+      id="search-input"
+      class="ts-input"
+      type="search"
+      autofocus
+      placeholder={t["search.placeholder"]}
+    />
+    <ol id="search-results" class="search-results"></ol>
+  </div>
+</dialog>
+
+<script>
+  // Escapes for both HTML text content and attribute values (hence the
+  // trailing quote-escape) — unlike remark-mermaid.mjs's esc(), which only
+  // ever escapes into text-content. The escape sets differ on purpose:
+  // do not unify them.
+  const esc = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+  // Pagefind stores excerpts as decoded text, so a `<mark>`-wrapped match
+  // next to raw HTML from a source code block (e.g. an `<img onerror=…>`
+  // inside a fenced code sample) would otherwise inject live markup via
+  // innerHTML below. Escape everything, then restore only pagefind's own
+  // <mark> tags (never user/content-controlled) as real elements.
+  const excerptSafe = (e: string) =>
+    esc(e).replace(/&lt;mark&gt;/g, "<mark>").replace(/&lt;\/mark&gt;/g, "</mark>");
+
+  // Only pagefind.js's own import path needs the base prefixed by hand: the
+  // pagefind runtime auto-detects the site base from wherever pagefind.js
+  // itself was loaded and joins every result's `d.url` onto it already, so
+  // `d.url` below is already an absolute, base-included path. Prefixing it
+  // again here would double it up (verified against a built
+  // dist/pagefind/pagefind.js: its getDefaultBaseUrl() derives the base from
+  // import.meta.url, then every raw index url is joined onto that base) —
+  // do not re-add `base` to `d.url`.
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+  const dialog = document.getElementById("search-dialog") as HTMLDialogElement;
+  const input = document.getElementById("search-input") as HTMLInputElement;
+  const list = document.getElementById("search-results")!;
+  // Pagefind's runtime search API is a generated post-build asset, not an
+  // npm module — it ships no types, so `any` is the honest type here.
+  let pagefind: any;
+  // Vite's build wraps *every* `import(...)` call site in a modulePreload
+  // helper to inject <link rel=modulepreload> hints — even ones marked
+  // `@vite-ignore` — and since pagefind.js doesn't exist until the postbuild
+  // step runs (after Vite's build), it can't compute that helper's deps
+  // list, which corrupts the output: `__VITE_PRELOAD__ is not defined` at
+  // runtime (confirmed against the compiled bundle). Routing the import
+  // through `new Function` hides it from Vite's static import scan
+  // entirely — there's no literal `import(` for it to find and wrap.
+  const importPagefind = new Function("path", "return import(path)") as (
+    path: string,
+  ) => Promise<any>;
+  document
+    .getElementById("search-open")
+    ?.addEventListener("click", async () => {
+      dialog.showModal();
+      // Dev note: the index only exists after `npm run build` (postbuild).
+      // `astro dev` has no dist/pagefind/, so this 404s, the catch below
+      // keeps search a silent no-op, and the input stays inert.
+      pagefind ??= await importPagefind(
+        `${base}/pagefind/pagefind.js`,
+      ).catch(() => {
+        console.info("Pagefind index not found (run npm run build first).");
+        return null;
+      });
+    });
+  input.addEventListener("input", async () => {
+    if (!pagefind) return;
+    const { results } = await pagefind.search(input.value);
+    const top = await Promise.all(
+      results.slice(0, 8).map((r: any) => r.data()),
+    );
+    list.innerHTML = top
+      .map(
+        (d: any) =>
+          `<li><a href="${esc(d.url)}"><strong>${esc(d.meta.title ?? d.url)}</strong><span>${excerptSafe(d.excerpt)}</span></a></li>`,
+      )
+      .join("");
+  });
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

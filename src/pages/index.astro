@@ -1,0 +1,69 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import AboutPersonal from "@/components/AboutPersonal.astro";
+import AboutProfessional from "@/components/AboutProfessional.astro";
+import SITE from "@/config";
+import { t, fill } from "@/locales";
+// The ASCII art is a two-way easter egg: a real HTML comment at the top of
+// the page (view-source), and logged to the console below (F12). `set:html`
+// is required — an Astro `{/* */}` comment never reaches the built output.
+import art from "@/data/ascii-art.txt?raw";
+
+// Prebuilt once per locale — the toggle script below is plain inline JS
+// (no module imports), so it receives the finished strings via define:vars
+// instead of calling fill() itself.
+const SWITCH_LABELS = {
+  professional: fill(t["face.switchTo"], { name: t["face.work"] }),
+  personal: fill(t["face.switchTo"], { name: t["face.life"] }),
+};
+---
+
+<Layout title={t["nav.about"]} description={SITE.description}>
+  <Fragment set:html={`<!--\n${art}\n-->`} />
+  <!-- Both faces are in the DOM (SSG). `.is-hidden` (statically on the
+       professional face) overlays the hidden face on the visible one and
+       drives the flip/fade transitions — no FOUC, works before JS. Each
+       face carries its own FaceToggle copy in the identity card. -->
+  <div class="faces">
+    <AboutPersonal />
+    <AboutProfessional />
+  </div>
+</Layout>
+
+<!-- Print the ASCII art to the console so it shows the moment DevTools
+     (F12) opens, not only in view-source. -->
+<script is:inline define:vars={{ art, title: SITE.title }}>
+  console.log("%c" + art, "font-family:monospace;line-height:1.1");
+  console.log("%c" + title, "font-size:24px;font-weight:800;color:#1f2430");
+</script>
+
+<script is:inline define:vars={{ SWITCH_LABELS }}>
+  const faces = document.querySelectorAll(".faces .face");
+  const toggles = document.querySelectorAll(".face-toggle");
+  toggles.forEach((toggle) =>
+    toggle.addEventListener("click", () => {
+      // One button, two faces: whichever is hidden now is the one to show.
+      const next = document.querySelector(".face.is-hidden").dataset.face;
+      const other = next === "professional" ? "personal" : "professional";
+      faces.forEach((f) => {
+        const hidden = f.dataset.face !== next;
+        f.classList.toggle("is-hidden", hidden);
+        // `inert` drops the leaving face from the tab order and a11y tree
+        // right away — CSS `visibility` only catches up when the fade ends.
+        f.inert = hidden;
+      });
+      // Every face carries its own toggle copy — sync them all.
+      document
+        .querySelectorAll(".face-toggle .face-option")
+        .forEach((o) =>
+          o.classList.toggle("is-active", o.dataset.face === next),
+        );
+      toggles.forEach((btn) =>
+        btn.setAttribute("aria-label", SWITCH_LABELS[other]),
+      );
+      // The clicked copy just went inert with its face, which blurs it —
+      // hand focus to the copy in the face that is now visible.
+      document.querySelector(".face:not(.is-hidden) .face-toggle")?.focus();
+    }),
+  );
+</script>

@@ -1,0 +1,67 @@
+---
+import SITE from "@/config";
+import { t } from "@/locales";
+import { url } from "@/utils/url";
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => {
+  const target = url(href);
+  // Astro's root-of-base pathname omits the trailing slash that url("/")
+  // always has (e.g. "/astro-flipside" vs. "/astro-flipside/") — accept
+  // either so the home link still lights up at the site root.
+  return href === "/"
+    ? pathname === target || `${pathname}/` === target
+    : pathname.startsWith(target);
+};
+---
+
+<header class="site-header">
+  <div class="ts-container">
+    <div class="inner">
+      <a class="ts-header is-heavy" href={url("/")}>{SITE.title}</a>
+      <nav>
+        <div class="ts-tab is-pilled">
+          {
+            SITE.nav.map((link) => (
+              <a
+                class:list={["item", { "is-active": isActive(link.href) }]}
+                href={url(link.href)}
+              >
+                {t[link.label]}
+              </a>
+            ))
+          }
+        </div>
+        <button
+          id="search-open"
+          class="ts-button is-ghost is-icon"
+          aria-label={t["search.open"]}
+        >
+          <span class="ts-icon is-magnifying-glass-icon"></span>
+        </button>
+        <button
+          id="theme-toggle"
+          class="ts-button is-ghost is-icon"
+          aria-label={t["nav.themeToggle"]}
+        >
+          <span class="ts-icon is-moon-icon has-hidden-dark"></span>
+          <span class="ts-icon is-sun-icon has-hidden-light"></span>
+        </button>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  document.getElementById("theme-toggle")?.addEventListener("click", () => {
+    const html = document.documentElement;
+    const isDark =
+      html.classList.contains("is-dark") ||
+      (!html.classList.contains("is-light") &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    html.classList.toggle("is-dark", !isDark);
+    html.classList.toggle("is-light", isDark);
+    localStorage.setItem("theme", isDark ? "light" : "dark");
+    window.dispatchEvent(new CustomEvent("themechange"));
+  });
+</script>

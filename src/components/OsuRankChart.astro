@@ -1,0 +1,114 @@
+---
+// The osu! profile's 90-day world-rank line, redrawn in the site's
+// monochrome. Single series: no legend, no grid — the header names it and
+// two selective labels (best / latest) carry the numbers. Lower rank is
+// better, so the y-axis is inverted: best rank sits at the top.
+import { OSU } from "@/data/gamestats";
+import { t, fill } from "@/locales";
+
+const HISTORY = OSU?.rankHistory ?? [];
+// A day with no rank reads as 0 in the API (e.g. today, before it's
+// computed, or after the rank expires) — 0 is a sentinel, not a rank.
+// Dropped points keep their day slot, so the line just ends early.
+const ENTRIES = HISTORY.map((rank, day) => ({ rank, day })).filter(
+  (e) => e.rank > 0,
+);
+
+const W = 600;
+const H = 120;
+const PAD = 4;
+const ranks = ENTRIES.map((e) => e.rank);
+const min = Math.min(...ranks);
+const max = Math.max(...ranks);
+const span = max - min || 1;
+const x = (day: number) => PAD + (day * (W - 2 * PAD)) / (HISTORY.length - 1);
+const y = (rank: number) => PAD + ((rank - min) / span) * (H - 2 * PAD);
+const points = ENTRIES.map(
+  (e) => `${x(e.day).toFixed(1)},${y(e.rank).toFixed(1)}`,
+).join(" ");
+
+const latest = ENTRIES.at(-1)?.rank;
+const fmt = (n: number) => `#${n.toLocaleString()}`;
+// Native-tooltip hit strips: one per charted day, counted from day 90.
+const daysAgo = (day: number) => {
+  const ago = HISTORY.length - 1 - day;
+  return ago === 0 ? t["osu.today"] : fill(t["osu.daysAgo"], { n: ago });
+};
+const strip = (W - 2 * PAD) / (HISTORY.length - 1);
+---
+
+{
+  ENTRIES.length > 1 && (
+    <figure class="rank-chart">
+      {/* No visible header (owner's call) — the svg aria-label still
+          carries the summary for assistive tech. */}
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        role="img"
+        aria-label={fill(t["osu.rankChartLabel"], {
+          best: fmt(min),
+          latest: fmt(latest!),
+        })}
+      >
+        {/* Recessive SQUARE grid: the four rows fix the cell size and the
+            columns repeat it across. */}
+        {[1, 2, 3].map((k) => (
+          <line
+            class="rank-grid"
+            x1={PAD}
+            x2={W - PAD}
+            y1={PAD + (k * (H - 2 * PAD)) / 4}
+            y2={PAD + (k * (H - 2 * PAD)) / 4}
+          />
+        ))}
+        {Array.from(
+          { length: 30 },
+          (_, i) => PAD + (i + 1) * ((H - 2 * PAD) / 4),
+        )
+          .filter((gx) => gx < W - PAD)
+          .map((gx) => (
+            <line class="rank-grid" x1={gx} x2={gx} y1={PAD} y2={H - PAD} />
+          ))}
+        <polyline class="rank-line" points={points} />
+        {ENTRIES.map((e) => (
+          <>
+            <rect
+              class="rank-hit"
+              x={x(e.day) - strip / 2}
+              y="0"
+              width={strip}
+              height={H}
+              data-tip={`${daysAgo(e.day)} ${fmt(e.rank)}`}
+            />
+            {/* Hover marker, revealed by the sibling strip's :hover. */}
+            <circle class="rank-dot" cx={x(e.day)} cy={y(e.rank)} r="4" />
+          </>
+        ))}
+      </svg>
+      {/* Styled like the social-icon tooltips; positioned over the hovered
+          day's dot by the script below. Mouse-only affordance — the svg
+          aria-label already carries the summary. */}
+      <div class="rank-tip" aria-hidden="true" />
+    </figure>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLElement>(".rank-chart").forEach((chart) => {
+    const tip = chart.querySelector<HTMLElement>(".rank-tip")!;
+    chart.querySelectorAll<SVGRectElement>(".rank-hit").forEach((hit) => {
+      hit.addEventListener("mouseenter", () => {
+        const dot = hit.nextElementSibling!;
+        const chartBox = chart.getBoundingClientRect();
+        const dotBox = dot.getBoundingClientRect();
+        tip.textContent = hit.dataset.tip!;
+        tip.style.left = `${dotBox.x + dotBox.width / 2 - chartBox.x}px`;
+        tip.style.top = `${dotBox.y - chartBox.y}px`;
+        tip.classList.add("is-shown");
+      });
+    });
+    chart
+      .querySelector("svg")!
+      .addEventListener("mouseleave", () => tip.classList.remove("is-shown"));
+  });
+</script>

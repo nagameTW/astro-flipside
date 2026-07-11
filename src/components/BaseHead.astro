@@ -1,0 +1,61 @@
+---
+// Self-hosted Noto Sans TC (Tocas UI's primary font-family) — weights 400/500/700
+// per the official docs, bundled so there's no external font request.
+import "@fontsource/noto-sans-tc/400.css";
+import "@fontsource/noto-sans-tc/500.css";
+import "@fontsource/noto-sans-tc/700.css";
+import "@/styles/global.css";
+import SITE from "@/config";
+import { url } from "@/utils/url";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// Default share image: the template expects a 1200×630 social-share image
+// at public/og.png (a demo asset ships with the template; replace it with
+// your own) — a page can override with its own `image`.
+const { title, description = SITE.description, image = "/og.png", noindex } =
+  Astro.props;
+const pageTitle = title ? `${title} | ${SITE.title}` : SITE.title;
+const imageURL = new URL(url(image), Astro.site);
+---
+
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/>
+<link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
+<meta name="generator" content={Astro.generator} />
+<link rel="sitemap" href={url("/sitemap-index.xml")} />
+<link rel="alternate" type="application/rss+xml" title={SITE.title} href={url("/rss.xml")} />
+<link rel="stylesheet" href={url("/vendor/tocas/tocas.min.css")} />
+{
+  SITE.features.math && (
+    <link rel="stylesheet" href={url("/vendor/katex/katex.min.css")} />
+  )
+}
+<link rel="canonical" href={canonicalURL} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<title>{pageTitle}</title>
+<meta name="title" content={pageTitle} />
+<meta name="description" content={description} />
+<meta name="author" content={SITE.author} />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content={pageTitle} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={imageURL} />

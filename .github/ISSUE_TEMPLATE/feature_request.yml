@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest an idea for this template
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝提出建議！(Thanks for the suggestion!)
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: What are you trying to do that the template doesn't support today?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: would-you-pr
+    attributes:
+      label: Contribution
+      options:
+        - label: I'd be willing to open a PR for this

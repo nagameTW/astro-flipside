@@ -1,0 +1,1157 @@
+/* Site styles on top of Tocas UI. Tocas has no prose styling, so
+   .md-content maps rendered Markdown onto its design tokens.
+
+   Spacing follows an 8px grid. That works because <html> carries Tocas's
+   `is-large` class (see Layout.astro), which roots the page at 16px instead of
+   the default 15px, so every rem step lands on the grid:
+
+       0.5rem = 8px   1rem = 16px   1.5rem = 24px   2rem = 32px
+       2.5rem = 40px  3rem = 48px   4rem = 64px     6rem = 96px
+
+   Use those steps. Exempt: border widths, radii, blur radii, and .md-content,
+   whose rhythm is em-based and tied to the text size. Tocas's own component
+   padding (chips, badges, buttons, tabs) is off the grid and stays that way —
+   putting it on would mean restyling the vendored components. */
+
+::selection {
+  background: var(--ts-gray-800);
+  color: var(--ts-gray-50);
+}
+
+/* Tocas lays the document out as a table (`html{display:table}`,
+   `body{display:table-cell}`) — a legacy full-height hack this site does not
+   use. A table root cannot take the viewport's overflow, so <html> becomes its
+   own scroll container, and a scroll container's scrollbar sits inside the
+   layout: it appears only on pages tall enough to scroll and squeezes the
+   centered container sideways. Measured in Firefox against this stylesheet,
+   the container sat at 185px on a short page and 179px on a tall one.
+
+   Restore normal block layout, then reserve the space the scrollbar would
+   take so it cannot move anything when it appears.
+
+   Selectors are `:root`/`:root body` so these win on specificity rather than
+   on stylesheet order — Tocas declares the same properties on `html`/`body`. */
+:root {
+  display: block;
+  height: auto;
+  /* Fallback for browsers without `scrollbar-gutter` (Safari before 18.2):
+     draw the track always, so the width is at least constant. */
+  overflow-y: scroll;
+  /* Clear the sticky header when jumping to a heading anchor or tabbing to a
+     control near the top. 112px clears the tallest header state (88px on
+     phones) with room to spare. */
+  scroll-padding-top: 7rem;
+}
+@supports (scrollbar-gutter: stable) {
+  :root {
+    /* Reserve the gutter without painting an inert track and stepper buttons
+       on pages that cannot scroll. */
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+}
+:root body {
+  /* Flex column + min-height so the footer pins to the viewport bottom on
+     short pages (404); long pages push it down. `:root body` keeps
+     the high specificity that beats Tocas's `body { display: table-cell }`. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Both lines are deliberate. Tocas sets `overflow-x: hidden`, which would
+     make <body> a scroll container for the sticky header to stick to instead
+     of the viewport. `clip` avoids that; browsers without it (Safari < 16)
+     drop that line and land on `visible`, which avoids it too. Neither clips
+     horizontal overflow, and the pages have none. */
+  overflow-x: visible;
+  overflow-x: clip;
+}
+:root body > main {
+  flex: 1 0 auto;
+}
+
+/* Header / footer shell */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100; /* below Tocas --ts-z-mask (101) */
+  /* No bottom border: the blurred backdrop already separates the header from
+     the content passing under it. */
+  /* Opaque first: browsers with backdrop-filter but no color-mix (iOS Safari
+     15, Firefox 103-112) drop the next line and would otherwise render the
+     header fully transparent, since the @supports rule below never fires. */
+  background: var(--ts-page-background-default);
+  background: color-mix(
+    in srgb,
+    var(--ts-page-background-default) 70%,
+    transparent
+  );
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+}
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .site-header {
+    background: var(--ts-page-background-default);
+  }
+}
+.site-header .inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+}
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Tocas packs the pilled tabs edge to edge; space them out. */
+.site-header .ts-tab {
+  gap: 0.5rem;
+}
+/* Tocas's tab items have no hover state; give them the same feedback as the
+   ghost icon button (theme toggle). The active tab keeps Tocas's filled
+   pill, so it's excluded here. */
+.site-header .ts-tab .item {
+  transition: background-color 0.15s ease;
+}
+.site-header .ts-tab .item:not(.is-active):hover {
+  background: var(--ts-gray-100);
+}
+
+/* A sticky header must stay shallow on phones. Tighten it so the nav items
+   fit one row (down to 360px); narrower screens scroll the tab strip
+   rather than hiding items behind a wrap. */
+@media (max-width: 767px) {
+  .site-header .inner {
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+  }
+  .site-header nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
+  }
+  .site-header nav > .ts-button {
+    flex: 0 0 auto;
+  }
+  .site-header .ts-tab {
+    flex-wrap: nowrap;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .site-header .ts-tab::-webkit-scrollbar {
+    display: none;
+  }
+  .site-header .ts-tab .item {
+    white-space: nowrap;
+    padding-inline: 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+.site-footer {
+  text-align: center;
+  padding: 3rem 0 4rem;
+}
+
+/* Page building blocks */
+/* 404 page banner spacing. */
+.hero {
+  padding: 6rem 0 4rem;
+}
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 4rem 0 1.5rem;
+}
+.pagination-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 3rem 0;
+}
+
+/* About page: a pinned identity column beside the scrolling detail column. */
+.about-layout {
+  display: grid;
+  grid-template-columns: 288px minmax(0, 1fr);
+  gap: 3rem;
+  /* Required: a stretched grid item fills the row, leaving sticky nowhere to
+     travel. */
+  align-items: start;
+  margin: 3rem 0;
+}
+.about-aside {
+  position: sticky;
+  /* 7rem = 112px, clearing the 69px header by 43px. */
+  top: 7rem;
+  /* Nudge the whole card down a little. */
+  margin-top: 2rem;
+}
+/* Main-column panels are Tocas cards drawn without their border (Tocas
+   fills a card with `--ts-gray-50`, the same colour as the page, so
+   removing the border leaves nothing of the card on screen — the padding
+   still aligns the columns). The identity card in the aside keeps its
+   border so it reads as a card. */
+.about-main .ts-box {
+  border: 0;
+}
+.about-card {
+  text-align: center;
+  /* Let the icon-button tooltips escape the card's `.ts-box` overflow:hidden. */
+  overflow: visible;
+}
+/* Top headroom is the face toggle's band: 1rem gap + 1.75rem toggle + 1rem
+   gap, so the toggle floats equidistant from the card's top edge and the
+   avatar below. `.ts-box.about-card` outranks `.ts-box .ts-content`'s
+   padding below, which ties with (and follows) a plain `.about-card`
+   selector. */
+.ts-box.about-card .ts-content {
+  padding-block-start: 3.75rem;
+}
+.about-card .ts-header + .ts-text {
+  margin-top: 0.25rem;
+}
+/* `.ts-header` is a flex container, so `text-align` never reaches the text
+   node inside it. Centre the flex line instead. */
+.about-card .ts-header {
+  justify-content: center;
+}
+.about-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+/* Card headings: title, then a rule filling the rest of the line.
+   `.ts-header` is already a flex row, so the rule is just a flex item — a
+   <span>, since <h1>/<h2> only take phrasing content, blockified by the flex
+   container so its border-top still paints.
+
+   The margin outranks `.ts-box .ts-content > * + *`, which would otherwise
+   pull the content under the heading to 8px. */
+.about-main .ts-header {
+  gap: 0.5rem;
+}
+.about-main .ts-header .ts-divider {
+  flex: 1;
+  margin-inline-start: 0.5rem;
+}
+.about-main .ts-content > .ts-header + * {
+  margin-top: 1.5rem;
+}
+.about-avatar {
+  display: block;
+  width: 136px;
+  height: 136px;
+  border-radius: 50%;
+  border: 3px solid var(--ts-gray-300);
+  margin-inline: auto;
+}
+/* Timeline subtitles (issuer, placement, role…) read as captions: Tocas's
+   `is-tiny` size, a clear step below the is-medium body. Scoped to the
+   direct subtitle line so body text inside .entry-note keeps its size. */
+.about-main .ts-timeline .content > .ts-text.is-secondary {
+  font-size: var(--ts-font-size-tiny);
+}
+/* Time labels ride Tocas's native timeline `aside` column, left of the
+   icons. The first column is FIXED — min-content would size it per section
+   and break the cross-section icon line — at the width of the longest
+   line: period ranges stack on two lines, so that is "– 2025.06" at the
+   is-tiny size. The content column must be able to shrink (minmax(0,1fr),
+   not `auto`) so long titles wrap instead of widening the page. Phones
+   drop the gutter — and dates with it (owner's call); see the media query
+   below. */
+.about-main .ts-timeline {
+  grid-template-columns: 5.5rem min-content minmax(0, 1fr);
+}
+.about-main .ts-timeline .aside {
+  font-size: var(--ts-font-size-tiny);
+}
+/* Anything below the title and subtitle sits in its own tinted block. Tocas's
+   tertiary background is darker than the page in both schemes (242 on 255,
+   23 on 39), so the block reads as recessed either way. */
+.entry-note {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--ts-border-radius-container);
+  background: var(--ts-page-background-tertiary);
+}
+.entry-note p {
+  margin-top: 0.5rem;
+}
+.entry-note p:first-child {
+  margin-top: 0;
+}
+/* Body paragraphs read as justified blocks — even left and right edges. */
+.about-main p {
+  text-align: justify;
+}
+@media (max-width: 767px) {
+  .about-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+  .about-aside {
+    position: static; /* nothing to pin beside in a single column */
+  }
+  /* Phones can't afford the date gutter — it goes, dates and all (owner's
+     call). Titles ellipsize rather than wrap; subtitles and note blocks
+     keep the full column width. */
+  .about-main .ts-timeline {
+    grid-template-columns: min-content minmax(0, 1fr);
+  }
+  .about-main .ts-timeline .aside {
+    display: none;
+  }
+  /* Tocas puts the indicator after a (now-hidden) aside in column 2. */
+  .about-main .ts-timeline .item .aside + .indicator {
+    grid-column: 1;
+  }
+  .about-main .ts-timeline .content > .ts-text.is-bold {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Merged about page: both faces (personal / professional) are in the DOM and
+   `.is-hidden` picks the hidden one. The toggle swaps that class; CSS does the
+   rest. The hidden face overlays the visible one (absolute, so the page keeps
+   the visible face's height), its columns fade — the right column also slides
+   up 8px — and the avatar flips in 3D: both avatars sit at the same spot,
+   `backface-visibility` hides each past 90°, and the hidden side's resting
+   angle (±180°) sets the spin direction, so toggling back flips the other
+   way. */
+/* Each face embeds a toggle copy in its identity card's top-right corner
+   (the card is sticky, so an outside overlay could not track it). The
+   containing block is the card's `.ts-content` — its `perspective` (set for
+   the avatar flip below) makes it one on every viewport. The toggle fades
+   with the rest of the card text, and the entering face's copy shows the
+   same synced state, so the crossfade reads as one continuous control. */
+/* `.ts-box.about-card` (not just `.about-card`): the margin reset must
+   outrank the `.ts-box .ts-content > * + *` row spacing further down, which
+   ties with — and follows — a two-class selector. */
+.ts-box.about-card .face-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  margin: 0; /* cancel the card's `* + *` row spacing */
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  /* Fixed height keeps the headroom arithmetic above exact. */
+  height: 1.75rem;
+  padding: 0 0.5rem;
+  font: inherit;
+  font-size: var(--ts-font-size-tiny);
+  color: var(--ts-gray-800);
+  background: var(--ts-gray-100);
+  border: 1px solid var(--ts-gray-200);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.about-card .face-toggle:hover {
+  background: var(--ts-gray-200);
+}
+/* The whole button switches; the labels only signal state — active dark,
+   idle faint. */
+.face-toggle .face-option {
+  color: var(--ts-gray-400);
+  transition: color 0.15s ease;
+}
+.face-toggle .face-option.is-active {
+  color: var(--ts-gray-800);
+  font-weight: 600;
+}
+.face-toggle .face-divider {
+  color: var(--ts-gray-300);
+}
+.faces {
+  position: relative;
+  margin: 3rem 0;
+}
+/* Faces align at the container top — .faces owns the page margin. */
+.faces .about-layout {
+  margin: 0;
+}
+.face.is-hidden {
+  /* The transition lives on the hidden state only: hiding is delayed until
+     the children finish fading (0.5s covers the slowest), while showing —
+     transition-free — is instant, so the entering face's toggle copy can
+     take focus in the same tick. */
+  transition: visibility 0.5s;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Pin to the container's height and clip: even hidden, an unclipped
+     absolute box adds its full height to the page's scrollable overflow —
+     the short face would scroll as far as the tall one. `clip`, not
+     `hidden`: hidden makes this a scroll container, so the aside's sticky
+     would stick 7rem below the face's own top and the card would sit 80px
+     lower than the visible face's during the cross-fade. Browsers without
+     `clip` (Safari < 16) fall back to `hidden` and keep only that quirk. */
+  bottom: 0;
+  overflow: hidden;
+  overflow: clip;
+  /* The leaving face paints above the entering one until the transition ends —
+     don't let it swallow clicks meant for the face underneath. */
+  pointer-events: none;
+}
+.face .about-main {
+  /* Slightly behind the avatar flip, per the design. */
+  transition:
+    opacity 0.3s ease 0.15s,
+    transform 0.3s ease 0.15s;
+}
+.face.is-hidden .about-main {
+  opacity: 0;
+  transform: translateY(8px);
+}
+/* The identity card crossfades around the flipping avatar: card chrome and
+   text fade, the avatar itself only rotates. */
+.face .about-card {
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+.face.is-hidden .about-card {
+  border-color: transparent;
+  background: transparent;
+}
+.face .about-card .ts-content > :not(.about-avatar) {
+  transition: opacity 0.3s ease;
+}
+.face.is-hidden .about-card .ts-content > :not(.about-avatar) {
+  opacity: 0;
+}
+.about-card .ts-content {
+  perspective: 40rem;
+}
+.face .about-avatar {
+  backface-visibility: hidden;
+  transition: transform 0.5s ease;
+}
+.face.is-hidden[data-face="personal"] .about-avatar {
+  transform: rotateY(180deg);
+}
+.face.is-hidden[data-face="professional"] .about-avatar {
+  transform: rotateY(-180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .face.is-hidden,
+  .face .about-main,
+  .face .about-card,
+  .face .about-card .ts-content > :not(.about-avatar),
+  .face .about-avatar {
+    transition: none;
+  }
+}
+
+/* Life face content blocks — Steam rows, osu! stat tiles, the trophy wall
+   and the gear/sensitivity table. Each section renders only when its data
+   exists (gamestats.json is written by the gamestats workflow; trophies
+   and gear are owner-maintained lists). */
+/* Steam rows: capsule art from Steam's CDN, name (one line), hours on the
+   right; lifetime rows add a bar relative to the list's #1. */
+.steam-subhead {
+  font-size: var(--ts-font-size-tiny);
+  margin-bottom: 0.75rem;
+}
+/* 最近遊玩: cover-only cards side by side (five fit the wide column). */
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(8rem, 100%), 1fr));
+  gap: 1rem;
+}
+.recent-cap {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 460 / 215;
+  border-radius: 0.25rem;
+}
+div.recent-cap {
+  background: var(--ts-gray-100); /* missing-art stand-in */
+}
+.recent-name {
+  margin-top: 0.5rem;
+  font-size: var(--ts-font-size-tiny);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.game-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+}
+.game-row + .game-row {
+  margin-top: 0; /* the rows' padding now provides the separation */
+}
+.game-cap {
+  display: block;
+  width: 92px;
+  height: auto;
+  border-radius: 0.25rem;
+}
+/* Missing art keeps the column: a quiet box at the img's exact size (an
+   empty auto-column div has no width of its own to derive height from). */
+.game-cap-empty {
+  width: 92px;
+  aspect-ratio: 460 / 215;
+  background: var(--ts-gray-100);
+}
+.game-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.game-main {
+  min-width: 0; /* let the name ellipsize inside the grid column */
+}
+.game-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--ts-gray-200);
+  margin-top: 0.375rem;
+}
+.game-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ts-gray-800);
+}
+.game-hours {
+  text-align: right;
+  white-space: nowrap;
+  font-size: var(--ts-font-size-tiny);
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 1rem;
+}
+/* osu! rank sparkline: one monochrome 2px line, inverted y (best rank on
+   top), native <title> tooltips on invisible per-day hit strips. The panel
+   wears the same recessed tint as .entry-note. */
+.rank-chart {
+  margin: 0;
+  padding: 1rem;
+  border-radius: var(--ts-border-radius-container);
+  background: var(--ts-page-background-tertiary);
+}
+.rank-chart .rank-grid {
+  stroke: var(--ts-gray-300);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.rank-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.rank-chart .rank-line {
+  fill: none;
+  stroke: var(--ts-gray-800);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.rank-chart .rank-hit {
+  fill: transparent;
+}
+.rank-chart .rank-dot {
+  fill: var(--ts-gray-800);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease;
+}
+.rank-chart .rank-hit:hover + .rank-dot {
+  opacity: 1;
+}
+/* Same bubble as the social-icon tooltips, riding the hovered day's dot. */
+.rank-chart {
+  position: relative;
+}
+.rank-tip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 0.45rem));
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  background: #1f2430;
+  color: #fff;
+  font-size: var(--ts-font-size-tiny);
+  line-height: 1.4;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+}
+.rank-tip.is-shown {
+  opacity: 1;
+}
+.stat-grid .ts-text.is-secondary {
+  font-size: var(--ts-font-size-tiny);
+}
+.trophy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+  gap: 1rem;
+}
+/* Cards are <button>s opening the lightbox — strip the UA chrome. */
+.trophy-item {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: zoom-in;
+}
+/* Cards.astro also renders this shape as a plain outbound link (a `url`
+   card) — same layout, but it navigates rather than zooms. */
+.trophy-item.is-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+.trophy-grid img {
+  display: block;
+  width: 100%;
+  border-radius: 0.4rem;
+}
+/* Lightbox sized to match the right content column (~812px), not full
+   screen. `dialog.trophy-modal` (0,1,1) must out-specify Tocas's
+   `dialog.ts-modal{--width:380px}`. */
+dialog.trophy-modal {
+  --width: min(52rem, 94vw);
+}
+.trophy-modal .content img {
+  display: block;
+  width: 100%;
+}
+.trophy-caption {
+  margin-top: 0.25rem;
+}
+/* Placeholder card while the owner's screenshots are pending. */
+.trophy-empty {
+  aspect-ratio: 16 / 9;
+  border-radius: 0.4rem;
+  background: var(--ts-gray-100);
+}
+
+/* Music (Last.fm): recent scrobbles as a list of album-art rows, top
+   artists as chips. */
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.track-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  margin-inline: -0.5rem;
+  border-radius: var(--ts-border-radius-container);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+.track-row:hover {
+  background: var(--ts-page-background-tertiary);
+}
+.track-art {
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.25rem;
+  object-fit: cover;
+}
+.track-art-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ts-gray-100);
+  color: var(--ts-gray-500);
+}
+.track-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.track-name,
+.track-artist {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.track-artist {
+  font-size: var(--ts-font-size-tiny);
+}
+/* Gear cards: icon + type + model on the entry-note tint, three across on
+   the wide column. */
+.gear-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr));
+  gap: 1rem;
+}
+.gear-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--ts-border-radius-container);
+  background: var(--ts-page-background-tertiary);
+}
+.gear-card > .ts-icon {
+  font-size: 1.25rem;
+  color: var(--ts-gray-600);
+  margin-top: 0.125rem;
+}
+.gear-body {
+  min-width: 0;
+}
+.gear-label {
+  font-size: var(--ts-font-size-tiny);
+}
+
+/* Links block: a plain row list, no bullets — label link + optional note. */
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.links-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.links-list a {
+  color: inherit;
+  font-weight: 600;
+}
+
+/* Hover feedback shared across the Life cards: a small lift + soft shadow,
+   the same language as the social-icon buttons. The hours list is a set of
+   rows, so those tint their background instead of lifting. */
+.trophy-item img,
+.gear-card,
+.recent-card .recent-cap {
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.trophy-item:hover img,
+.gear-card:hover,
+.recent-card:hover .recent-cap {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.25);
+}
+.game-row {
+  padding: 0.5rem;
+  margin-inline: -0.5rem;
+  border-radius: var(--ts-border-radius-container);
+  transition: background-color 0.15s ease;
+}
+.game-row:hover {
+  background: var(--ts-page-background-tertiary);
+}
+@media (prefers-reduced-motion: reduce) {
+  .trophy-item img,
+  .gear-card,
+  .recent-card .recent-cap {
+    transition: box-shadow 0.15s ease;
+  }
+  .trophy-item:hover img,
+  .gear-card:hover,
+  .recent-card:hover .recent-cap {
+    transform: none;
+  }
+}
+
+/* Card grids: fluid responsive columns via native CSS grid — Tocas's
+   mobile:/tablet+: prefixes are JS-driven and unavailable CSS-only. */
+.cards-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(256px, 100%), 1fr));
+}
+.cards-grid.is-wide {
+  grid-template-columns: repeat(auto-fill, minmax(min(384px, 100%), 1fr));
+}
+
+/* Cards as links (blog posts) — same hover lift as the Life cards,
+   site-wide. `.post-card` (PostCard.astro) is a div, not an <a>: it holds a
+   real tag-chip link inside it, and an <a> can't contain another <a>. */
+a.ts-box,
+.post-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+a.ts-box:hover,
+.post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.25);
+}
+@media (prefers-reduced-motion: reduce) {
+  a.ts-box,
+  .post-card {
+    transition: box-shadow 0.15s ease;
+  }
+  a.ts-box:hover,
+  .post-card:hover {
+    transform: none;
+  }
+}
+/* Cards breathe: 24px inside, 16px between their rows, 24px between
+   timeline entries. */
+.ts-box .ts-content {
+  padding: 1.5rem;
+}
+.ts-box .ts-content > * + * {
+  margin-top: 1rem;
+}
+/* PostCard stretched-link: .post-card-link (the title) covers the whole
+   card via ::after, so "click anywhere on the card" still works. .ts-wrap
+   (tag chips) gets a higher stacking order so its real links stay on top
+   and independently clickable, instead of being covered by the overlay.
+   ponytail: standard stretched-link tradeoff — the .ts-wrap row is a dead
+   zone around the chips (no card-link there), and description/date text
+   isn't selectable through the overlay. Matches Bootstrap's
+   .stretched-link; not worth a JS hit-test to reclaim those slivers. */
+.post-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+.post-card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.post-card .ts-wrap {
+  position: relative;
+  z-index: 1;
+}
+.ts-timeline {
+  --ts-timeline-content-distance: 1.5rem;
+}
+
+/* Social links: a centred row of circular icon buttons. Each lifts and tints
+   to its brand colour (--brand) on hover, presses down on click, and shows its
+   name (aria-label) as a tooltip. Selectors target every child so both the
+   <a> links and the Discord <button> get the treatment. */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.social-icons > * {
+  position: relative;
+  /* Tocas buttons are overflow:hidden, which would clip the tooltip (an
+     ::after sitting above the button). Let it escape. */
+  overflow: visible;
+  /* Three states: idle white, hover grey, pressed black. */
+  background: var(--ts-gray-50);
+  border: 1px solid var(--ts-gray-300);
+  color: var(--ts-gray-800);
+  transition:
+    transform 0.12s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.social-icons > * .ts-icon {
+  color: inherit;
+}
+.social-icons > *:hover {
+  background: var(--ts-gray-200);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px -3px rgba(0, 0, 0, 0.2);
+}
+.social-icons > *:active {
+  background: var(--ts-gray-900);
+  color: var(--ts-gray-50);
+  transform: translateY(-1px) scale(0.9);
+}
+.social-icons > *::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: calc(100% + 0.45rem);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  background: #1f2430;
+  color: #fff;
+  font-size: var(--ts-font-size-tiny);
+  line-height: 1.4;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+}
+.social-icons > *:hover::after,
+.social-icons > *:focus-visible::after {
+  opacity: 1;
+}
+
+/* Back-to-top: bottom-right, fades in once the page is scrolled.
+   `visibility` keeps the hidden button out of the keyboard tab order. */
+#back-to-top {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s;
+}
+#back-to-top.is-shown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Blog post */
+.post-header {
+  margin: 3rem 0;
+}
+.post-hero {
+  width: 100%;
+  border-radius: 0.4rem;
+  margin-bottom: 2rem;
+}
+
+/* Table of contents: content + sticky rail from 1024px up (a 220px rail
+   needs room beside the prose without crowding it); a single column with a
+   native <details> above the content below that breakpoint. */
+.post-body {
+  display: grid;
+  gap: 2rem;
+}
+/* Below 1024px .post-body stays a single column, stacking in source order
+   (content, then rail) — reorder so the collapsed ToC sits above the
+   article instead of trailing after it. Grid auto-placement follows
+   order-modified order, so this must be undone once the rail becomes a
+   real second column below, or it would auto-place into the wide column. */
+.post-rail {
+  order: -1;
+}
+@media (min-width: 1024px) {
+  .post-body {
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+  .post-rail {
+    order: 0;
+  }
+  .post-rail .toc {
+    position: sticky;
+    top: 5rem;
+  }
+  /* The summary is only an interactive disclosure control on mobile; on the
+     rail the list is always open, so its toggle affordance is inert.
+     pointer-events only blocks the mouse — a keyboard user can still Tab to
+     it and toggle the underlying `open` attribute with Enter, but the rules
+     below keep the list visually open either way, so nothing changes on
+     screen. Known, accepted gap: a screen reader may still announce the
+     region as collapsed even though its contents are exposed. */
+  .toc-details > summary {
+    pointer-events: none;
+    list-style: none;
+  }
+  /* <details> has no `open` attribute (mobile needs it closed by default), so
+     the browser hides everything but the summary until toggled. Disabling
+     the summary above froze that closed state — force the list open
+     regardless of the (never-toggled) open attribute. Chromium collapses a
+     closed details' content in an internal ::details-content box (separate
+     from the <ul> itself), so both need overriding; browsers without that
+     pseudo-element just skip the second rule. */
+  .toc-details:not([open]) > ul {
+    display: block;
+  }
+  .toc-details:not([open])::details-content {
+    content-visibility: visible;
+    block-size: auto;
+  }
+}
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+.toc-item.is-depth-3 {
+  padding-inline-start: 1rem;
+}
+.toc a {
+  text-decoration: none;
+  opacity: 0.75;
+}
+.toc a.is-current {
+  opacity: 1;
+  font-weight: 600;
+}
+
+/* Long-form Markdown content */
+.md-content {
+  line-height: 1.85;
+}
+.md-content > * + * {
+  margin-top: 1em;
+}
+.md-content h1,
+.md-content h2,
+.md-content h3,
+.md-content h4 {
+  font-weight: 700;
+  line-height: 1.4;
+  margin-top: 2em;
+}
+.md-content h1 {
+  font-size: 1.8em;
+}
+.md-content h2 {
+  font-size: 1.5em;
+}
+.md-content h3 {
+  font-size: 1.25em;
+}
+.md-content h4 {
+  font-size: 1.1em;
+}
+/* rehype-autolink-headings appends this `#` link to every heading (id from
+   rehype-slug). Hidden until the heading is hovered or the link itself is
+   keyboard-focused, so it doesn't clutter the read. */
+.md-content .heading-anchor {
+  margin-inline-start: 0.35em;
+  opacity: 0;
+  text-decoration: none;
+}
+.md-content :is(h1, h2, h3, h4):hover .heading-anchor,
+.md-content .heading-anchor:focus-visible {
+  opacity: 0.6;
+}
+.md-content a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.md-content ul,
+.md-content ol {
+  padding-inline-start: 1.5em;
+}
+.md-content li + li {
+  margin-top: 0.4em;
+}
+.md-content blockquote {
+  border-inline-start: 3px solid var(--ts-gray-300);
+  padding-inline-start: 1em;
+  color: var(--ts-gray-600);
+}
+/* Inline code only — fenced blocks render as expressive-code frames (their
+   own <pre><code>), which style themselves and must stay untouched here. */
+.md-content :not(pre) > code {
+  background: var(--ts-gray-100);
+  border-radius: 0.25rem;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+}
+/* Defensive fallback for the ONE markdown pipeline expressive-code doesn't
+   touch: Section.astro's `markdown` block (Markdown.astro) runs raw
+   `marked.parse()`, not Astro's remark/rehype chain, so a fenced code block
+   there renders a bare <pre><code> with no EC frame. Without this, it would
+   inherit nothing (the rule above is scoped off `pre`) and `.ts-box`'s
+   `overflow: hidden` would clip long lines. Scoped away from EC's own
+   `<pre>` (always inside a `.expressive-code` wrapper) so real blog-post
+   code frames are untouched. */
+.md-content pre:not(.expressive-code *) {
+  padding: 1rem;
+  border-radius: 0.4rem;
+  overflow-x: auto;
+  background: var(--ts-gray-100);
+}
+.md-content img {
+  max-width: 100%;
+  border-radius: 0.4rem;
+}
+.md-content table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+.md-content th,
+.md-content td {
+  border: 1px solid var(--ts-gray-300);
+  padding: 0.4em 0.8em;
+}
+.md-content hr {
+  border: 0;
+  border-top: 1px solid var(--ts-gray-300);
+}
+
+/* Prev/next post nav: reuses .cards-grid's responsive auto-fill columns.
+   PostCard is a .ts-box div with a stretched title link; hover lift comes from the site-wide .ts-box rules. */
+.post-nav {
+  margin-top: 3rem;
+}
+
+/* Search dialog (Pagefind): dialog.ts-modal already supplies the bordered
+   box and dimmed ::backdrop (see Cards.astro's trophy-modal), so only the
+   content padding and the result rows are site-specific here. */
+.search-dialog .content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.search-results li a {
+  display: block;
+  padding: 0.5rem;
+  margin-inline: -0.5rem;
+  border-radius: var(--ts-border-radius-container);
+  color: inherit;
+  text-decoration: none;
+}
+.search-results li a:hover {
+  background: var(--ts-page-background-tertiary);
+}
+.search-results li strong {
+  display: block;
+}
+.search-results li span {
+  display: block;
+  font-size: var(--ts-font-size-tiny);
+  color: var(--ts-gray-500);
+}

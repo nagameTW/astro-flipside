@@ -1,0 +1,130 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { MarkdownHeading } from "astro";
+import Layout from "@/layouts/Layout.astro";
+import FormattedDate from "@/components/FormattedDate.astro";
+import Toc from "@/components/Toc.astro";
+import Comments from "@/components/Comments.astro";
+import { t, fill } from "@/locales";
+import { url } from "@/utils/url";
+
+type Props = CollectionEntry<"blog">["data"] & {
+  minutesRead: number;
+  headings: MarkdownHeading[];
+  prev?: { id: string; title: string };
+  next?: { id: string; title: string };
+};
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  tags = [],
+  draft,
+  minutesRead,
+  headings,
+  prev,
+  next,
+} = Astro.props;
+// Same h2/h3 + footnote-label exclusion as Toc.astro: when the ToC would
+// render nothing, skip the .post-body grid entirely — an empty rail would
+// still reserve its 220px desktop column (squeezing the prose) and add a
+// stray grid gap on mobile.
+const hasToc = headings.some(
+  (h) => (h.depth === 2 || h.depth === 3) && h.slug !== "footnote-label",
+);
+---
+
+<Layout title={title} description={description}>
+  <article class="ts-container is-narrow" data-pagefind-body>
+    <header class="post-header">
+      <h1 class="ts-header is-big is-heavy">{title}</h1>
+      {
+        draft && (
+          // Dev-only signal: getPosts() filters drafts out of prod builds,
+          // so this chip can never render in a production build.
+          <span class="ts-chip is-outlined has-top-spaced">
+            {t["blog.draft"]}
+          </span>
+        )
+      }
+      <div class="ts-text is-description has-top-spaced">
+        <FormattedDate date={pubDate} />
+        {
+          updatedDate && (
+            <>
+              {` · ${t["blog.updated"]} `}
+              <FormattedDate date={updatedDate} />
+            </>
+          )
+        }
+        {` · ${fill(t["blog.readingTime"], { m: minutesRead })}`}
+      </div>
+      {
+        tags.length > 0 && (
+          <div class="ts-wrap has-top-spaced">
+            {tags.map((tag) => (
+              <a
+                href={url(`/blog/tags/${tag}/`)}
+                class="ts-chip is-circular is-outlined"
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+      <div class="ts-divider has-top-spaced"></div>
+    </header>
+    {
+      heroImage && (
+        <img
+          class="post-hero"
+          src={/^https?:\/\//.test(heroImage) ? heroImage : url(heroImage)}
+          alt=""
+        />
+      )
+    }
+    {
+      hasToc ? (
+        <div class="post-body">
+          <div class="md-content">
+            <slot />
+          </div>
+          <aside class="post-rail">
+            <Toc headings={headings} />
+          </aside>
+        </div>
+      ) : (
+        <div class="md-content">
+          <slot />
+        </div>
+      )
+    }
+    {
+      (prev || next) && (
+        <nav class="cards-grid post-nav">
+          {prev && (
+            <a class="ts-box" rel="prev" href={url(`/blog/${prev.id}/`)}>
+              <div class="ts-content">
+                <div class="ts-text is-description">{t["blog.prev"]}</div>
+                <div class="ts-header is-heavy">{prev.title}</div>
+              </div>
+            </a>
+          )}
+          {next && (
+            <a class="ts-box" rel="next" href={url(`/blog/${next.id}/`)}>
+              <div class="ts-content">
+                <div class="ts-text is-description">{t["blog.next"]}</div>
+                <div class="ts-header is-heavy">{next.title}</div>
+              </div>
+            </a>
+          )}
+        </nav>
+      )
+    }
+    <Comments />
+  </article>
+</Layout>

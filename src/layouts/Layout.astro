@@ -1,0 +1,62 @@
+---
+import BaseHead from "@/components/BaseHead.astro";
+import Navbar from "@/components/Navbar.astro";
+import Footer from "@/components/Footer.astro";
+import Search from "@/components/Search.astro";
+import { t, LOCALE } from "@/locales";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Keep this page out of search engines. */
+  noindex?: boolean;
+}
+
+const { title, description, noindex } = Astro.props;
+---
+
+<!-- `is-large` roots the page at 16px rather than Tocas's default 15px. That is
+     what lands its whole rem scale on an 8px grid: 0.5rem = 8px, 1rem = 16px,
+     1.5rem = 24px, 3rem = 48px. -->
+<html lang={LOCALE} class="is-large">
+  <head>
+    <BaseHead title={title} description={description} noindex={noindex} />
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem("theme");
+        if (saved === "dark") document.documentElement.classList.add("is-dark");
+        if (saved === "light")
+          document.documentElement.classList.add("is-light");
+      })();
+    </script>
+  </head>
+
+  <body>
+    <Navbar />
+    <Search />
+    <!-- Default container width (1180px): `is-narrow` (910px) squeezed long
+         timeline titles into wrapping under their dates. -->
+    <main class="ts-container">
+      <slot />
+    </main>
+    <Footer />
+    <button
+      id="back-to-top"
+      class="ts-button is-icon is-circular is-secondary"
+      aria-label={t["layout.backToTop"]}
+    >
+      <span class="ts-icon is-arrow-up-icon"></span>
+    </button>
+    <script>
+      const backToTop = document.getElementById("back-to-top")!;
+      addEventListener(
+        "scroll",
+        () => backToTop.classList.toggle("is-shown", scrollY > 400),
+        { passive: true },
+      );
+      backToTop.addEventListener("click", () =>
+        scrollTo({ top: 0, behavior: "smooth" }),
+      );
+    </script>
+  </body>
+</html>

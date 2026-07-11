@@ -1,0 +1,52 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { url } from "@/utils/url";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+---
+
+{
+  /* Not a single wrapping <a>: tag chips below are now real links to
+     /blog/tags/<tag>/, and an <a> can't nest inside another <a> (invalid
+     HTML — the outer link would silently break at the nested tag). The
+     title is a stretched-link instead: it visually behaves as "click
+     anywhere on the card" (.post-card-link::after in global.css), while
+     .ts-wrap sits above it (z-index) so chips stay independently clickable.
+  */
+}
+<div class="ts-box post-card">
+  <div class="ts-content">
+    <div class="ts-header is-heavy">
+      <a class="post-card-link" href={url(`/blog/${post.id}/`)}
+        >{post.data.title}</a
+      >
+    </div>
+    <div class="ts-text is-description">
+      <FormattedDate date={post.data.pubDate} />
+    </div>
+    {
+      post.data.description && (
+        <p class="ts-text is-secondary">{post.data.description}</p>
+      )
+    }
+    {
+      post.data.tags.length > 0 && (
+        <div class="ts-wrap">
+          {post.data.tags.map((tag) => (
+            <a
+              href={url(`/blog/tags/${tag}/`)}
+              class="ts-chip is-circular is-outlined"
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</div>

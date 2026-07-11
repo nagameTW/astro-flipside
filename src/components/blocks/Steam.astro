@@ -1,0 +1,93 @@
+---
+// Steam module — recent covers + lifetime hours. Self-hides when gamestats
+// has neither list (current behavior; gamestats.json starts as `{}` until
+// the fetch workflow's secrets exist).
+import { STEAM_RECENT, STEAM_TOP } from "@/data/gamestats";
+import { t, fill } from "@/locales";
+
+// Lifetime bars are relative to the list's #1 (the list arrives sorted).
+const maxTotal = STEAM_TOP[0]?.hoursTotal ?? 1;
+---
+
+{
+  (STEAM_RECENT.length > 0 || STEAM_TOP.length > 0) && (
+    <section class="ts-box">
+      <div class="ts-content">
+        <h2 class="ts-header is-large is-heavy">
+          Steam
+          <span class="ts-divider" />
+        </h2>
+        {STEAM_RECENT.length > 0 && (
+          <div>
+            <div class="steam-subhead ts-text is-secondary">
+              {t["life.steamRecent"]}
+            </div>
+            {/* Covers only, side by side — no hours (owner's call). */}
+            <div class="recent-grid">
+              {STEAM_RECENT.map((g) => (
+                <div class="recent-card">
+                  {g.header ? (
+                    <img
+                      class="recent-cap"
+                      src={g.header}
+                      width="460"
+                      height="215"
+                      alt=""
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="recent-cap" />
+                  )}
+                  <div class="recent-name ts-text is-bold">{g.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {STEAM_RECENT.length > 0 && STEAM_TOP.length > 0 && (
+          <div class="ts-divider is-section" />
+        )}
+        {STEAM_TOP.length > 0 && (
+          <div>
+            <div class="steam-subhead ts-text is-secondary">
+              {t["life.steamTotal"]}
+            </div>
+            <div class="steam-rows">
+              {STEAM_TOP.map((g) => (
+                <div class="game-row">
+                  {g.header ? (
+                    <img
+                      class="game-cap"
+                      src={g.header}
+                      width="460"
+                      height="215"
+                      alt=""
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="game-cap game-cap-empty" />
+                  )}
+                  <div class="game-main">
+                    <div class="game-name ts-text is-bold">{g.name}</div>
+                    <div class="game-bar">
+                      <i
+                        style={`width: ${((g.hoursTotal / maxTotal) * 100).toFixed(1)}%`}
+                      />
+                    </div>
+                  </div>
+                  <div class="game-hours">
+                    <div class="ts-text is-secondary">
+                      {fill(t["life.hours"], {
+                        h: g.hoursTotal.toLocaleString(),
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,40 @@
+// Generic content blocks for the about faces. Each face's identity card
+// (avatar, toggle, socials) stays bespoke in its own component; everything
+// below the fold is one of these, so both faces render as
+// `SECTIONS.map((s) => <Section section={s} />)` (see Section.astro).
+export type TimelineEntry = {
+  title: string;
+  subtitle?: string;
+  start: string;
+  end?: string; // "YYYY.MM"
+  duties?: { name: string; text: string }[];
+};
+export type HighlightEntry = { title: string; subtitle?: string; date: string };
+export type CardEntry = {
+  title: string;
+  subtitle?: string;
+  img?: string;
+  url?: string;
+};
+
+export type Section =
+  | { type: "text"; title?: string; paragraphs: string[] }
+  | { type: "chips"; title?: string; items: string[] }
+  | {
+      type: "kv";
+      title?: string;
+      rows: { label: string; value: string; icon?: string }[];
+    }
+  | { type: "timeline"; title?: string; entries: TimelineEntry[] }
+  | { type: "highlights"; title?: string; entries: HighlightEntry[] }
+  | { type: "cards"; title?: string; cards: CardEntry[] }
+  | { type: "stats"; title?: string; tiles: { value: string; label: string }[] }
+  | {
+      type: "links";
+      title?: string;
+      links: { label: string; url: string; note?: string }[];
+    }
+  | { type: "markdown"; title?: string; body: string }
+  | { type: "steam" }
+  | { type: "osu" }
+  | { type: "music" };

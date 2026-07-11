@@ -1,0 +1,36 @@
+---
+// Shared by blog/[...page].astro and blog/tags/[tag]/[...page].astro.
+// Mirrors the source site's zeroday pagination markup (.pagination-wrap +
+// ts-pagination), reduced to prev/next only.
+import type { Page } from "astro";
+import { t } from "@/locales";
+
+interface Props {
+  page: Page<unknown>;
+}
+
+const { page } = Astro.props;
+---
+
+{
+  page.lastPage > 1 && (
+    <div class="pagination-wrap">
+      <nav class="ts-pagination" aria-label={t["pagination.label"]}>
+        {page.url.prev && (
+          <a
+            class="item is-back"
+            href={page.url.prev}
+            aria-label={t["pagination.prev"]}
+          />
+        )}
+        {page.url.next && (
+          <a
+            class="item is-next"
+            href={page.url.next}
+            aria-label={t["pagination.next"]}
+          />
+        )}
+      </nav>
+    </div>
+  )
+}

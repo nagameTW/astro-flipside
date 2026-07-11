@@ -1,0 +1,36 @@
+---
+// Label/value cards — extracted from the Life face's gear grid. Rows may
+// carry an optional per-row `icon` (the gear grid's case); grid/card/label
+// classes and spacing are unchanged.
+interface Props {
+  title?: string;
+  rows: { label: string; value: string; icon?: string }[];
+}
+const { title, rows } = Astro.props;
+---
+
+{
+  rows.length > 0 && (
+    <section class="ts-box">
+      <div class="ts-content">
+        {title && (
+          <h2 class="ts-header is-large is-heavy">
+            {title}
+            <span class="ts-divider" />
+          </h2>
+        )}
+        <div class="gear-grid">
+          {rows.map((row) => (
+            <div class="gear-card">
+              {row.icon && <span class={`ts-icon ${row.icon}`} />}
+              <div class="gear-body">
+                <div class="gear-label ts-text is-secondary">{row.label}</div>
+                <div class="ts-text is-bold">{row.value}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

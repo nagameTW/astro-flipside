@@ -1,0 +1,37 @@
+---
+import type { GetStaticPaths, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import PostCard from "@/components/PostCard.astro";
+import Pagination from "@/components/Pagination.astro";
+import { getPosts } from "@/utils/posts";
+import { t, fill } from "@/locales";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getPosts();
+  const tags = new Set(posts.flatMap((post) => post.data.tags));
+  return [...tags].flatMap((tag) =>
+    paginate(
+      posts.filter((post) => post.data.tags.includes(tag)),
+      { params: { tag }, pageSize: 10 },
+    ),
+  );
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params as { tag: string };
+const { page } = Astro.props as { page: Page<CollectionEntry<"blog">> };
+const title = fill(t["blog.taggedWith"], { tag });
+---
+
+<Layout title={title} description={t["blog.tagIndexDescription"]}>
+  <div class="section-title">
+    <h1 class="ts-header is-big is-heavy">{title}</h1>
+    <span class="ts-text is-description"
+      >{fill(t["blog.count"], { n: page.total })}</span
+    >
+  </div>
+  <div class="cards-grid is-wide">
+    {page.data.map((post) => <PostCard post={post} />)}
+  </div>
+  <Pagination page={page} />
+</Layout>

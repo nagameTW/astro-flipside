@@ -1,0 +1,32 @@
+---
+// Tile row — reuses the osu! stat-grid classes (label on top, bold value
+// below), just driven by a generic tiles array instead of osu's own stats.
+interface Props {
+  title?: string;
+  tiles: { value: string; label: string }[];
+}
+const { title, tiles } = Astro.props;
+---
+
+{
+  tiles.length > 0 && (
+    <section class="ts-box">
+      <div class="ts-content">
+        {title && (
+          <h2 class="ts-header is-large is-heavy">
+            {title}
+            <span class="ts-divider" />
+          </h2>
+        )}
+        <div class="stat-grid">
+          {tiles.map((s) => (
+            <div>
+              <div class="ts-text is-secondary">{s.label}</div>
+              <div class="ts-text is-bold">{s.value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

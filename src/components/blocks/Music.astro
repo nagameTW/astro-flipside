@@ -1,0 +1,58 @@
+---
+// Last.fm module — recent scrobbles as album-art rows. Self-hides when
+// there's nothing recent.
+import { MUSIC_RECENT } from "@/data/gamestats";
+import { t } from "@/locales";
+
+// Last.fm stores no source video id, so a track links to a YT Music search
+// for "artist track" — its first result is the song, a tap from playing.
+const ytMusicSearch = (artist: string, track: string) =>
+  `https://music.youtube.com/search?q=${encodeURIComponent(`${artist} ${track}`)}`;
+---
+
+{
+  MUSIC_RECENT.length > 0 && (
+    <section class="ts-box">
+      <div class="ts-content">
+        <h2 class="ts-header is-large is-heavy">
+          {t["life.music"]}
+          <span class="ts-divider" />
+        </h2>
+        <div class="steam-subhead ts-text is-secondary">
+          {t["life.recentlyPlayedMusic"]}
+        </div>
+        <div class="track-list">
+          {MUSIC_RECENT.slice(0, 3).map((track) => (
+            <a
+              class="track-row"
+              href={ytMusicSearch(track.artist, track.track)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {track.image ? (
+                <img
+                  class="track-art"
+                  src={track.image}
+                  width="64"
+                  height="64"
+                  alt=""
+                  loading="lazy"
+                />
+              ) : (
+                <span class="track-art track-art-empty">
+                  <span class="ts-icon is-music-icon" />
+                </span>
+              )}
+              <span class="track-body">
+                <span class="track-name ts-text is-bold">{track.track}</span>
+                <span class="track-artist ts-text is-secondary">
+                  {track.artist}
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
