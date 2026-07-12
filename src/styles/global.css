@@ -490,10 +490,14 @@
 }
 /* Cards are <button>s opening the lightbox — strip the UA chrome. Shared
    with .gallery-item (below): same "image + optional caption, click to
-   zoom" shape, just laid out in a masonry column instead of a grid cell. */
+   zoom" shape, just laid out in a masonry column instead of a grid cell.
+   Flex column, not block: browsers vertically CENTER a button's content,
+   so in a grid row stretched by a longer-captioned sibling the shorter
+   card's image sank below its neighbors'. */
 .trophy-item,
 .gallery-item {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   padding: 0;
   border: 0;
@@ -514,6 +518,14 @@
   display: block;
   width: 100%;
   border-radius: var(--ts-border-radius-element);
+}
+/* Cards-block media (trophies, discography) crops to one fixed ratio —
+   the same 16:9 the .trophy-empty placeholder uses — so every card in the
+   grid is the same size. The gallery keeps natural ratios; its masonry
+   depends on them. */
+.trophy-grid img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 /* Lightbox sized to match the right content column (~812px), not full
    screen. `dialog.trophy-modal` (0,1,1) must out-specify Tocas's
@@ -960,8 +972,8 @@ a.ts-box:hover,
    `visibility` keeps the hidden button out of the keyboard tab order. */
 #back-to-top {
   position: fixed;
-  right: 1.5rem;
-  bottom: 1.5rem;
+  right: 2.25rem;
+  bottom: 2.25rem;
   z-index: 100;
   opacity: 0;
   visibility: hidden;
