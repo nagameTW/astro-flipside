@@ -16,7 +16,7 @@ const INTRO = [
 
 // Interests as tags (like the Work face's Skills).
 const INTERESTS = [
-  "手搖茶",
+  "手搖飲",
   "魔術",
   "籃球",
   "老電影",
