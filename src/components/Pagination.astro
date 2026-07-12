@@ -4,6 +4,7 @@
 // ts-pagination): back arrow, one numbered item per page, next arrow.
 import type { Page } from "astro";
 import { t } from "@/locales";
+import Icon from "@/components/Icon.astro";
 
 interface Props {
   page: Page<unknown>;
@@ -31,7 +32,12 @@ const pageHref = (n: number) => (n === 1 ? root : `${root}/${n}`);
             class="item is-back"
             href={page.url.prev}
             aria-label={t["pagination.prev"]}
-          />
+          >
+            {/* Tocas drew these arrows with icon-font pseudo-elements; the
+                font is gone (see Icon.astro), so supply the glyph inline —
+                the dead ::before/::after are neutralized in global.css. */}
+            <Icon name="angle-left" />
+          </a>
         )}
         {Array.from({ length: page.lastPage }, (_, i) => i + 1).map((n) => (
           <a
@@ -47,7 +53,9 @@ const pageHref = (n: number) => (n === 1 ? root : `${root}/${n}`);
             class="item is-next"
             href={page.url.next}
             aria-label={t["pagination.next"]}
-          />
+          >
+            <Icon name="angle-right" />
+          </a>
         )}
       </nav>
     </div>

@@ -3,7 +3,7 @@ title: "Kitchen sink"
 description: "Every Markdown feature this template supports, in one post."
 pubDate: 2026-01-02
 tags: ["demo", "markdown"]
-heroImage: "/blog/hero-desk.jpg"
+heroImage: "./hero-desk.jpg"
 # heroImage credit: Karola G (Pexels), https://www.pexels.com/photo/wooden-table-with-coffee-and-notebook-with-pen-4195334/
 ---
 
@@ -74,7 +74,7 @@ Inline code like `npm run build` sits in a sentence without breaking it.
   same as an image imported from `src/` (verified: this renders as
   `/astro-flipside/_astro/avatar.<hash>.webp` — Astro's default image
   service re-encodes raster images to webp, unlike the plain-copy
-  behavior the old SVG got here). Plain `![](/avatar.jpg)`
+  behavior the old SVG got here). Plain `![](/og.png)`-style absolute paths
   would NOT get this treatment; only `heroImage` in frontmatter (see
   BlogPost.astro) and this colocated relative form are base-prefixed
   automatically. (Photo: Baruk Granda, same avatar as the Life/Work
@@ -97,7 +97,7 @@ shrink it, like the sized example below.
   `SITE.base` in `src/config.ts`.
 -->
 
-<img src="/astro-flipside/blog/hero-desk.jpg" width="160" alt="Sized image demo">
+<img src="/astro-flipside/og.png" width="160" alt="Sized image demo">
 
 ## Math and diagrams
 

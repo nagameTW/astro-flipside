@@ -3,17 +3,22 @@
 // is pure data (avatar, name, socials, section list). Social buttons:
 // entries with `url` link out; entries with `copy` (e.g. Discord, which
 // has no add-friend URL) copy the handle to the clipboard — script below.
+import type { ImageMetadata } from "astro";
 import type { Section as SectionData } from "@/data/sections";
+import { Image } from "astro:assets";
 import FaceToggle from "@/components/FaceToggle.astro";
 import Section from "@/components/Section.astro";
-import { url } from "@/utils/url";
+import Icon from "@/components/Icon.astro";
 
 interface Props {
   face: "personal" | "professional";
   /** Ship the face hidden + inert (statically, so the non-default face
    *  never flashes before JS runs). */
   hidden?: boolean;
-  avatar: string;
+  /** The default (visible) face's avatar is above the fold — fetch it at
+   *  high priority; the hidden face's can wait. */
+  priority?: boolean;
+  avatar: ImageMetadata;
   name: string;
   /** Subtitle line. Omitted → an invisible placeholder keeps both cards'
    *  geometry identical, or the face cross-fade reads as the card
@@ -22,8 +27,16 @@ interface Props {
   socials: { name: string; icon: string; url?: string; copy?: string }[];
   sections: SectionData[];
 }
-const { face, hidden = false, avatar, name, headline, socials, sections } =
-  Astro.props;
+const {
+  face,
+  hidden = false,
+  priority = false,
+  avatar,
+  name,
+  headline,
+  socials,
+  sections,
+} = Astro.props;
 const isExternal = (href?: string) => !!href && href.startsWith("http");
 ---
 
@@ -34,7 +47,17 @@ const isExternal = (href?: string) => !!href && href.startsWith("http");
 >
   <aside class="about-aside ts-box about-card">
     <div class="ts-content">
-      <img class="about-avatar" src={url(avatar)} width="136" height="136" alt="" />
+      <Image
+        class="about-avatar"
+        src={avatar}
+        width={136}
+        height={136}
+        densities={[1, 2]}
+        format="webp"
+        alt=""
+        loading={priority ? "eager" : "lazy"}
+        fetchpriority={priority ? "high" : undefined}
+      />
       <div class="ts-header is-large is-heavy has-top-spaced">{name}</div>
       {
         headline ? (
@@ -56,7 +79,7 @@ const isExternal = (href?: string) => !!href && href.startsWith("http");
                 target={isExternal(l.url) ? "_blank" : undefined}
                 rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
               >
-                <span class={`ts-icon ${l.icon}`} />
+                <Icon name={l.icon} />
               </a>
             ) : (
               <button
@@ -65,7 +88,7 @@ const isExternal = (href?: string) => !!href && href.startsWith("http");
                 data-copy={l.copy}
                 aria-label={l.name}
               >
-                <span class={`ts-icon ${l.icon}`} />
+                <Icon name={l.icon} />
               </button>
             ),
           )

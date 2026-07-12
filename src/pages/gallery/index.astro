@@ -2,7 +2,8 @@
 import Layout from "@/layouts/Layout.astro";
 import { GALLERY } from "@/data/gallery";
 import { t, fill } from "@/locales";
-import { resolveImg } from "@/utils/url";
+import SmartImage from "@/components/SmartImage.astro";
+import Icon from "@/components/Icon.astro";
 // The masonry carries data-pagefind-body: captions and alt text are unique
 // content, so the gallery joins the search index (see index.astro's note;
 // the lightbox copies below the masonry stay out of it).
@@ -30,7 +31,13 @@ import { resolveImg } from "@/utils/url";
             class="gallery-item"
             data-modal={`gallery-modal-${i}`}
           >
-            <img src={resolveImg(photo.src)} alt={photo.alt} loading="lazy" />
+            <SmartImage
+              src={photo.src}
+              alt={photo.alt}
+              loading={i < 2 ? "eager" : "lazy"}
+              widths={[320, 640]}
+              sizes="(max-width: 640px) 94vw, 320px"
+            />
             {photo.caption && (
               <div class="gallery-caption ts-text is-tiny">
                 {photo.caption}
@@ -57,10 +64,16 @@ import { resolveImg } from "@/utils/url";
           data-open={`gallery-modal-${(i - 1 + GALLERY.length) % GALLERY.length}`}
           aria-label={t["gallery.prev"]}
         >
-          <span class="ts-icon is-angle-left-icon" />
+          <Icon name="angle-left" />
         </button>
         <figure class="gallery-modal-figure">
-          <img src={resolveImg(photo.src)} alt="" loading="lazy" />
+          <SmartImage
+            src={photo.src}
+            alt=""
+            loading="lazy"
+            widths={[1000, 1600]}
+            sizes="94vw"
+          />
           <figcaption class="ts-text is-secondary">
             {photo.caption ?? ""}
           </figcaption>
@@ -71,7 +84,7 @@ import { resolveImg } from "@/utils/url";
           data-open={`gallery-modal-${(i + 1) % GALLERY.length}`}
           aria-label={t["gallery.next"]}
         >
-          <span class="ts-icon is-angle-right-icon" />
+          <Icon name="angle-right" />
         </button>
       </dialog>
     ))

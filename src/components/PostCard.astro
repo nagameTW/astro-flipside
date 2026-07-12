@@ -1,13 +1,17 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "@/components/FormattedDate.astro";
-import { resolveImg, url } from "@/utils/url";
+import SmartImage from "@/components/SmartImage.astro";
+import { url } from "@/utils/url";
 
 interface Props {
   post: CollectionEntry<"blog">;
+  /** First card above the fold: its cover is the list page's LCP, so it
+   *  must not lazy-load. */
+  eager?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, eager = false } = Astro.props;
 ---
 
 {
@@ -38,11 +42,14 @@ const { post } = Astro.props;
     </div>
     {
       post.data.heroImage && (
-        <img
+        <SmartImage
           class="post-card-cover"
-          src={resolveImg(post.data.heroImage)}
+          src={post.data.heroImage}
           alt=""
-          loading="lazy"
+          loading={eager ? "eager" : "lazy"}
+          fetchpriority={eager ? "high" : undefined}
+          widths={[160, 320]}
+          sizes="160px"
         />
       )
     }

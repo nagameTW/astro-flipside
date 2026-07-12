@@ -23,30 +23,9 @@ It is a clean, Chinese-friendly Astro theme, distilled from my own
 personal site. I stripped out the private parts, kept the lessons
 learned, and left a starting point you can build on directly.
 
-<table>
-  <tr>
-    <td><img src="screenshot-work.png" alt="The Work face: resume, skills, experience"></td>
-    <td><img src="screenshot-home-light.png" alt="The Life face: interests, collections, everyday life"></td>
-  </tr>
-</table>
+<img src="hero.jpg" alt="Flipside at a glance: the Work and Life faces, gallery, post list, code frames, and the dark theme">
 
 README in [繁體中文](../README.md) / **English**
-
-<details>
-<summary>More screenshots: dark theme, a blog post</summary>
-
-<table>
-  <tr>
-    <td><img src="screenshot-home-dark.png" width="380" alt="Home, Life face, dark theme"></td>
-    <td><img src="screenshot-post.png" width="380" alt="A blog post with the table of contents and a code frame"></td>
-  </tr>
-  <tr>
-    <td align="center"><sub>Dark theme</sub></td>
-    <td align="center"><sub>Blog post (TOC + code frame)</sub></td>
-  </tr>
-</table>
-
-</details>
 
 ## What it wants to do for you
 
@@ -152,8 +131,7 @@ Everything below is technical reference. Come back when you build.
 
 - [x] Pinterest-style masonry layout: CSS multi-column, so photos keep their
       own aspect ratio instead of being cropped into a fixed grid
-- [x] Data-driven: list photos in `src/data/gallery.ts`, drop the files in
-      `public/gallery/`
+- [x] Data-driven: drop the files in `src/assets/gallery/`, import and list them in `src/data/gallery.ts` (auto webp + responsive sizes)
 - [x] Click a photo to open it full-size in a lightbox
 
 **Everywhere**
@@ -218,8 +196,7 @@ This repo deploys itself as a project page (`base: "/astro-flipside"`) at
 ## Optional modules
 
 **Trophies** (Life face, Highlights cards): edit `src/data/trophies.ts`.
-Screenshots go in `public/trophies/`. An empty `src` renders a placeholder
-box.
+Screenshots go in `src/assets/trophies/` and are imported. Omitting `src` renders a placeholder box.
 
 **Gear** (Life face, Gear block): edit the `GEAR` array in
 `src/data/life.ts`.
@@ -237,11 +214,21 @@ Every key in `src/config.ts`:
 | `author`           | Your name. Rendered as a `<meta name="author">` tag on every page (its only consumer today).                                               |
 | `locale`           | `"en"` or `"zh-TW"`; selects the UI string dictionary (`src/locales/`) and `<html lang>`.                                                  |
 | `nav`              | Nav bar links; each `label` is a key into the locale dictionary.                                                                           |
-| `socials`          | Life-face identity-card buttons; `url` opens a link, `copy` copies text (Discord-style).                                                   |
+| `socials`          | Life-face identity-card buttons; `url` opens a link, `copy` copies text (Discord-style); `icon` is a name from `src/components/Icon.astro`. |
 | `github`           | Work-face identity-card GitHub link.                                                                                                       |
 | `features.math`    | KaTeX math (`$…$` / `$$…$$`) in posts. Off by default; zero bundle cost when off.                                                          |
 | `features.mermaid` | ` ```mermaid ` fenced diagrams in posts. Off by default; zero bundle cost when off.                                                        |
 | `features.giscus`  | `false`, or the four data-attributes from [giscus.app](https://giscus.app) to enable comments.                                             |
+
+### Icons
+
+UI icons are inline SVG (`src/components/Icon.astro`); the Font Awesome
+icon font Tocas ships is not loaded. To add an icon, find a Free icon on
+fontawesome.com and add its SVG path and viewBox width to `ICONS` in
+`Icon.astro`, following the existing entries — data files can then use it
+by name. Note: Tocas components the template itself doesn't use but that
+rely on the icon font (checkbox ticks, select carets, rating stars, …)
+need an icon supplied the same way if you add them to a page.
 
 ## Locale
 

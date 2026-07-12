@@ -7,7 +7,7 @@
 // Shell, heading, and empty-guard live in Section.astro; `title` is still
 // received here because the modal ids are namespaced by it.
 import type { CardEntry } from "@/data/sections";
-import { resolveImg } from "@/utils/url";
+import SmartImage from "@/components/SmartImage.astro";
 
 interface Props {
   title?: string;
@@ -28,7 +28,13 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
   {
     cards.map((c, i) => {
       const media = c.img ? (
-        <img src={resolveImg(c.img)} alt="" loading="lazy" />
+        <SmartImage
+          src={c.img}
+          alt=""
+          loading="lazy"
+          widths={[400, 800]}
+          sizes="(max-width: 767px) 94vw, 400px"
+        />
       ) : (
         <div class="trophy-empty" />
       );
@@ -70,22 +76,30 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
     })
   }
 </div>
-{/* In-page lightboxes: Tocas modals on the native <dialog>. Backdrop
-    click and Esc close them. Only cards with an image and no `url` get
-    one (the trophy-wall case). */}
+{/* In-page lightboxes: the same full-viewport dark stage as the gallery
+    (dialog.gallery-modal — one lightbox look site-wide). Esc and any
+    click off the figure close. Only cards with an image and no `url`
+    get one (the trophy-wall case). */}
 {
   cards.map(
     (c, i) =>
       !c.url &&
       c.img && (
         <dialog
-          class="ts-modal trophy-modal"
+          class="gallery-modal"
           id={`card-modal-${slug}-${i}`}
           aria-label={c.title}
         >
-          <div class="content">
-            <img src={resolveImg(c.img)} alt="" loading="lazy" />
-          </div>
+          <figure class="gallery-modal-figure">
+            <SmartImage
+              src={c.img}
+              alt=""
+              loading="lazy"
+              widths={[800, 1400]}
+              sizes="94vw"
+            />
+            <figcaption class="ts-text is-secondary">{c.title}</figcaption>
+          </figure>
         </dialog>
       ),
   )
@@ -94,15 +108,18 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
 <script>
   import { wireModalOpeners } from "@/utils/dialogs";
   // Opening is the shared wiring (queries the whole document, so any number
-  // of Cards instances work); closing stays here — in a Tocas ts-modal the
-  // dialog element itself IS the dimmed overlay, so a click that lands on
-  // it (not the content box) closes. Esc is native.
+  // of Cards instances work); closing matches the gallery stage — the whole
+  // dialog is the dark backdrop, so any click off the figure closes. Esc is
+  // native. Scoped to card modals so the gallery page's own dialogs (wired
+  // in gallery/index.astro) aren't double-bound.
   wireModalOpeners(".trophy-item[data-modal]");
   document
-    .querySelectorAll<HTMLDialogElement>("dialog.trophy-modal")
+    .querySelectorAll<HTMLDialogElement>(
+      'dialog.gallery-modal[id^="card-modal-"]',
+    )
     .forEach((d) => {
       d.addEventListener("click", (e) => {
-        if (e.target === d) d.close();
+        if (!(e.target as Element).closest(".gallery-modal-figure")) d.close();
       });
     });
 </script>

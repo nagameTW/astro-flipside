@@ -26,8 +26,8 @@ const { page, title } = Astro.props;
     <p class="ts-text is-secondary">{t["blog.empty"]}</p>
   ) : (
     <div class="cards-grid is-wide">
-      {page.data.map((post) => (
-        <PostCard post={post} />
+      {page.data.map((post, i) => (
+        <PostCard post={post} eager={i === 0} />
       ))}
     </div>
   )

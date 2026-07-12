@@ -3,7 +3,7 @@ title: "功能總覽"
 description: "這個範本支援的 Markdown 功能，濃縮在同一篇文章裡。"
 pubDate: 2026-01-03
 tags: ["demo"]
-heroImage: "/blog/hero-studio.jpg"
+heroImage: "./hero-studio.jpg"
 # heroImage credit: Leo Wieling, https://unsplash.com/photos/Sby_GQz1-5E
 ---
 
@@ -72,7 +72,7 @@ export function add(a: number, b: number): number {
   進來的圖片完全相同（已驗證：會渲染成
   `/astro-flipside/_astro/avatar.<hash>.webp`——Astro 預設的圖片服務會把
   點陣圖重新編碼成 webp，跟這裡原本那張 SVG「原封不動複製」的行為不同）。
-  純 Markdown 的 `![](/avatar.jpg)` 不會有這層處理，只有 frontmatter 的 `heroImage`
+  純 Markdown 的 `![](/og.png)` 這類絕對路徑不會有這層處理，只有 frontmatter 的 `heroImage`
   （見 BlogPost.astro）和這種 colocated 相對路徑才會自動帶 base 前綴。
   （照片：Baruk Granda，跟 Life／Work 卡片同一張大頭貼——
   https://unsplash.com/photos/OHLRskxOpjI。）
@@ -91,7 +91,7 @@ export function add(a: number, b: number): number {
   進 `public/` 檔案路徑裡，跟 `src/config.ts` 的 `SITE.base` 是同一個字串。
 -->
 
-<img src="/astro-flipside/blog/hero-studio.jpg" width="160" alt="圖片縮放示範">
+<img src="/astro-flipside/og.png" width="160" alt="圖片縮放示範">
 
 ## 數學與圖表
 

@@ -3,7 +3,7 @@ title: "歡迎使用 Flipside"
 description: "Flipside 網站要編輯的地方：設定、資料與內容。"
 pubDate: 2026-01-01
 tags: ["meta"]
-heroImage: "/blog/hero-guitar.jpg"
+heroImage: "./hero-guitar.jpg"
 # heroImage credit: Brent Ninaber, https://unsplash.com/photos/HALqu3hIsuk
 # (cropped to drop the headstock — no third-party brand visible)
 ---

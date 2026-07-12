@@ -1,6 +1,7 @@
 ---
 import SITE from "@/config";
 import Search from "@/components/Search.astro";
+import Icon from "@/components/Icon.astro";
 import { t } from "@/locales";
 import { url } from "@/utils/url";
 
@@ -38,15 +39,15 @@ const isActive = (href: string) => {
           class="ts-button is-ghost is-icon is-circular"
           aria-label={t["search.open"]}
         >
-          <span class="ts-icon is-magnifying-glass-icon"></span>
+          <Icon name="magnifying-glass" />
         </button>
         <button
           id="theme-toggle"
           class="ts-button is-ghost is-icon is-circular"
           aria-label={t["nav.themeToggle"]}
         >
-          <span class="ts-icon is-moon-icon has-hidden-dark"></span>
-          <span class="ts-icon is-sun-icon has-hidden-light"></span>
+          <Icon name="moon" class="has-hidden-dark" />
+          <Icon name="sun" class="has-hidden-light" />
         </button>
       </nav>
     </div>
