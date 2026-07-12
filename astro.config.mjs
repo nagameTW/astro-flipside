@@ -1,12 +1,5 @@
 // @ts-check
-import {
-  cp,
-  copyFile,
-  mkdir,
-  readdir,
-  readFile,
-  writeFile,
-} from "node:fs/promises";
+import { cp, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
@@ -76,11 +69,16 @@ const notoFonts = () => ({
         "",
       );
       await writeFile(out + "noto-sans-tc.css", css);
-      const files = await readdir(`${src}/files`);
+      // Copy exactly the files the stripped CSS references — a filename
+      // filter either drags in the unreferenced combined-CJK woff2s or,
+      // tightened to numbered slices, drops the referenced combined
+      // latin/cyrillic ones. Deriving from the CSS keeps referenced ==
+      // copied by construction.
+      const referenced = [...css.matchAll(/url\(\.\/files\/([^)]+)\)/g)].map(
+        (m) => m[1],
+      );
       await Promise.all(
-        files
-          .filter((f) => /-(400|500|700)-normal\.woff2$/.test(f))
-          .map((f) => copyFile(`${src}/files/${f}`, `${out}files/${f}`)),
+        referenced.map((f) => copyFile(`${src}/files/${f}`, `${out}files/${f}`)),
       );
     },
   },
