@@ -16,20 +16,18 @@ interface Props extends Record<string, unknown> {
   densities?: number[];
 }
 const { src, alt, widths, sizes, densities, ...common } = Astro.props;
+// Astro's Image props treat `widths` and `densities` as mutually
+// exclusive union branches — spreading both keys (even undefined) fails
+// the type check, so pick the branch that was actually provided.
+const responsive = (
+  densities ? { densities } : widths ? { widths, sizes } : {}
+) as Record<string, unknown>;
 ---
 
 {
   typeof src === "string" ? (
     <img src={resolveImg(src)} alt={alt} {...common} />
   ) : (
-    <Image
-      src={src}
-      alt={alt}
-      format="webp"
-      widths={widths}
-      sizes={sizes}
-      densities={densities}
-      {...common}
-    />
+    <Image src={src} alt={alt} format="webp" {...responsive} {...common} />
   )
 }
