@@ -35,7 +35,6 @@ const zhTW: UIStrings = {
   "search.clear": "清除搜尋",
   "search.noResults": "沒有符合的結果。",
   "post.footnotesLabel": "註腳",
-  "post.footnoteBack": "回到內文",
   "notFound.message": "找不到這個頁面。",
   "notFound.home": "回首頁",
   "life.copied": "已複製！",

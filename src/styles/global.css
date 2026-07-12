@@ -1185,13 +1185,10 @@ a.ts-box:hover,
   padding-inline-start: 1em;
   color: var(--ts-gray-600);
 }
-/* Footnote back-reference ("回到內文", set in astro.config.mjs): a small,
-   quiet control at the end of each footnote rather than body text. */
+/* GFM appends a ↩ back-reference link to every footnote; hidden — the
+   jump-back affordance is noise at this post length (owner call). */
 .md-content .data-footnote-backref {
-  margin-inline-start: 0.35em;
-  font-size: var(--ts-font-size-tiny);
-  color: var(--ts-gray-500);
-  white-space: nowrap;
+  display: none;
 }
 /* Inline code only — fenced blocks render as expressive-code frames (their
    own <pre><code>), which style themselves and must stay untouched here.
