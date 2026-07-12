@@ -1,30 +1,28 @@
 ---
-title: "Welcome to Flipside"
-description: "Where to edit a Flipside site: config, data, and content."
+title: "歡迎使用 Flipside"
+description: "Flipside 網站要編輯的地方：設定、資料與內容。"
 pubDate: 2026-01-01
 tags: ["meta"]
 ---
 
-This is the first post on a fresh Flipside install. If you're reading it in
-the built site, the blog is already wired up: tags, pagination, RSS, search,
-reading time, all of it. You shouldn't need to touch any of the plumbing.
-There are exactly three places you edit.
+這是全新安裝的 Flipside 的第一篇文章。如果你是在建置好的網站上看到它，代表
+部落格的功能都已經接好了：標籤、分頁、RSS、搜尋、閱讀時間，一應俱全。底層
+的管線不需要你動手，真正要編輯的地方只有三處。
 
 ## `src/config.ts`
 
-Site title, description, author, nav links, socials, and the feature flags
-(`features.math`, `features.mermaid`, `features.giscus`). One file, mostly
-strings and booleans.
+網站標題、描述、作者、導覽列連結、社群連結，以及功能旗標（`features.math`、
+`features.mermaid`、`features.giscus`）。一個檔案，大多是字串跟布林值。
 
 ## `src/data/*`
 
-The About page's content (timeline, stats, project cards, links) lives here
-as plain data files, not markup. Change the data, the page updates itself.
+「關於」頁面的內容（時間軸、數據、作品卡片、連結）都放在這裡，是純資料檔，
+不是版面標記。改資料，頁面就會自動更新。
 
 ## `src/content/blog/`
 
-This folder. Drop a Markdown file in, give it a `title` and `pubDate` in the
-frontmatter, and it's a post: sorted into the index, tagged, syndicated to
-`rss.xml`, and indexed for search on the next build.
+就是這個資料夾。丟一個 Markdown 檔進來，在 frontmatter 填上 `title` 和
+`pubDate`，它就會變成一篇文章：排進列表、加上標籤、同步到 `rss.xml`，下次
+建置時也會被索引進搜尋。
 
-See the kitchen-sink post next for everything the Markdown pipeline supports.
+接下來看〈功能總覽〉那篇文章，裡面示範了 Markdown 管線支援的所有東西。

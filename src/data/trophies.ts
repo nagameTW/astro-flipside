@@ -10,7 +10,6 @@ export type Trophy = {
 export const TROPHIES: Trophy[] = [
   {
     src: "",
-    caption:
-      "Reached the leaderboard once. Screenshot lost to a hard-drive crash.",
+    caption: "曾經一度衝上排行榜，可惜截圖隨著硬碟故障一起消失了。",
   },
 ];

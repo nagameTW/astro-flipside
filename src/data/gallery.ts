@@ -14,38 +14,38 @@ export type GalleryPhoto = {
 export const GALLERY: GalleryPhoto[] = [
   {
     src: "/gallery/gallery-1.svg",
-    alt: "Golden hour on a quiet trail",
-    caption: "A walk after work, mid-October.",
+    alt: "寧靜小徑上的黃金時刻",
+    caption: "下班後的散步，十月中旬。",
   },
   {
     src: "/gallery/gallery-2.svg",
-    alt: "Coffee at the corner table by the window",
+    alt: "靠窗角落桌上的咖啡",
   },
   {
     src: "/gallery/gallery-3.svg",
-    alt: "City skyline just after sunset",
-    caption: "First cold night of the year.",
+    alt: "日落後不久的城市天際線",
+    caption: "今年第一個寒冷的夜晚。",
   },
   {
     src: "/gallery/gallery-4.svg",
-    alt: "Bookshelf corner in afternoon light",
+    alt: "午後陽光下的書架一角",
   },
   {
     src: "/gallery/gallery-5.svg",
-    alt: "Mountains passing by a train window",
-    caption: "Somewhere past the tunnel.",
+    alt: "從火車窗外掠過的山景",
+    caption: "穿過隧道後的某處。",
   },
   {
     src: "/gallery/gallery-6.svg",
-    alt: "A new leaf on the balcony plant",
+    alt: "陽台植物上的新葉",
   },
   {
     src: "/gallery/gallery-7.svg",
-    alt: "A notebook and a half-finished sketch",
-    caption: "Still not done with this one.",
+    alt: "筆記本與畫到一半的素描",
+    caption: "這張還沒畫完。",
   },
   {
     src: "/gallery/gallery-8.svg",
-    alt: "Rain on the window at blue hour",
+    alt: "藍色時刻，雨落在窗上",
   },
 ];

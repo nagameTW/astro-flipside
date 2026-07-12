@@ -1,35 +1,35 @@
-<!-- 歡迎貢獻！欄位用英文填寫即可；不確定的段落中英夾雜也沒關係，別因為語言卻步。 -->
+<!-- Feel free to write in English. -->
 
-## Description
+## 說明
 
-<!-- What does this change, and why? Keep it short but complete. -->
+<!-- 這個改動做了什麼、為什麼要做？簡短但完整地描述。 -->
 
-Fixes #<!-- issue number, or delete this line -->
+Fixes #<!-- 填入 issue 編號，或刪掉這行 -->
 
-## Type of change
+## 變更類型
 
-<!-- Check all that apply. -->
+<!-- 勾選所有符合的項目。 -->
 
-- [ ] Bug fix (non-breaking)
-- [ ] New feature (non-breaking)
-- [ ] Breaking change (existing template users must adjust something)
-- [ ] Documentation / demo content
-- [ ] Visual / style only
-- [ ] CI / tooling
+- [ ] Bug 修正（不影響相容性）
+- [ ] 新功能（不影響相容性）
+- [ ] 破壞性變更（現有範本使用者需要跟著調整）
+- [ ] 文件／範例內容
+- [ ] 視覺／樣式調整
+- [ ] CI／工具
 
-## How has this been tested?
+## 如何測試？
 
-<!-- Commands you ran and what you looked at. -->
+<!-- 你跑了哪些指令、檢查了什麼。 -->
 
-## Screenshots
+## 截圖
 
-<!-- Before/after for any visual change — required, not optional.
-     Delete this section for non-visual changes. -->
+<!-- 任何視覺變更都要附上前後對照截圖，這不是選填。
+     非視覺變更可以刪掉這一節。 -->
 
-## Checklist
+## 檢查清單
 
-- [ ] `npm run check && npm run build && npm test` pass locally
-- [ ] No personal data introduced: see the gate in [CONTRIBUTING.md](../CONTRIBUTING.md#personal-data)
-- [ ] Both `src/locales/en.ts` and `src/locales/zh-TW.ts` updated together (for any UI string change)
-- [ ] Docs updated where behavior changed (README / CONTRIBUTING)
-- [ ] PR title follows [Conventional Commits](https://www.conventionalcommits.org/) — it becomes the squash-merge commit message
+- [ ] `npm run check && npm run build && npm test` 本機皆通過
+- [ ] 沒有引入個人資料：見 [CONTRIBUTING.md](../CONTRIBUTING.md#個人資料) 的檢查項目
+- [ ] 若改動任何介面字串，`src/locales/en.ts` 和 `src/locales/zh-TW.ts` 已在同一個 PR 內一起更新
+- [ ] 行為變更時已更新對應文件（README／CONTRIBUTING）
+- [ ] PR 標題符合 [Conventional Commits](https://www.conventionalcommits.org/) 規範，因為它會成為 squash-merge 後的 commit message

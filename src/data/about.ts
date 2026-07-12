@@ -41,11 +41,11 @@ export type Certification = {
 // nowrap column, and a wider one squeezes the entry beside it.
 
 export const PROFILE = {
-  name: "Alex Lin",
-  headline: "Acme Corp · Software Engineer",
+  name: "林曉映",
+  headline: "範例科技 · 軟體工程師",
   bio: [
-    "I build things at Acme Corp. Replace this paragraph with who you are and what you do.",
-    "Second paragraph: past experience, focus areas, whatever tells your story.",
+    "目前在範例科技寫程式。把這段換成你是誰、你在做什麼。",
+    "第二段：過去的經歷、專注領域，任何能說出你故事的內容。",
   ],
 };
 
@@ -53,26 +53,26 @@ export const PROFILE = {
 // below with your own history; the shapes are what Section.astro expects.
 export const EXPERIENCE: Experience[] = [
   {
-    period: "2023.06 – Present",
-    title: "Acme Corp · Senior Software Engineer",
+    period: "2023.06 – 至今",
+    title: "範例科技 · 資深軟體工程師",
     duties: [
       {
-        name: "Platform Modernization",
-        text: "Led the migration of a monolithic service into a set of composable APIs, cutting median response time in half.",
+        name: "平台現代化",
+        text: "主導將單體服務拆分為一組可組合的 API，將回應時間中位數縮短一半。",
       },
       {
-        name: "Mentorship",
-        text: "Onboard and mentor new engineers on the team's architecture, tooling, and code-review norms.",
+        name: "新人帶領",
+        text: "帶領並指導團隊新進工程師熟悉架構、工具與程式碼審查慣例。",
       },
     ],
   },
   {
     period: "2020.07 – 2023.05",
-    title: "Northwind Traders · Software Engineer",
+    title: "北風貿易 · 軟體工程師",
     duties: [
       {
-        name: "Feature Delivery",
-        text: "Designed and shipped customer-facing features end to end, from spec to production rollout.",
+        name: "功能開發交付",
+        text: "從規格到正式上線，端到端設計並交付面向使用者的功能。",
       },
     ],
   },
@@ -82,11 +82,11 @@ export const EXPERIENCE: Experience[] = [
 export const EDUCATION: Education[] = [
   {
     period: "2016.09 – 2020.06",
-    school: "State University",
-    degree: "B.S. in Computer Science",
-    thesis: "A Lightweight Caching Layer for Read-Heavy Web Services",
+    school: "州立大學",
+    degree: "資訊工程學系學士",
+    thesis: "讀取密集型網路服務的輕量快取層設計",
     description:
-      "Measured how a small in-memory cache in front of a relational database affects tail latency under bursty read traffic.",
+      "測量在關聯式資料庫前加一層小型記憶體快取，對突發讀取流量下尾端延遲的影響。",
   },
 ];
 
@@ -100,29 +100,29 @@ export const SKILLS: string[] = [
   "AWS",
   "GraphQL",
   "CI/CD",
-  "System Design",
-  "Testing & QA",
+  "系統設計",
+  "測試與品保",
 ];
 
 // Career highlights, newest first.
 export const HIGHLIGHTS: Highlight[] = [
   {
     date: "2025.11",
-    title: "Internal Hackathon",
-    detail: "1st place · Team Byte Force",
-    note: "Built a demo tool for visualizing API latency in real time.",
+    title: "內部黑客松",
+    detail: "第一名 · 位元大隊",
+    note: "打造一個即時視覺化 API 延遲的展示工具。",
   },
   {
     date: "2024.03",
-    title: "Acme Corp Innovation Award",
-    detail: "Runner-up",
+    title: "範例科技創新獎",
+    detail: "亞軍",
   },
 ];
 
 export const CERTIFICATIONS: Certification[] = [
   {
-    name: "Certified Placeholder Practitioner",
-    issuer: "Fictional Cloud Institute",
+    name: "範例認證工程師",
+    issuer: "虛構雲端學院",
     year: "2024",
   },
 ];
@@ -151,7 +151,7 @@ const EDUCATION_ENTRIES: TimelineEntry[] = EDUCATION.map((e) => ({
   subtitle: e.degree,
   ...splitPeriod(e.period),
   duties: e.thesis
-    ? [{ name: `Thesis: ${e.thesis}`, text: e.description ?? "" }]
+    ? [{ name: `論文：${e.thesis}`, text: e.description ?? "" }]
     : undefined,
 }));
 
@@ -169,28 +169,28 @@ const CERTIFICATION_CARDS: CardEntry[] = CERTIFICATIONS.map((c) => ({
 
 // Quick-facts strip; playful values are deliberate (this is placeholder data).
 const STATS_TILES: { value: string; label: string }[] = [
-  { value: "6+", label: "Years experience" },
-  { value: "42", label: "Repos shipped" },
-  { value: "∞", label: "Cups of coffee" },
+  { value: "6+", label: "年資" },
+  { value: "42", label: "上線 Repo 數" },
+  { value: "∞", label: "喝掉的咖啡" },
 ];
 
 const TALKS: { label: string; url: string; note?: string }[] = [
   {
-    label: "Scaling Fake Systems at Acme Corp",
+    label: "在範例科技擴展虛構系統",
     url: "https://example.com/talks/scaling-fake-systems",
-    note: "Acme DevCon · 2025",
+    note: "範例科技開發者大會 · 2025",
   },
 ];
 
 export const PROFESSIONAL_SECTIONS: Section[] = [
   // Intro paragraphs come from PROFILE.bio so the identity card and this
   // section stay in sync.
-  { type: "text", title: "About", paragraphs: PROFILE.bio },
-  { type: "stats", title: "By the Numbers", tiles: STATS_TILES },
-  { type: "timeline", title: "Experience", entries: EXPERIENCE_ENTRIES },
-  { type: "timeline", title: "Education", entries: EDUCATION_ENTRIES },
-  { type: "chips", title: "Skills", items: SKILLS },
-  { type: "highlights", title: "Highlights", entries: HIGHLIGHTS_ENTRIES },
-  { type: "cards", title: "Certifications", cards: CERTIFICATION_CARDS },
-  { type: "links", title: "Talks", links: TALKS },
+  { type: "text", title: "關於", paragraphs: PROFILE.bio },
+  { type: "stats", title: "數據一覽", tiles: STATS_TILES },
+  { type: "timeline", title: "經歷", entries: EXPERIENCE_ENTRIES },
+  { type: "timeline", title: "學歷", entries: EDUCATION_ENTRIES },
+  { type: "chips", title: "技能", items: SKILLS },
+  { type: "highlights", title: "亮點", entries: HIGHLIGHTS_ENTRIES },
+  { type: "cards", title: "證照", cards: CERTIFICATION_CARDS },
+  { type: "links", title: "演講", links: TALKS },
 ];

@@ -11,11 +11,10 @@ const SITE = {
   /** Sub-path when deployed as a GitHub project page, e.g. "/astro-flipside". "" for root. */
   base: "/astro-flipside",
   title: "Flipside",
-  description:
-    "A dual-face personal site — work on one side, life on the other.",
-  author: "Alex Lin",
+  description: "雙面（Work / Life）個人網站與部落格模板",
+  author: "林曉映",
   /** UI language for every built-in string: "en" | "zh-TW". */
-  locale: "en" as "en" | "zh-TW",
+  locale: "zh-TW" as "en" | "zh-TW",
   /** Navigation. label is a locale key (see src/locales/). */
   nav: [
     { label: "nav.about", href: "/" },
