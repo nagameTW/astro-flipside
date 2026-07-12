@@ -1,12 +1,14 @@
 ---
 // Label/value cards — extracted from the Life face's gear grid. Rows may
-// carry an optional per-row `icon` (the gear grid's case); grid/card/label
-// classes and spacing are unchanged.
+// carry an optional per-row `icon` (the gear grid's case) and an optional
+// `href` that turns the value into a link (e.g. a store page); grid/card/
+// label classes and spacing are unchanged.
 interface Props {
   title?: string;
-  rows: { label: string; value: string; icon?: string }[];
+  rows: { label: string; value: string; icon?: string; href?: string }[];
 }
 const { title, rows } = Astro.props;
+const isExternal = (u: string) => u.startsWith("http");
 ---
 
 {
@@ -25,7 +27,25 @@ const { title, rows } = Astro.props;
               {row.icon && <span class={`ts-icon ${row.icon}`} />}
               <div class="gear-body">
                 <div class="gear-label ts-text is-secondary">{row.label}</div>
-                <div class="ts-text is-bold">{row.value}</div>
+                <div class="ts-text is-bold">
+                  {
+                    row.href ? (
+                      <a
+                        href={row.href}
+                        target={isExternal(row.href) ? "_blank" : undefined}
+                        rel={
+                          isExternal(row.href)
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                      >
+                        {row.value}
+                      </a>
+                    ) : (
+                      row.value
+                    )
+                  }
+                </div>
               </div>
             </div>
           ))}

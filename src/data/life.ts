@@ -27,16 +27,20 @@ const INTERESTS = [
 ];
 
 // Placeholder gear cards, mic first then monitoring and instrument.
-const GEAR: { label: string; item: string; icon: string }[] = [
+// `href` is optional — with it the item name links out (e.g. to a store
+// page); without it the name renders as plain text.
+const GEAR: { label: string; item: string; icon: string; href?: string }[] = [
   {
     label: "麥克風",
     item: "聲學 AT-01 麥克風",
     icon: "is-microphone-icon",
+    href: "https://example.com/shop/at-01",
   },
   {
     label: "監聽耳機",
     item: "聲學 IH-02 監聽耳機",
     icon: "is-headphones-icon",
+    href: "https://example.com/shop/ih-02",
   },
   {
     label: "主奏吉他",
@@ -65,8 +69,13 @@ export const PERSONAL_SECTIONS: Section[] = [
   { type: "cards", title: "人生成就", cards: TROPHY_CARDS },
   {
     type: "kv",
-    title: "裝備",
-    rows: GEAR.map((g) => ({ label: g.label, value: g.item, icon: g.icon })),
+    title: "器材",
+    rows: GEAR.map((g) => ({
+      label: g.label,
+      value: g.item,
+      icon: g.icon,
+      href: g.href,
+    })),
   },
   { type: "markdown", title: "其他", body: MISC_BODY },
 ];

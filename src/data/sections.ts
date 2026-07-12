@@ -23,7 +23,9 @@ export type Section =
   | {
       type: "kv";
       title?: string;
-      rows: { label: string; value: string; icon?: string }[];
+      // href turns the value into a link (e.g. a store or product page);
+      // external http(s) links open in a new tab.
+      rows: { label: string; value: string; icon?: string; href?: string }[];
     }
   | { type: "timeline"; title?: string; entries: TimelineEntry[] }
   | { type: "highlights"; title?: string; entries: HighlightEntry[] }
