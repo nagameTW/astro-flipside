@@ -2,7 +2,10 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/nagameTW/astro-flipside/ci.yml?label=CI&style=for-the-badge)](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2F3741?style=for-the-badge)](LICENSE)
-![Astro](https://img.shields.io/badge/Astro-5.1.3-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro-5-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
+[![Tocas UI](https://img.shields.io/badge/Tocas_UI-1F2430?style=for-the-badge)](https://tocas-ui.com/)
+![i18n](https://img.shields.io/badge/i18n-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%20%7C%20English-2F3741?style=for-the-badge)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-2F3741?style=for-the-badge)](CONTRIBUTING.md)
 
 <img src="public/favicon.svg" alt="Flipside logo" width="80" height="80">
 
