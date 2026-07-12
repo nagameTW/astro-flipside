@@ -1,7 +1,7 @@
 import type { Section, CardEntry } from "@/data/sections";
 import { TROPHIES } from "@/data/trophies";
 
-// Photo: Mark Olsen, https://unsplash.com/photos/rj4KLIcDwwc (Unsplash
+// Photo: Nikolett Emmert, https://unsplash.com/photos/PR7J4fH6EGU (Unsplash
 // License — free to use, modify, and redistribute; see
 // https://unsplash.com/license). A cat, matching the persona's interests —
 // the no-visible-face rule only binds HUMAN faces.
