@@ -7,7 +7,9 @@
 //
 // To add an icon: find it on fontawesome.com (Free set), copy its SVG path
 // and viewBox width into ICONS below — every Free icon has a 512-unit-high
-// viewBox, so one [width, path] pair is all an entry needs.
+// viewBox, so one [width, path] pair is all an entry needs. (Some glyphs'
+// paths poke slightly past the viewBox — sun's rays, for one; the .icon
+// rule in global.css sets overflow:visible so they don't clip.)
 const ICONS: Record<string, [number, string]> = {
   "magnifying-glass": [
     512,

@@ -203,11 +203,20 @@ src/
 | `author`           | 你的名字。會輸出成每個頁面的 `<meta name="author">` 標籤（目前唯一會讀取這個欄位的地方）。                  |
 | `locale`           | `"en"` 或 `"zh-TW"`；決定介面字串字典（`src/locales/`）跟 `<html lang>`。                                   |
 | `nav`              | 導覽列連結；每個 `label` 是介面字典裡的一個 key。                                                           |
-| `socials`          | Life 面大頭貼卡片的社群按鈕；`url` 會開啟連結，`copy` 會複製文字（像 Discord 那樣）。                       |
+| `socials`          | Life 面大頭貼卡片的社群按鈕；`url` 會開啟連結，`copy` 會複製文字（像 Discord 那樣）；`icon` 是 `src/components/Icon.astro` 裡的名稱。 |
 | `github`           | Work 面大頭貼卡片上的 GitHub 連結。                                                                         |
 | `features.math`    | 文章裡的 KaTeX 數學公式（`$…$` / `$$…$$`）。預設關閉；關閉時不佔 bundle 大小。                              |
 | `features.mermaid` | 文章裡的 ` ```mermaid ` 圖表。預設關閉；關閉時不佔 bundle 大小。                                            |
 | `features.giscus`  | `false`，或是 [giscus.app](https://giscus.app) 給的四個資料屬性，設定後開啟留言功能。                       |
+
+### 圖示
+
+介面圖示是內嵌 SVG（`src/components/Icon.astro`），不載入 Tocas 內建的
+Font Awesome 圖示字型。要新增圖示，到 fontawesome.com 找 Free 圖示，把
+它的 SVG path 和 viewBox 寬度照現有格式加進 `Icon.astro` 的 `ICONS`，
+資料檔裡就能用它的名稱。注意：模板沒用到、但依賴圖示字型的 Tocas 元件
+（checkbox 勾勾、select 箭頭、rating 星星等）如果你自己加進頁面，需要
+一併補上圖示。
 
 ## 語言
 

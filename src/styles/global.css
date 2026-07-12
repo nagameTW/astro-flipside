@@ -28,9 +28,18 @@
 
 /* Inline SVG icons (Icon.astro). The -0.125em shift seats the glyph on the
    text baseline the way the old icon font did (same value Font Awesome's
-   own SVG styles use). */
+   own SVG styles use). overflow:visible matches FA's own SVG styles too:
+   a few glyphs' paths poke slightly past the viewBox (sun's rays, discord)
+   and would clip without it. */
 .icon {
   vertical-align: -0.125em;
+  overflow: visible;
+}
+/* Tocas's pagination arrows were icon-font pseudo-elements; the font is
+   stripped, so Pagination.astro inlines the glyphs and these stay dead. */
+.ts-pagination .item.is-back::before,
+.ts-pagination .item.is-next::after {
+  content: none;
 }
 /* Tocas's .ts-button.is-start-icon spacing targets .ts-icon; mirror it for
    SVG icons so the button pattern keeps working. */

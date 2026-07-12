@@ -214,11 +214,21 @@ Every key in `src/config.ts`:
 | `author`           | Your name. Rendered as a `<meta name="author">` tag on every page (its only consumer today).                                               |
 | `locale`           | `"en"` or `"zh-TW"`; selects the UI string dictionary (`src/locales/`) and `<html lang>`.                                                  |
 | `nav`              | Nav bar links; each `label` is a key into the locale dictionary.                                                                           |
-| `socials`          | Life-face identity-card buttons; `url` opens a link, `copy` copies text (Discord-style).                                                   |
+| `socials`          | Life-face identity-card buttons; `url` opens a link, `copy` copies text (Discord-style); `icon` is a name from `src/components/Icon.astro`. |
 | `github`           | Work-face identity-card GitHub link.                                                                                                       |
 | `features.math`    | KaTeX math (`$…$` / `$$…$$`) in posts. Off by default; zero bundle cost when off.                                                          |
 | `features.mermaid` | ` ```mermaid ` fenced diagrams in posts. Off by default; zero bundle cost when off.                                                        |
 | `features.giscus`  | `false`, or the four data-attributes from [giscus.app](https://giscus.app) to enable comments.                                             |
+
+### Icons
+
+UI icons are inline SVG (`src/components/Icon.astro`); the Font Awesome
+icon font Tocas ships is not loaded. To add an icon, find a Free icon on
+fontawesome.com and add its SVG path and viewBox width to `ICONS` in
+`Icon.astro`, following the existing entries — data files can then use it
+by name. Note: Tocas components the template itself doesn't use but that
+rely on the icon font (checkbox ticks, select carets, rating stars, …)
+need an icon supplied the same way if you add them to a page.
 
 ## Locale
 
