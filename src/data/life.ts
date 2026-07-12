@@ -1,11 +1,12 @@
 import type { Section, CardEntry } from "@/data/sections";
 import { TROPHIES } from "@/data/trophies";
 
-// Photo: Baruk Granda, https://unsplash.com/photos/OHLRskxOpjI (Unsplash
+// Photo: Mark Olsen, https://unsplash.com/photos/rj4KLIcDwwc (Unsplash
 // License — free to use, modify, and redistribute; see
-// https://unsplash.com/license). Silhouette only, no visible face.
+// https://unsplash.com/license). A cat, matching the persona's interests —
+// the no-visible-face rule only binds HUMAN faces.
 /** Life-face avatar (the Work face has its own, see data/about.ts). */
-export const AVATAR = "/avatar.jpg";
+export const AVATAR = "/avatar-life.jpg";
 
 // Casual self-intro — obviously-fake demo persona.
 const INTRO = [

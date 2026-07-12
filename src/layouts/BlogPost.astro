@@ -8,7 +8,9 @@ import Comments from "@/components/Comments.astro";
 import { t, fill } from "@/locales";
 import { url } from "@/utils/url";
 import SITE from "@/config";
-import { AVATAR } from "@/data/life";
+// The byline wears the WORK avatar: posts are the musician identity's
+// output (the Life face's cat stays on the about page).
+import { AVATAR_WORK } from "@/data/about";
 
 type Props = CollectionEntry<"blog">["data"] & {
   minutesRead: number;
@@ -42,6 +44,10 @@ const hasToc = headings.some(
 <Layout title={title} description={description}>
   <article class="ts-container is-narrow" data-pagefind-body>
     <header class="post-header">
+      <a class="post-back" href={url("/blog/")}>
+        <span class="ts-icon is-arrow-left-icon" aria-hidden="true"></span>
+        {t["post.backToList"]}
+      </a>
       <h1 class="ts-header is-big is-heavy post-title">{title}</h1>
       {
         draft && (
@@ -53,7 +59,7 @@ const hasToc = headings.some(
         )
       }
       <div class="post-meta">
-        <img class="post-meta-avatar" src={url(AVATAR)} alt="" />
+        <img class="post-meta-avatar" src={url(AVATAR_WORK)} alt="" />
         <div class="post-meta-who">
           <div class="post-meta-author">{SITE.author}</div>
           <div class="ts-text is-description">

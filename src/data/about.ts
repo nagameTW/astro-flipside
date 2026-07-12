@@ -31,11 +31,12 @@ export type Highlight = {
   note?: string;
 };
 
-// Photo: Satyam Pathak, https://unsplash.com/photos/WI5e-s1ky0Y (Unsplash
-// License). Silhouetted hand holding headphones — no visible face, fits
-// the persona rule the Life avatar follows.
+// Photo: Baruk Granda, https://unsplash.com/photos/OHLRskxOpjI (Unsplash
+// License — free to use, modify, and redistribute; see
+// https://unsplash.com/license). On-stage silhouette, no visible face —
+// the musician identity, so it also fronts blog posts (BlogPost.astro).
 /** Work-face avatar (the Life face keeps data/life.ts's AVATAR). */
-export const AVATAR_WORK = "/avatar-work.jpg";
+export const AVATAR_WORK = "/avatar.jpg";
 
 /** A released work — repurposed from a certification-style card. */
 export type Discography = {

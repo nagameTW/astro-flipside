@@ -33,6 +33,7 @@ const en = {
   "search.clear": "Clear search",
   "search.noResults": "No matching results.",
   "post.footnotesLabel": "Footnotes",
+  "post.backToList": "Back to posts",
   "lightbox.label": "Enlarged image",
   "notFound.message": "This page does not exist.",
   "notFound.home": "Back to home",
