@@ -12,10 +12,13 @@ import { t } from "@/locales";
 <dialog id="search-dialog" class="search-dialog" aria-label={t["search.open"]}>
   <div class="ts-container">
     <div class="search-inner">
-      {/* Wrapper form so Tocas's is-large height/font presets apply; it
-          is also the positioning context for the project-styled clear
-          button (the native WebKit cancel X is hidden in global.css). */}
-      <div class="ts-input is-large">
+      {/* Borderless Apple-style query row: bare magnifier + naked input,
+          no box — the solid panel IS the field. The native WebKit cancel
+          X is hidden in global.css; the project-styled clear button
+          appears once there is text. */}
+      <div class="search-row">
+        <span class="ts-icon is-magnifying-glass-icon" aria-hidden="true"
+        ></span>
         <input
           id="search-input"
           type="search"

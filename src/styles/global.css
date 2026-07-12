@@ -509,9 +509,12 @@
 /* Lightbox sized to match the right content column (~812px), not full
    screen. `dialog.trophy-modal` (0,1,1) must out-specify Tocas's
    `dialog.ts-modal{--width:380px}`. */
-/* Any open modal locks the page behind it (native <dialog> doesn't). */
-body:has(dialog[open]) {
-  overflow: hidden;
+/* Any open modal locks the page behind it (native <dialog> doesn't). The
+   lock sits on :root because this stylesheet makes <html> the scroll
+   container (`:root { overflow-y: scroll }` above) — overflow set on
+   <body> never reaches the viewport, so a body-level lock is a no-op. */
+:root:has(dialog[open]) {
+  overflow-y: hidden;
 }
 dialog.trophy-modal {
   --width: min(52rem, 94vw);
@@ -1151,20 +1154,44 @@ a.ts-box:hover,
 }
 
 /* Search panel (Pagefind): an Apple-style header extension. The <dialog>
-   sits INSIDE the sticky header (Navbar.astro) and opens non-modally, so
-   the header itself stays crisp; the panel hangs off the header's bottom
-   edge and overlays the page instead of pushing it down. #search-veil dims
-   and click-guards the content below at z 99 — one notch under
-   .site-header's 100. Scroll locking still comes from the shared
-   body:has(dialog[open]) rule further up. */
+   sits INSIDE the sticky header (Navbar.astro) and opens non-modally; the
+   header trades its glass for solid page background while open (rule
+   below) and the panel is the same solid, so the two read as ONE opaque
+   slab — the header simply looks taller. No radius, no shadow: the frosted
+   veil below is the only separation, like apple.com's search. #search-veil
+   also click-guards the page at z 99, one notch under .site-header's 100. */
 .search-veil {
   position: fixed;
   inset: 0;
   z-index: 99;
-  background: rgb(0 0 0 / 0.5);
+  /* Dim-only first: the pale frosted wash needs color-mix; browsers
+     without it land on the plain dim. */
+  background: rgb(0 0 0 / 0.35);
+  background: color-mix(
+    in srgb,
+    var(--ts-page-background-default) 30%,
+    transparent
+  );
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .search-veil {
+    /* Without blur the pale wash would read as a rendering glitch. */
+    background: rgb(0 0 0 / 0.35);
+  }
 }
 .search-veil[hidden] {
   display: none;
+}
+/* One slab: while the panel is open the header drops its translucency so
+   no seam shows where the panel begins. */
+:root:has(dialog.search-dialog[open]) .site-header {
+  background: var(--ts-page-background-default);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 dialog.search-dialog {
   position: absolute;
@@ -1174,34 +1201,13 @@ dialog.search-dialog {
   max-width: none;
   margin: 0;
   border: 0;
-  padding: 0.35rem 0 1.25rem;
-  /* .site-header's glass recipe, so header + panel read as one slab
-     (opaque-first fallback for the same browsers, see the header rule). */
+  padding: 0.75rem 0 2.5rem;
   background: var(--ts-page-background-default);
-  background: color-mix(
-    in srgb,
-    var(--ts-page-background-default) 70%,
-    transparent
-  );
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border-radius: 0 0 var(--ts-border-radius-container)
-    var(--ts-border-radius-container);
-  box-shadow: var(--ts-elevated-shadow-modal);
-}
-@supports not (
-  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
-) {
-  dialog.search-dialog {
-    background: var(--ts-page-background-default);
-  }
 }
 .search-inner {
-  width: min(44rem, 100%);
-  margin-inline: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 @media (prefers-reduced-motion: no-preference) {
   dialog.search-dialog[open] {
@@ -1214,15 +1220,31 @@ dialog.search-dialog {
     }
   }
 }
-/* Pill-shaped query field: the wrapper publishes --border-radius for
-   Tocas's own input rules; extra end padding clears the floating clear
-   button. */
-.search-dialog .ts-input {
-  --border-radius: 9999px;
+/* Borderless Apple-style query row: the solid panel IS the field, so the
+   input carries no box of its own. */
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
-.search-dialog .ts-input :where(input) {
-  border-radius: 9999px;
-  padding-inline: 1.1rem 2.6rem;
+.search-row > .ts-icon {
+  font-size: 1.3rem;
+  color: var(--ts-gray-500);
+}
+.search-row input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: inherit;
+  outline: none;
+}
+.search-row input::placeholder {
+  color: var(--ts-gray-500);
 }
 /* The native WebKit search-cancel X ignores the site's icon font — hide it
    in favor of the project-styled clear button. */
@@ -1232,20 +1254,17 @@ dialog.search-dialog {
   display: none;
 }
 .search-clear {
-  position: absolute;
-  inset-inline-end: 0.45rem;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.9rem;
-  height: 1.9rem;
+  width: 2rem;
+  height: 2rem;
   border: 0;
   border-radius: 50%;
   background: transparent;
   color: var(--ts-gray-500);
   cursor: pointer;
+  font-size: 1rem;
 }
 .search-clear:hover {
   background: var(--ts-page-background-tertiary);
