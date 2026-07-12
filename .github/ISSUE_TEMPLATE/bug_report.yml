@@ -1,23 +1,25 @@
-name: Bug report
-description: Report a problem with the template
+name: 錯誤回報
+description: 回報範本的問題
 title: "[Bug]: "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        感謝回報，請盡量填寫以下欄位以便重現問題。(Thanks for the report — please fill in what you can below, so the bug can be reproduced.)
+        Feel free to write in English.
+
+        感謝回報，請盡量填寫以下欄位，方便我們重現問題。
   - type: textarea
     id: what-happened
     attributes:
-      label: What happened?
-      description: A clear description of the bug.
+      label: 發生了什麼事？
+      description: 清楚描述這個錯誤。
     validations:
       required: true
   - type: textarea
     id: repro-steps
     attributes:
-      label: Steps to reproduce
+      label: 重現步驟
       placeholder: |
         1. ...
         2. ...
@@ -27,29 +29,29 @@ body:
   - type: textarea
     id: expected
     attributes:
-      label: Expected behavior
+      label: 預期行為
   - type: input
     id: version
     attributes:
-      label: Template version / commit
-      description: The git commit SHA or tag you're using.
+      label: 範本版本／commit
+      description: 你使用的 git commit SHA 或標籤。
   - type: dropdown
     id: deploy-target
     attributes:
-      label: Deploy target
+      label: 部署方式
       options:
-        - User page (username.github.io)
-        - Project page (username.github.io/repo)
-        - Other / local dev
+        - 使用者頁面（username.github.io）
+        - Project 頁面（username.github.io/repo）
+        - 其他／本機開發
   - type: dropdown
     id: locale
     attributes:
-      label: Locale
+      label: 語言設定
       options:
         - en
         - zh-TW
   - type: textarea
     id: logs
     attributes:
-      label: Logs / screenshots
-      description: Console output, build errors, or screenshots, if relevant.
+      label: 記錄／截圖
+      description: 主控台輸出、建置錯誤訊息，或截圖（如果相關的話）。
