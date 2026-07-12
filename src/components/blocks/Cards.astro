@@ -7,7 +7,7 @@
 // Shell, heading, and empty-guard live in Section.astro; `title` is still
 // received here because the modal ids are namespaced by it.
 import type { CardEntry } from "@/data/sections";
-import { resolveImg } from "@/utils/url";
+import SmartImage from "@/components/SmartImage.astro";
 
 interface Props {
   title?: string;
@@ -28,7 +28,13 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
   {
     cards.map((c, i) => {
       const media = c.img ? (
-        <img src={resolveImg(c.img)} alt="" loading="lazy" />
+        <SmartImage
+          src={c.img}
+          alt=""
+          loading="lazy"
+          widths={[400, 800]}
+          sizes="(max-width: 767px) 94vw, 400px"
+        />
       ) : (
         <div class="trophy-empty" />
       );
@@ -84,7 +90,13 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
           aria-label={c.title}
         >
           <div class="content">
-            <img src={resolveImg(c.img)} alt="" loading="lazy" />
+            <SmartImage
+              src={c.img}
+              alt=""
+              loading="lazy"
+              widths={[800, 1400]}
+              sizes="min(52rem, 94vw)"
+            />
           </div>
         </dialog>
       ),

@@ -2,19 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import { GALLERY } from "@/data/gallery";
 import { t, fill } from "@/locales";
-import { resolveImg } from "@/utils/url";
-import sharp from "sharp";
-
-// Width/height attributes keep the masonry from reflowing as photos load
-// (this page measured CLS 0.188 without them). Local files are measured
-// once at build; remote URLs are skipped and keep their natural flow.
-const dims = new Map<string, { width: number; height: number }>();
-for (const photo of GALLERY) {
-  if (/^https?:\/\//.test(photo.src)) continue;
-  const meta = await sharp(`public${photo.src}`).metadata();
-  if (meta.width && meta.height)
-    dims.set(photo.src, { width: meta.width, height: meta.height });
-}
+import SmartImage from "@/components/SmartImage.astro";
 // The masonry carries data-pagefind-body: captions and alt text are unique
 // content, so the gallery joins the search index (see index.astro's note;
 // the lightbox copies below the masonry stay out of it).
@@ -42,12 +30,12 @@ for (const photo of GALLERY) {
             class="gallery-item"
             data-modal={`gallery-modal-${i}`}
           >
-            <img
-              src={resolveImg(photo.src)}
+            <SmartImage
+              src={photo.src}
               alt={photo.alt}
               loading={i < 2 ? "eager" : "lazy"}
-              width={dims.get(photo.src)?.width}
-              height={dims.get(photo.src)?.height}
+              widths={[320, 640]}
+              sizes="(max-width: 640px) 94vw, 320px"
             />
             {photo.caption && (
               <div class="gallery-caption ts-text is-tiny">
@@ -78,7 +66,13 @@ for (const photo of GALLERY) {
           <span class="ts-icon is-angle-left-icon" />
         </button>
         <figure class="gallery-modal-figure">
-          <img src={resolveImg(photo.src)} alt="" loading="lazy" />
+          <SmartImage
+            src={photo.src}
+            alt=""
+            loading="lazy"
+            widths={[1000, 1600]}
+            sizes="94vw"
+          />
           <figcaption class="ts-text is-secondary">
             {photo.caption ?? ""}
           </figcaption>

@@ -5,8 +5,9 @@ import { TROPHIES } from "@/data/trophies";
 // License — free to use, modify, and redistribute; see
 // https://unsplash.com/license). A cat, matching the persona's interests —
 // the no-visible-face rule only binds HUMAN faces.
+import avatarLife from "../assets/avatar-life.jpg";
 /** Life-face avatar (the Work face has its own, see data/about.ts). */
-export const AVATAR = "/avatar-life.jpg";
+export const AVATAR = avatarLife;
 
 // Casual self-intro — obviously-fake demo persona.
 const INTRO = [

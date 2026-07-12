@@ -1,9 +1,13 @@
+import type { ImageMetadata } from "astro";
 import type {
   Section,
   TimelineEntry,
   HighlightEntry,
   CardEntry,
 } from "@/data/sections";
+import coverTide from "../assets/discography/tide.jpg";
+import coverNight from "../assets/discography/night.jpg";
+import coverDawn from "../assets/discography/dawn.jpg";
 
 export type Experience = {
   period: string;
@@ -35,16 +39,17 @@ export type Highlight = {
 // License — free to use, modify, and redistribute; see
 // https://unsplash.com/license). On-stage silhouette, no visible face —
 // the musician identity, so it also fronts blog posts (BlogPost.astro).
+import avatarWork from "../assets/avatar-work.jpg";
 /** Work-face avatar (the Life face keeps data/life.ts's AVATAR). */
-export const AVATAR_WORK = "/avatar.jpg";
+export const AVATAR_WORK = avatarWork;
 
 /** A released work — repurposed from a certification-style card. */
 export type Discography = {
   name: string;
   issuer: string;
   year: string;
-  /** Cover art (public/ path or full URL); omit for a placeholder card. */
-  img?: string;
+  /** Imported cover art or a full https:// URL; omit for a placeholder. */
+  img?: ImageMetadata | string;
 };
 
 // Dates read `YYYY.MM`, kept short: the timeline renders them in a
@@ -138,19 +143,19 @@ export const DISCOGRAPHY: Discography[] = [
     name: "《潮汐圖》",
     issuer: "浪聲唱片",
     year: "2025",
-    img: "/discography/tide.jpg",
+    img: coverTide,
   },
   {
     name: "《夜行動物園》",
     issuer: "浪聲唱片",
     year: "2023",
-    img: "/discography/night.jpg",
+    img: coverNight,
   },
   {
     name: "《拂曉前》EP",
     issuer: "拂曉音樂工作室",
     year: "2020",
-    img: "/discography/dawn.jpg",
+    img: coverDawn,
   },
 ];
 

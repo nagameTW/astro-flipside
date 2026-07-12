@@ -6,7 +6,9 @@ import FormattedDate from "@/components/FormattedDate.astro";
 import Toc from "@/components/Toc.astro";
 import Comments from "@/components/Comments.astro";
 import { t, fill } from "@/locales";
-import { resolveImg, url } from "@/utils/url";
+import SmartImage from "@/components/SmartImage.astro";
+import { Image } from "astro:assets";
+import { url } from "@/utils/url";
 import SITE from "@/config";
 // The byline wears the WORK avatar: posts are the musician identity's
 // output (the Life face's cat stays on the about page).
@@ -59,7 +61,16 @@ const hasToc = headings.some(
         )
       }
       <div class="post-meta">
-        <img class="post-meta-avatar" src={url(AVATAR_WORK)} alt="" />
+        <Image
+          class="post-meta-avatar"
+          src={AVATAR_WORK}
+          width={44}
+          height={44}
+          densities={[1, 2]}
+          format="webp"
+          loading="eager"
+          alt=""
+        />
         <div class="post-meta-who">
           <div class="post-meta-author">{SITE.author}</div>
           <div class="ts-text is-description">
@@ -79,11 +90,14 @@ const hasToc = headings.some(
     </header>
     {
       heroImage && (
-        <img
+        <SmartImage
           class="post-hero"
-          src={resolveImg(heroImage)}
+          src={heroImage}
           alt=""
+          loading="eager"
           fetchpriority="high"
+          widths={[720, 1100, 1600]}
+          sizes="(max-width: 767px) 100vw, min(1100px, 92vw)"
         />
       )
     }

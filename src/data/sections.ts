@@ -2,6 +2,7 @@
 // (avatar, toggle, socials) stays bespoke in its own component; everything
 // below the fold is one of these, so both faces render as
 // `SECTIONS.map((s) => <Section section={s} />)` (see Section.astro).
+import type { ImageMetadata } from "astro";
 export type TimelineEntry = {
   title: string;
   subtitle?: string;
@@ -13,7 +14,9 @@ export type HighlightEntry = { title: string; subtitle?: string; date: string };
 export type CardEntry = {
   title: string;
   subtitle?: string;
-  img?: string;
+  /** Imported asset (astro:assets pipeline) or a full https:// URL;
+   *  omit for a placeholder card. */
+  img?: ImageMetadata | string;
   url?: string;
 };
 
