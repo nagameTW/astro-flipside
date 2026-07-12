@@ -123,8 +123,10 @@ export default defineConfig({
       styleOverrides: {
         borderRadius: "0.4rem",
         codeFontSize: "0.9em",
+        // Light value sits between --ts-gray-75 (250) and gray-100 (242):
+        // gray-100 read too heavy against the white page (owner call).
         codeBackground: ({ theme }) =>
-          theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(242, 242, 242)",
+          theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(246, 246, 246)",
         borderWidth: "0",
         frames: {
           frameBoxShadowCssValue: "none",
@@ -137,7 +139,7 @@ export default defineConfig({
           editorActiveTabIndicatorTopColor: "transparent",
           editorActiveTabIndicatorBottomColor: "transparent",
           terminalBackground: ({ theme }) =>
-            theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(242, 242, 242)",
+            theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(246, 246, 246)",
           terminalTitlebarBackground: ({ theme }) =>
             theme.type === "dark" ? "rgb(56, 56, 56)" : "rgb(238, 238, 238)",
           terminalTitlebarBorderBottomColor: ({ theme }) =>
