@@ -3,7 +3,8 @@ title: "Kitchen sink"
 description: "Every Markdown feature this template supports, in one post."
 pubDate: 2026-01-02
 tags: ["demo", "markdown"]
-heroImage: "/avatar.svg"
+heroImage: "/blog/hero-desk.jpg"
+# heroImage credit: Karola G (Pexels), https://www.pexels.com/photo/wooden-table-with-coffee-and-notebook-with-pen-4195334/
 ---
 
 A reference post exercising everything the Markdown pipeline renders, so you
@@ -71,13 +72,16 @@ Inline code like `npm run build` sits in a sentence without breaking it.
   images: a file living next to its Markdown source is picked up by the
   build-time asset pipeline and optimized, hashed and base-prefixed,
   same as an image imported from `src/` (verified: this renders as
-  `/astro-flipside/_astro/avatar.<hash>.svg`). Plain `![](/avatar.svg)`
+  `/astro-flipside/_astro/avatar.<hash>.webp` — Astro's default image
+  service re-encodes raster images to webp, unlike the plain-copy
+  behavior the old SVG got here). Plain `![](/avatar.jpg)`
   would NOT get this treatment; only `heroImage` in frontmatter (see
   BlogPost.astro) and this colocated relative form are base-prefixed
-  automatically.
+  automatically. (Photo: Baruk Granda, same avatar as the Life/Work
+  cards — https://unsplash.com/photos/OHLRskxOpjI.)
 -->
 
-![Flipside's placeholder avatar](./avatar.svg)
+![Flipside's placeholder avatar](./avatar.jpg)
 
 By default an image fills the column's width; add a `width` attribute to
 shrink it, like the sized example below.
@@ -93,7 +97,7 @@ shrink it, like the sized example below.
   `SITE.base` in `src/config.ts`.
 -->
 
-<img src="/astro-flipside/avatar.svg" width="160" alt="Sized image demo">
+<img src="/astro-flipside/blog/hero-desk.jpg" width="160" alt="Sized image demo">
 
 ## Math and diagrams
 

@@ -1,8 +1,11 @@
 import type { Section, CardEntry } from "@/data/sections";
 import { TROPHIES } from "@/data/trophies";
 
+// Photo: Baruk Granda, https://unsplash.com/photos/OHLRskxOpjI (Unsplash
+// License — free to use, modify, and redistribute; see
+// https://unsplash.com/license). Silhouette only, no visible face.
 /** Shared by both faces. */
-export const AVATAR = "/avatar.svg";
+export const AVATAR = "/avatar.jpg";
 
 // Casual self-intro — obviously-fake demo persona.
 const INTRO = [

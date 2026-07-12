@@ -5,6 +5,7 @@
 // → lightbox button (today's trophy behavior); else a plain, non-interactive
 // placeholder card (e.g. certifications, which have neither).
 import type { CardEntry } from "@/data/sections";
+import { url } from "@/utils/url";
 
 interface Props {
   title?: string;
@@ -12,6 +13,12 @@ interface Props {
 }
 const { title, cards } = Astro.props;
 const isExternal = (u?: string) => !!u && u.startsWith("http");
+// Same rule as gallery/index.astro and BlogPost.astro's heroImage: a card
+// image is a public/ path (base-prefixed here) or a full https:// URL (used
+// as-is). Trophy entries were always "" until real photos landed, so this
+// path went untested — a bare `<img src={c.img}>` would 404 under a
+// non-root `base` (see src/config.ts).
+const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
 // Modal ids must be unique across the whole page — both faces (and every
 // Cards usage on them) are in the DOM at once — so they're namespaced by
 // this block's own title rather than a bare per-card index. HTML ids allow
@@ -34,7 +41,7 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
         <div class="trophy-grid">
           {cards.map((c, i) => {
             const media = c.img ? (
-              <img src={c.img} alt="" loading="lazy" />
+              <img src={resolve(c.img)} alt="" loading="lazy" />
             ) : (
               <div class="trophy-empty" />
             );
@@ -88,7 +95,7 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
                 aria-label={c.title}
               >
                 <div class="content">
-                  <img src={c.img} alt="" loading="lazy" />
+                  <img src={resolve(c.img)} alt="" loading="lazy" />
                 </div>
               </dialog>
             ),
