@@ -1282,20 +1282,21 @@ dialog.search-dialog {
   /* The panel starts below the header, so leave it headroom. */
   max-height: 55vh;
   overflow-y: auto;
-  /* An <ol> for semantics only — no 1./2./3. markers, no indent. */
+  /* An <ol> for semantics only — no 1./2./3. markers. The start padding
+     lines the row text (1.85rem + the row's own 0.5rem) up with the query
+     text above (the magnifier glyph renders ~1.55rem wide + 0.8rem gap),
+     like apple.com. Measured, not derived — adjust if the icon changes. */
   list-style: none;
   margin: 0;
-  padding: 0;
-  /* The rows bleed 0.5rem past the list on both sides (hover background,
-     negative margins below), so the scroll container is always 1rem
-     "overflowing": on Windows-style classic scrollbars that paints a
-     permanent horizontal bar. Clip that axis instead. */
+  padding: 0 0 0 1.85rem;
+  /* Belt for stray row overflow inside this scroll container: on
+     Windows-style classic scrollbars it would paint a permanent
+     horizontal bar. */
   overflow-x: hidden;
 }
 .search-results li a {
   display: block;
   padding: 0.5rem;
-  margin-inline: -0.5rem;
   border-radius: var(--ts-border-radius-container);
   color: inherit;
   text-decoration: none;
@@ -1308,7 +1309,7 @@ dialog.search-dialog {
 }
 .search-results li.search-empty {
   color: var(--ts-gray-500);
-  padding-block: 0.25rem;
+  padding: 0.25rem 0.5rem;
 }
 .search-results li strong {
   display: block;

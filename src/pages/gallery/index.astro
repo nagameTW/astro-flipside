@@ -6,6 +6,9 @@ import { url } from "@/utils/url";
 
 // Same "public/ path or full URL" rule as BlogPost.astro's heroImage.
 const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
+// The masonry carries data-pagefind-body: captions and alt text are unique
+// content, so the gallery joins the search index (see index.astro's note;
+// the lightbox copies below the masonry stay out of it).
 ---
 
 <Layout title={t["nav.gallery"]} description={t["gallery.description"]}>
@@ -19,7 +22,11 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
     GALLERY.length === 0 ? (
       <p class="ts-text is-secondary">{t["gallery.empty"]}</p>
     ) : (
-      <div class="gallery-masonry">
+      <div
+        class="gallery-masonry"
+        data-pagefind-body
+        data-pagefind-meta={`title:${t["nav.gallery"]}`}
+      >
         {GALLERY.map((photo, i) => (
           <button
             type="button"
