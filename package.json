@@ -13,7 +13,7 @@
     "test": "node --test plugins/*.test.mjs"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.0.3",
+    "@astrojs/mdx": "^7.0.2",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.2.1",
     "@expressive-code/plugin-line-numbers": "^0.44.0",
