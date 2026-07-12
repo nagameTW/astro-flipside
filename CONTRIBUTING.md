@@ -18,24 +18,24 @@ python3 scripts/test_fetch_gamestats.py
 
 `npm audit` may still list advisories against `astro`/`esbuild`: clearing
 those needs a breaking major-version bump, so they're left for a deliberate
-upgrade rather than `--force`. They're build-tooling-only — the static
-output this template ships is unaffected — and dependabot already tracks
+upgrade rather than `--force`. They're build-tooling-only (the static
+output this template ships is unaffected), and dependabot already tracks
 them weekly (`.github/dependabot.yml`).
 
 ## Repo map
 
-- `src/config.ts` — single source of site configuration (title, nav, feature
+- `src/config.ts`: single source of site configuration (title, nav, feature
   flags, socials). Most customization starts here.
-- `src/locales/en.ts`, `src/locales/zh-TW.ts` — every built-in UI string, one
+- `src/locales/en.ts`, `src/locales/zh-TW.ts`: every built-in UI string, one
   dictionary per locale. `SITE.locale` in `src/config.ts` picks which loads.
-- `src/data/*.ts` — content data: work/life "about" copy (`about.ts`,
+- `src/data/*.ts`: content data, work/life "about" copy (`about.ts`,
   `life.ts`), portfolio entries (`projects.ts`), the shared block-content
   type definitions (`sections.ts`), and optional game-stats data
   (`gamestats.ts`, refreshed by `scripts/fetch_gamestats.py`).
-- `src/components/blocks/*.astro` — the generic content blocks (text, chips,
+- `src/components/blocks/*.astro`: the generic content blocks (text, chips,
   timeline, cards, stats, ...) that both about-faces render from
   `src/data/sections.ts` entries. See Conventions below.
-- `plugins/*.mjs` — build-time remark plugins (Mermaid fences, reading time),
+- `plugins/*.mjs`: build-time remark plugins (Mermaid fences, reading time),
   each with an adjacent `*.test.mjs`.
 
 ## Conventions
@@ -45,10 +45,10 @@ them weekly (`.github/dependabot.yml`).
 - One branch per change; open a PR against `main`.
 - Blocks stay data-driven: a block component takes its content from
   `src/data/*.ts` and renders nothing when that data is empty (see e.g.
-  `cards.length > 0 && (...)` in `Cards.astro`) — don't hardcode content
+  `cards.length > 0 && (...)` in `Cards.astro`). Don't hardcode content
   inside a block component.
 - A UI string change touches **both** `src/locales/en.ts` and
-  `src/locales/zh-TW.ts` in the same PR — one locale silently falling behind
+  `src/locales/zh-TW.ts` in the same PR. One locale silently falling behind
   the other is treated as a bug.
 
 ## Personal data
@@ -85,4 +85,4 @@ npm run build && npm run preview
 ```
 
 Then open the printed local URL and spot-check the page(s) your change
-touches — light + dark, and both locales if you touched UI strings.
+touches: light + dark, and both locales if you touched UI strings.

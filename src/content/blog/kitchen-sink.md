@@ -46,8 +46,8 @@ deleted while still syntax-highlighting the rest of the line.
 Inline code like `npm run build` sits in a sentence without breaking it.
 
 > A blockquote: everything below the fold is generated from this one
-> Markdown file — the theme, the reading time, and the table of contents
-> all read the same source.
+> Markdown file (the theme, the reading time, and the table of contents
+> all read the same source).
 
 ## Tables
 
@@ -69,7 +69,7 @@ Inline code like `npm run build` sits in a sentence without breaking it.
 <!--
   Colocated assets are Astro's documented pattern for content-collection
   images: a file living next to its Markdown source is picked up by the
-  build-time asset pipeline and optimized — hashed and base-prefixed,
+  build-time asset pipeline and optimized, hashed and base-prefixed,
   same as an image imported from `src/` (verified: this renders as
   `/astro-flipside/_astro/avatar.<hash>.svg`). Plain `![](/avatar.svg)`
   would NOT get this treatment; only `heroImage` in frontmatter (see
@@ -84,7 +84,7 @@ Inline code like `npm run build` sits in a sentence without breaking it.
 `features.math` and `features.mermaid` (in `src/config.ts`) ship **off** by
 default, so `$$…$$` and ` ```mermaid ` blocks would render as inert text
 rather than a formula or diagram. Shown here as an escaped reference instead
-of live, possibly-broken output — flip the flags on to render them for real.
+of live, possibly-broken output. Flip the flags on to render them for real.
 
 ```text
 $$
@@ -103,6 +103,6 @@ graph TD
 Reading time on this post is computed from the rendered text, CJK included[^1].
 
 [^1]:
-    See `plugins/remark-reading-time.mjs` — it counts the `mdast` tree with
+    See `plugins/remark-reading-time.mjs`: it counts the `mdast` tree with
     the `reading-time` package, which counts CJK by character rather than by
     word.

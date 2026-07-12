@@ -7,7 +7,7 @@ tags: ["meta"]
 
 This is the first post on a fresh Flipside install. If you're reading it in
 the built site, the blog is already wired up: tags, pagination, RSS, search,
-reading time — all of it. You shouldn't need to touch any of the plumbing.
+reading time, all of it. You shouldn't need to touch any of the plumbing.
 There are exactly three places you edit.
 
 ## `src/config.ts`
@@ -18,13 +18,13 @@ strings and booleans.
 
 ## `src/data/*`
 
-The About page's content — timeline, stats, project cards, links — lives here
+The About page's content (timeline, stats, project cards, links) lives here
 as plain data files, not markup. Change the data, the page updates itself.
 
 ## `src/content/blog/`
 
 This folder. Drop a Markdown file in, give it a `title` and `pubDate` in the
-frontmatter, and it's a post — sorted into the index, tagged, syndicated to
+frontmatter, and it's a post: sorted into the index, tagged, syndicated to
 `rss.xml`, and indexed for search on the next build.
 
 See the kitchen-sink post next for everything the Markdown pipeline supports.
