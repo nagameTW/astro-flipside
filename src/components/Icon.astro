@@ -10,6 +10,11 @@
 // viewBox, so one [width, path] pair is all an entry needs. (Some glyphs'
 // paths poke slightly past the viewBox — sun's rays, for one; the .icon
 // rule in global.css sets overflow:visible so they don't clip.)
+//
+// Heads-up if you add Tocas components the template doesn't use (checkbox,
+// select, rating, breadcrumb…): their built-in glyphs were icon-font
+// pseudo-elements, and the font is gone — supply the glyph with <Icon>
+// the same way Pagination.astro does.
 const ICONS: Record<string, [number, string]> = {
   "magnifying-glass": [
     512,

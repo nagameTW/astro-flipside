@@ -35,8 +35,6 @@
     <li><a href="#commands">Commands</a></li>
     <li><a href="#project-structure">Project structure</a></li>
     <li><a href="#deploy">Deploy</a></li>
-    <li><a href="#optional-modules">Optional modules</a></li>
-    <li><a href="#config-reference">Config reference</a></li>
     <li><a href="#locale">Locale</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
@@ -48,41 +46,36 @@
 
 ## About Flipside
 
-At work you answer email, sit in meetings, print a job title on a
-business card. After hours you practice guitar, shoot hoops, log on
-under a handle only your people would recognize. Both are you, yet
-they rarely share a page. A personal site usually hands you one
-layout, so you pick one self to show.
+At work you answer email, sit in meetings, put a job title on a
+business card. After hours you practice guitar, play ball, or log on
+under an ID only fellow fans would recognize.
 
-Flipside says: don't pick. Like a coin, one side is your profession,
-the other is what you love, and flipping it is all it takes.
+Both of these are you, yet they rarely show up in the same place.
 
-So the About page ships with a toggle. Press it and the avatar flips:
-Work folds away, Life unfolds. Your resume and your hobbies live at
-the same address, and visitors decide which you to meet.
+Most personal sites give you one layout and one way to tell your
+story, so you keep having to choose: show the profession, or share
+the passion? In the end, one side gets to stand for all of you.
 
-It is a clean, Chinese-friendly Astro theme, distilled from my own
-personal site. I stripped out the private parts, kept the lessons
-learned, and left a starting point you can build on directly.
+Flipside's core idea is simple: why compromise.
+
+Like a coin: profession on the front, passion on the back. Both sides
+are the real you, and all it takes is a flip.
+
+So the About page ships with a toggle. Click it and the avatar turns
+over: the Work face folds away, the Life face opens up. Your resume,
+your work, and your hobbies share one address, and visitors are not
+handed a single version of you; they choose the angle from which to
+know you.
+
+Flipside is a clean, easily customized Astro theme that treats
+Chinese users as first-class. It grew out of my own personal site: I
+removed everything private, kept the design thinking and engineering
+that accumulated along the way, and shaped it into a starting point
+you can use right away, so that more people can build a site that
+shows their profession without giving up what makes them who they
+are.
 
 <img src="hero.jpg" alt="Flipside at a glance: the Work and Life faces, gallery, post list, code frames, and the dark theme">
-
-### What it wants to do for you
-
-The details writers care about come prewired: code frames carry file
-names and line numbers, the table of contents follows your scroll,
-full-text search needs no server, and drafts never ship by accident.
-
-If you shoot photos, there is a masonry gallery that keeps every
-picture's own aspect ratio and opens a lightbox on click.
-
-Chinese users will feel at home: the interface is built on Tocas UI,
-a framework designed for Chinese typography. Traditional Chinese is
-the default; English is one config line away.
-
-The whole site builds to static files. No server, no secrets, no cron
-jobs; push to GitHub and it lives. The full list is under
-[Features](#features).
 
 ### Built with
 
@@ -136,9 +129,12 @@ git push        # Actions builds and deploys; live in about a minute
 ```
 
 Every later push to `main` redeploys automatically. If the site comes up
-unstyled or without images, go back to step 3 and check `base`. Filling
-in your content (both faces' data, posts, the gallery) is covered by the
-sections below; delete the demo posts once you've read them.
+unstyled or without images, go back to step 3 and check `base`. Your
+content lives in the three arrowed spots under
+[Project structure](#project-structure); every other field in
+`src/config.ts` (title, description, socials, feature flags) carries its
+own comment, so fill them in as you go. Delete the demo posts once
+you've read them.
 
 Netlify, Vercel, and Cloudflare Pages work too: the template is fully
 static, so importing the repo is enough (set `base` to `""`). See the
@@ -237,43 +233,6 @@ published:
 
 This repo deploys itself as a project page (`base: "/astro-flipside"`) at
 <https://nagametw.github.io/astro-flipside/> as a live demo.
-
-## Optional modules
-
-**Trophies** (Life face, Highlights cards): edit `src/data/trophies.ts`.
-Screenshots go in `src/assets/trophies/` and are imported. Omitting `src` renders a placeholder box.
-
-**Gear** (Life face, Gear block): edit the `GEAR` array in
-`src/data/life.ts`.
-
-## Config reference
-
-Every key in `src/config.ts`:
-
-| Key                | Meaning                                                                                                                                     |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `site`             | Deployment origin, no trailing slash.                                                                                                       |
-| `base`             | Sub-path for a GitHub project page (e.g. `"/astro-flipside"`); `""` for a user/root page.                                                   |
-| `title`            | Site name: nav brand, `<title>`, RSS channel title; also shown as the Life-face identity-card name (that face has no separate name field).  |
-| `description`      | Site meta description; RSS channel description; a post's fallback meta description when it has none of its own.                             |
-| `author`           | Your name. Rendered as a `<meta name="author">` tag on every page (its only consumer today).                                                |
-| `locale`           | `"en"` or `"zh-TW"`; selects the UI string dictionary (`src/locales/`) and `<html lang>`.                                                   |
-| `nav`              | Nav bar links; each `label` is a key into the locale dictionary.                                                                            |
-| `socials`          | Life-face identity-card buttons; `url` opens a link, `copy` copies text (Discord-style); `icon` is a name from `src/components/Icon.astro`. |
-| `github`           | Work-face identity-card GitHub link.                                                                                                        |
-| `features.math`    | KaTeX math (`$…$` / `$$…$$`) in posts. Off by default; zero bundle cost when off.                                                           |
-| `features.mermaid` | ` ```mermaid ` fenced diagrams in posts. Off by default; zero bundle cost when off.                                                         |
-| `features.giscus`  | `false`, or the four data-attributes from [giscus.app](https://giscus.app) to enable comments.                                              |
-
-### Icons
-
-UI icons are inline SVG (`src/components/Icon.astro`); the Font Awesome
-icon font Tocas ships is not loaded. To add an icon, find a Free icon on
-fontawesome.com and add its SVG path and viewBox width to `ICONS` in
-`Icon.astro`, following the existing entries — data files can then use it
-by name. Note: Tocas components the template itself doesn't use but that
-rely on the icon font (checkbox ticks, select carets, rating stars, …)
-need an icon supplied the same way if you add them to a page.
 
 ## Locale
 
