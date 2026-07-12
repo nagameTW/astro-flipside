@@ -24,14 +24,35 @@ const SITE = {
   /** Life-face identity-card social buttons. `url` opens; `copy` copies text (Discord-style). */
   socials: [
     {
-      name: "GitHub",
-      icon: "is-github-icon",
-      url: "https://github.com/your-name",
+      name: "Instagram",
+      icon: "is-instagram-icon",
+      url: "https://example.com/instagram/your-name",
+    },
+    {
+      name: "Threads",
+      icon: "is-threads-icon",
+      url: "https://example.com/threads/your-name",
     },
     { name: "Discord", icon: "is-discord-icon", copy: "your-discord-handle" },
   ] as { name: string; icon: string; url?: string; copy?: string }[],
-  /** Work-face GitHub link. */
-  github: "https://github.com/your-name",
+  /** Work-face identity-card social buttons — same `url`/`copy` shape. */
+  socialsWork: [
+    {
+      name: "Spotify",
+      icon: "is-spotify-icon",
+      url: "https://example.com/spotify/your-name",
+    },
+    {
+      name: "YouTube",
+      icon: "is-youtube-icon",
+      url: "https://example.com/youtube/your-name",
+    },
+    {
+      name: "SoundCloud",
+      icon: "is-soundcloud-icon",
+      url: "https://example.com/soundcloud/your-name",
+    },
+  ] as { name: string; icon: string; url?: string; copy?: string }[],
   features: {
     /** KaTeX math ($…$ / $$…$$) in posts. */
     math: false,

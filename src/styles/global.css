@@ -572,9 +572,16 @@
 dialog.trophy-modal {
   --width: min(52rem, 94vw);
 }
+/* Same viewport-fit policy as the gallery lightbox: media letterboxes to
+   the screen whatever its aspect ratio. width:100% alone let a portrait
+   image blow past the viewport bottom. */
 .trophy-modal .content img {
   display: block;
-  width: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 14rem);
+  margin-inline: auto;
 }
 /* Gallery lightbox: an X/FB-style viewer. The dialog IS the dark stage —
    full viewport, no border chrome — and the image letterboxes inside it,

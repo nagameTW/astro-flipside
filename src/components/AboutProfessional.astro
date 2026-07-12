@@ -5,9 +5,12 @@ import FaceToggle from "@/components/FaceToggle.astro";
 import Section from "@/components/Section.astro";
 import { url } from "@/utils/url";
 
-// Work face keeps exactly one social affordance: the SITE.github link.
-// Template users who want LinkedIn, email, etc. on this face should add a
-// `links` section block instead (see src/components/blocks/Links.astro).
+// Work face renders SITE.socialsWork with the same url/copy affordances as
+// the Life face (AboutPersonal.astro also hosts the shared clipboard
+// handler — it targets [data-copy] document-wide, so copy buttons work on
+// both faces). Longer link lists belong in a `links` section block instead
+// (see src/components/blocks/Links.astro).
+const isExternal = (u: string) => u.startsWith("http");
 ---
 
 <!-- `is-hidden` + `inert` ship statically: personal is the default face, so
@@ -27,15 +30,30 @@ import { url } from "@/utils/url";
       </div>
       <div class="ts-text is-secondary">{PROFILE.headline}</div>
       <div class="social-icons has-top-spaced">
-        <a
-          class="ts-button is-icon is-circular"
-          href={SITE.github}
-          aria-label="GitHub"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span class="ts-icon is-github-icon"></span>
-        </a>
+        {
+          SITE.socialsWork.map((l) =>
+            l.url ? (
+              <a
+                class="ts-button is-icon is-circular"
+                href={l.url}
+                aria-label={l.name}
+                target={isExternal(l.url) ? "_blank" : undefined}
+                rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
+              >
+                <span class={`ts-icon ${l.icon}`} />
+              </a>
+            ) : (
+              <button
+                type="button"
+                class="ts-button is-icon is-circular"
+                data-copy={l.copy}
+                aria-label={l.name}
+              >
+                <span class={`ts-icon ${l.icon}`} />
+              </button>
+            ),
+          )
+        }
       </div>
       <FaceToggle />
     </div>
