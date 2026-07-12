@@ -28,7 +28,7 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
           >
             <img src={resolve(photo.src)} alt={photo.alt} loading="lazy" />
             {photo.caption && (
-              <div class="gallery-caption ts-text is-tiny is-secondary">
+              <div class="gallery-caption ts-text is-tiny">
                 {photo.caption}
               </div>
             )}

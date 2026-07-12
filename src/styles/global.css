@@ -532,6 +532,58 @@ dialog.gallery-modal {
 .gallery-item {
   break-inside: avoid;
   margin-bottom: 1rem;
+  /* The hover overlay is clipped by the button so it inherits the image's
+     rounded corners. */
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.4rem;
+}
+/* Pinterest-style reveal: a dark scrim fades in on hover/keyboard focus,
+   and the caption (when present) sits on the image's bottom edge in white.
+   Touch devices skip the whole layer — the lightbox already shows the
+   caption there. */
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.62),
+    rgba(0, 0, 0, 0.18) 55%,
+    rgba(0, 0, 0, 0.08)
+  );
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  pointer-events: none;
+}
+.gallery-item .gallery-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  padding: 0.65rem 0.75rem;
+  color: #fff;
+  text-align: start;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  pointer-events: none;
+}
+.gallery-item:hover::after,
+.gallery-item:focus-visible::after,
+.gallery-item:hover .gallery-caption,
+.gallery-item:focus-visible .gallery-caption {
+  opacity: 1;
+}
+@media (hover: none) {
+  .gallery-item::after,
+  .gallery-item .gallery-caption {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-item::after,
+  .gallery-item .gallery-caption {
+    transition: none;
+  }
 }
 
 /* Gear cards: icon + type + model on the entry-note tint, three across on
