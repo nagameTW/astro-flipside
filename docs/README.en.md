@@ -1,5 +1,3 @@
-<a id="readme-top"></a>
-
 <div align="center">
 
 [![CI](https://img.shields.io/github/actions/workflow/status/nagameTW/astro-flipside/ci.yml?label=CI&style=for-the-badge)](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml)
@@ -90,8 +88,6 @@ jobs; push to GitHub and it lives. The full list is under
 - [Expressive Code](https://expressive-code.com/) — code frames
 - [Pagefind](https://pagefind.app/) — static full-text search
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Getting started
 
 **1. Create your repo**
@@ -147,8 +143,6 @@ static, so importing the repo is enough (set `base` to `""`). See the
 
 The sections below are technical reference. Come back when you build.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Features
 
 **Dual-face about**
@@ -191,8 +185,6 @@ The sections below are technical reference. Come back when you build.
 - [x] Base-path support for GitHub project pages
 - [x] Fully static output: zero secrets, zero server
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Commands
 
 All commands run from the project root, in a terminal:
@@ -205,8 +197,6 @@ All commands run from the project root, in a terminal:
 | `npm run check`   | Type-checks the project (Astro and TypeScript)                       |
 | `npm test`        | Runs the plugin unit tests (`plugins/*.test.mjs`)                    |
 | `npm run fmt`     | Formats the codebase with Prettier                                   |
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Project structure
 
@@ -225,8 +215,6 @@ src/
 
 The three arrows are what you edit for a new site. Everything else is
 template internals.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Deploy
 
@@ -247,8 +235,6 @@ published:
 This repo deploys itself as a project page (`base: "/astro-flipside"`) at
 <https://nagametw.github.io/astro-flipside/> as a live demo.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Optional modules
 
 **Trophies** (Life face, Highlights cards): edit `src/data/trophies.ts`.
@@ -256,8 +242,6 @@ Screenshots go in `src/assets/trophies/` and are imported. Omitting `src` render
 
 **Gear** (Life face, Gear block): edit the `GEAR` array in
 `src/data/life.ts`.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Config reference
 
@@ -288,16 +272,12 @@ by name. Note: Tocas components the template itself doesn't use but that
 rely on the icon font (checkbox ticks, select carets, rating stars, …)
 need an icon supplied the same way if you add them to a page.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Locale
 
 The whole UI (not per-post) reads one locale, and it now defaults to
 `"zh-TW"`. Set `locale: "en"` in `src/config.ts` to switch to the English
 strings instead. Both dictionaries live in `src/locales/`; add another
 language by copying `en.ts`'s keys.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Roadmap
 
@@ -307,8 +287,6 @@ language by copying `en.ts`'s keys.
 
 Planned work and known issues live in the
 [open issues](../../../issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contributing
 
@@ -322,13 +300,9 @@ conventions; the PR form walks you through the rest (type of change,
 testing, screenshots for visual changes). CI runs the same three checks
 you can run locally: `npm run check && npm run build && npm test`.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## License
 
 MIT. See [LICENSE](../LICENSE).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contact
 
@@ -336,11 +310,7 @@ Author: [nagameTW](https://github.com/nagameTW)
 
 Project link: <https://github.com/nagameTW/astro-flipside>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Acknowledgments
 
 Built on [Tocas UI](https://tocas-ui.com/). Blog scaffolding follows the
 official Astro blog starter.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
