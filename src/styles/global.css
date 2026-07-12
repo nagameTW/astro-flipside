@@ -1169,6 +1169,12 @@ a.ts-box:hover,
 .md-content h4 {
   font-size: 1.1em;
 }
+/* Post prose reads as justified blocks, same as the about faces'
+   .about-main p rule — even left and right edges. */
+.md-content p,
+.md-content li {
+  text-align: justify;
+}
 /* Prose links match the site-wide text-link rule: underline only on
    hover / keyboard focus. */
 .md-content a {
