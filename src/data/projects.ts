@@ -10,8 +10,8 @@ export type Project = {
 // content to show); kept as a worked data example for the template.
 export const PROJECTS: Project[] = [
   {
-    name: "This Template",
-    description: "The dual-face personal site you're looking at right now.",
+    name: "這個範本",
+    description: "你現在看到的這個雙面個人網站。",
     tech: ["Astro", "TypeScript"],
     url: "https://github.com/your-name/astro-flipside",
   },
