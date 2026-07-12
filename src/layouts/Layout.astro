@@ -49,6 +49,14 @@ const { title, description, noindex } = Astro.props;
       <Icon name="arrow-up" />
     </button>
     <script>
+      // Measured page-scrollbar width for the modal scroll-lock: while a
+      // dialog is open, :root goes overflow:hidden and loses its scrollbar
+      // gutter, so global.css pads the root by this amount to keep the page
+      // from shifting sideways. 0 on overlay-scrollbar platforms.
+      document.documentElement.style.setProperty(
+        "--scrollbar-w",
+        `${window.innerWidth - document.documentElement.clientWidth}px`,
+      );
       const backToTop = document.getElementById("back-to-top")!;
       addEventListener(
         "scroll",

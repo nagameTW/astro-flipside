@@ -590,10 +590,6 @@
   aspect-ratio: 16 / 9;
   object-fit: cover;
 }
-/* Lightbox sized to match the right content column (~812px), not full
-   screen. `dialog.ts-modal.trophy-modal` (0,2,1) genuinely out-specifies
-   Tocas's `dialog.ts-modal{--width:380px}` (0,1,1) — the previous
-   single-class selector only tied and won by stylesheet load order. */
 /* Any open modal locks the page behind it (native <dialog> doesn't). The
    lock sits on :root because this stylesheet makes <html> the scroll
    container (`:root { overflow-y: scroll }` above) — overflow set on
@@ -602,20 +598,29 @@
   /* Both axes: with only overflow-y hidden, overflow-x computes to auto
      and any stray pixel of horizontal overflow paints a scrollbar. */
   overflow: hidden;
+  /* overflow:hidden also drops the scrollbar gutter (scrollbar-gutter only
+     reserves it for scroll/auto), so on classic-scrollbar platforms the
+     whole page would shift sideways when a lightbox opens. Pad the root by
+     the measured scrollbar width instead (set in Layout.astro's script;
+     0px on overlay-scrollbar platforms). */
+  padding-right: var(--scrollbar-w, 0px);
 }
-dialog.ts-modal.trophy-modal {
-  --width: min(52rem, 94vw);
+/* The lightbox box hugs the image: Tocas gives .ts-modal > .content a
+   fixed width and a light background, so any picture narrower than the
+   box (portraits, square album art letterboxed by max-height) showed as
+   white bars on both sides. fit-content shrinks the box to the picture;
+   the size cap moves onto the image itself (94vw minus the dialog's 1rem
+   side padding). `dialog.ts-modal.trophy-modal .content` (0,3,1)
+   out-specifies Tocas's `.ts-modal > .content` (0,2,0). */
+dialog.ts-modal.trophy-modal .content {
+  width: fit-content;
 }
-/* Same viewport-fit policy as the gallery lightbox: media letterboxes to
-   the screen whatever its aspect ratio. width:100% alone let a portrait
-   image blow past the viewport bottom. */
 .trophy-modal .content img {
   display: block;
   width: auto;
   height: auto;
-  max-width: 100%;
+  max-width: min(52rem, calc(94vw - 2rem));
   max-height: calc(100vh - 14rem);
-  margin-inline: auto;
 }
 /* Gallery lightbox: an X/FB-style viewer. The dialog IS the dark stage —
    full viewport, no border chrome — and the image letterboxes inside it,
