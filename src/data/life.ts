@@ -6,35 +6,39 @@ export const AVATAR = "/avatar.svg";
 
 // Casual self-intro — obviously-fake demo persona.
 const INTRO = [
-  "範例科技下班之後，鍵盤後面的那個人。",
-  "喜歡玩遊戲、聽音樂，還有偶爾不太成功的下廚實驗。",
-  "還在尋找一個能撐過一個月的興趣。",
+  "白天在錄音室裡調和聲，晚上巷口手搖飲店打烊前一定會出現。",
+  "寫歌大多在半夜兩三點最清醒，靈感常常來自超商關東煮的蒸氣。",
+  "私底下怕生，一站上舞台就完全變了一個人。",
 ];
 
 // Interests as tags (like the Work face's Skills).
 const INTERESTS = [
-  "遊戲",
-  "音樂",
-  "烹飪",
-  "攝影",
-  "桌遊",
-  "健行",
-  "動漫",
-  "閱讀",
+  "手搖茶",
+  "魔術",
+  "籃球",
+  "老電影",
+  "電玩",
+  "貓咪",
+  "深夜廣播",
+  "黑膠收藏",
 ];
 
-// Placeholder gear cards, machine first then peripherals.
+// Placeholder gear cards, mic first then monitoring and instrument.
 const GEAR: { label: string; item: string; icon: string }[] = [
   {
-    label: "處理器",
-    item: "通用 8 核心 CPU",
-    icon: "is-microchip-icon",
+    label: "麥克風",
+    item: "聲學 AT-01 麥克風",
+    icon: "is-microphone-icon",
   },
-  { label: "記憶體", item: "32 GB RAM", icon: "is-memory-icon" },
   {
-    label: "鍵盤",
-    item: "機械軸體，觸感軸",
-    icon: "is-keyboard-icon",
+    label: "監聽耳機",
+    item: "聲學 IH-02 監聽耳機",
+    icon: "is-headphones-icon",
+  },
+  {
+    label: "主奏吉他",
+    item: "聲學 GT-3 木吉他",
+    icon: "is-guitar-icon",
   },
 ];
 
@@ -46,16 +50,16 @@ const TROPHY_CARDS: CardEntry[] = TROPHIES.map((trophy) => ({
 // Freeform catch-all — demonstrates the markdown block (list + bold text).
 const MISC_BODY = `有些話沒有適合的區塊可以放，這一區就是留給那些內容的。
 
-**最近在玩的東西：**
+**最近在忙的事：**
 
-- 週末的機器人小專案
-- 學做酸種麵包（做得不太好）
-- 第三次重看同一部喜歡的影集`;
+- 想把上次巡演的和聲重新錄一次
+- 練習邊彈吉他邊切效果器，還沒成功
+- 手搖飲喝到一半突然想到一句歌詞，衝回家寫`;
 
 export const PERSONAL_SECTIONS: Section[] = [
   { type: "text", title: "關於", paragraphs: INTRO },
   { type: "chips", title: "興趣", items: INTERESTS },
-  { type: "cards", title: "戰績", cards: TROPHY_CARDS },
+  { type: "cards", title: "人生成就", cards: TROPHY_CARDS },
   {
     type: "kv",
     title: "裝備",

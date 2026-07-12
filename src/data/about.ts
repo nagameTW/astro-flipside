@@ -31,7 +31,8 @@ export type Highlight = {
   note?: string;
 };
 
-export type Certification = {
+/** A released work — repurposed from a certification-style card. */
+export type Discography = {
   name: string;
   issuer: string;
   year: string;
@@ -41,90 +42,87 @@ export type Certification = {
 // nowrap column, and a wider one squeezes the entry beside it.
 
 export const PROFILE = {
-  name: "林曉映",
-  headline: "範例科技 · 軟體工程師",
+  name: "陸知遙",
+  headline: "創作歌手・製作人",
   bio: [
-    "目前在範例科技寫程式。把這段換成你是誰、你在做什麼。",
-    "第二段：過去的經歷、專注領域，任何能說出你故事的內容。",
+    "目前隸屬浪聲唱片，身兼創作歌手與製作人，曲風橫跨民謠、電子與爵士，不喜歡被單一標籤定義。",
+    "出道前在各地的展演空間駐唱多年，靠一把吉他跟一本寫滿塗改的歌詞本，慢慢找到屬於自己的聲音。",
   ],
 };
 
-// Placeholder résumé — obviously-fake demo content. Replace every value
-// below with your own history; the shapes are what Section.astro expects.
+// Placeholder career history — obviously-fake demo content. Replace every
+// value below with your own history; the shapes are what Section.astro
+// expects.
 export const EXPERIENCE: Experience[] = [
   {
     period: "2023.06 – 至今",
-    title: "範例科技 · 資深軟體工程師",
+    title: "浪聲唱片 · 簽約歌手／製作人",
     duties: [
       {
-        name: "平台現代化",
-        text: "主導將單體服務拆分為一組可組合的 API，將回應時間中位數縮短一半。",
+        name: "《潮汐圖》製作",
+        text: "身兼創作與製作，融合電子節拍與弦樂編制，主打單曲登上多個串流平台週榜前列。",
       },
       {
-        name: "新人帶領",
-        text: "帶領並指導團隊新進工程師熟悉架構、工具與程式碼審查慣例。",
+        name: "「浪跡」巡迴演出",
+        text: "統籌全長 18 場的巡迴演出，並參與燈光與舞台腳本設計。",
       },
     ],
   },
   {
-    period: "2020.07 – 2023.05",
-    title: "北風貿易 · 軟體工程師",
+    period: "2019.03 – 2023.05",
+    title: "拂曉音樂工作室 · 駐店創作歌手",
     duties: [
       {
-        name: "功能開發交付",
-        text: "從規格到正式上線，端到端設計並交付面向使用者的功能。",
+        name: "客座填詞",
+        text: "為工作室旗下新人樂團擔任客座填詞人，累積超過四十首合作作品。",
       },
     ],
   },
 ];
 
-// Newest first, matching the work-experience timeline above.
+// Newest first, matching the timeline above.
 export const EDUCATION: Education[] = [
   {
-    period: "2016.09 – 2020.06",
-    school: "州立大學",
-    degree: "資訊工程學系學士",
-    thesis: "讀取密集型網路服務的輕量快取層設計",
+    period: "2015.09 – 2019.06",
+    school: "臨海音樂學苑",
+    degree: "現代音樂創作組",
+    thesis: "畢業製作《潮間帶》",
     description:
-      "測量在關聯式資料庫前加一層小型記憶體快取，對突發讀取流量下尾端延遲的影響。",
+      "採集海邊城市四季的環境聲音，混音成一張以民謠編曲為底的畢業作品。",
   },
 ];
 
-// Placeholder skill tags — swap in your own stack.
+// Placeholder skill tags — swap in your own.
 export const SKILLS: string[] = [
-  "TypeScript",
-  "React",
-  "Node.js",
-  "PostgreSQL",
-  "Docker",
-  "AWS",
-  "GraphQL",
-  "CI/CD",
-  "系統設計",
-  "測試與品保",
+  "作曲",
+  "填詞",
+  "編曲",
+  "鋼琴",
+  "吉他",
+  "混音",
+  "現場演出",
+  "多語言演唱",
 ];
 
 // Career highlights, newest first.
 export const HIGHLIGHTS: Highlight[] = [
   {
     date: "2025.11",
-    title: "內部黑客松",
-    detail: "第一名 · 位元大隊",
-    note: "打造一個即時視覺化 API 延遲的展示工具。",
+    title: "金浪獎",
+    detail: "年度最佳跨界創作歌手",
+    note: "以專輯《潮汐圖》入圍三項，抱回一座。",
   },
   {
-    date: "2024.03",
-    title: "範例科技創新獎",
-    detail: "亞軍",
+    date: "2022.07",
+    title: "戶外音樂季閉幕壓軸",
+    detail: "生涯第一次站上萬人舞台",
   },
 ];
 
-export const CERTIFICATIONS: Certification[] = [
-  {
-    name: "範例認證工程師",
-    issuer: "虛構雲端學院",
-    year: "2024",
-  },
+export const DISCOGRAPHY: Discography[] = [
+  { name: "《潮汐圖》", issuer: "浪聲唱片", year: "2025" },
+  { name: "《夜行動物園》", issuer: "浪聲唱片", year: "2023" },
+  { name: "《拂曉前》EP", issuer: "拂曉音樂工作室", year: "2020" },
 ];
 
 // --- Section-block wiring for AboutProfessional -----------------------
@@ -161,24 +159,30 @@ const HIGHLIGHTS_ENTRIES: HighlightEntry[] = HIGHLIGHTS.map((h) => ({
   date: h.date,
 }));
 
-const CERTIFICATION_CARDS: CardEntry[] = CERTIFICATIONS.map((c) => ({
-  title: c.name,
-  subtitle: `${c.issuer} · ${c.year}`,
+const DISCOGRAPHY_CARDS: CardEntry[] = DISCOGRAPHY.map((d) => ({
+  title: d.name,
+  subtitle: `${d.issuer} · ${d.year}`,
   img: "",
 }));
 
 // Quick-facts strip; playful values are deliberate (this is placeholder data).
 const STATS_TILES: { value: string; label: string }[] = [
-  { value: "6+", label: "年資" },
-  { value: "42", label: "上線 Repo 數" },
-  { value: "∞", label: "喝掉的咖啡" },
+  { value: "3", label: "張專輯" },
+  { value: "62", label: "場巡演" },
+  { value: "180+", label: "首詞曲" },
 ];
 
-const TALKS: { label: string; url: string; note?: string }[] = [
+// Fictional fan-site/label link placeholders — swap in your own.
+const LINKS: { label: string; url: string; note?: string }[] = [
   {
-    label: "在範例科技擴展虛構系統",
-    url: "https://example.com/talks/scaling-fake-systems",
-    note: "範例科技開發者大會 · 2025",
+    label: "浪聲唱片｜藝人頁面",
+    url: "https://example.com/labels/wave-sound/lu-zhiyao",
+    note: "官方資料",
+  },
+  {
+    label: "遙聲電台（粉絲站）",
+    url: "https://example.com/fansites/echo-radio",
+    note: "非官方彙整",
   },
 ];
 
@@ -191,6 +195,6 @@ export const PROFESSIONAL_SECTIONS: Section[] = [
   { type: "timeline", title: "學歷", entries: EDUCATION_ENTRIES },
   { type: "chips", title: "技能", items: SKILLS },
   { type: "highlights", title: "亮點", entries: HIGHLIGHTS_ENTRIES },
-  { type: "cards", title: "證照", cards: CERTIFICATION_CARDS },
-  { type: "links", title: "演講", links: TALKS },
+  { type: "cards", title: "代表作", cards: DISCOGRAPHY_CARDS },
+  { type: "links", title: "連結", links: LINKS },
 ];
