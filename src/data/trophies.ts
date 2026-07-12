@@ -10,6 +10,11 @@ export type Trophy = {
 export const TROPHIES: Trophy[] = [
   {
     src: "",
-    caption: "曾經一度衝上排行榜，可惜截圖隨著硬碟故障一起消失了。",
+    caption:
+      "有次深夜即興哼出的旋律，後來成了最紅的一首歌——可惜手機忘記按下錄音鍵。",
+  },
+  {
+    src: "",
+    caption: "第一次登台候補上場，緊張到把整首歌的詞唱成另一首的調。",
   },
 ];
