@@ -28,11 +28,6 @@ const zhTW: UIStrings = {
   "search.placeholder": "搜尋文章…",
   "notFound.message": "找不到這個頁面。",
   "notFound.home": "回首頁",
-  "life.music": "音樂",
-  "life.recentlyPlayedMusic": "最近播放",
-  "life.steamRecent": "最近遊玩",
-  "life.steamTotal": "總遊戲時數",
-  "life.hours": "{h} 小時",
   "life.copied": "已複製！",
 };
 export default zhTW;

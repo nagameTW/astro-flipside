@@ -29,7 +29,6 @@ Fixes #<!-- issue number, or delete this line -->
 ## Checklist
 
 - [ ] `npm run check && npm run build && npm test` pass locally
-- [ ] `python3 scripts/test_fetch_gamestats.py` passes (when `scripts/` is touched)
 - [ ] No personal data introduced: see the gate in [CONTRIBUTING.md](../CONTRIBUTING.md#personal-data)
 - [ ] Both `src/locales/en.ts` and `src/locales/zh-TW.ts` updated together (for any UI string change)
 - [ ] Docs updated where behavior changed (README / CONTRIBUTING)

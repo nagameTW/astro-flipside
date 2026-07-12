@@ -26,11 +26,6 @@ const en = {
   "search.placeholder": "Search posts…",
   "notFound.message": "This page does not exist.",
   "notFound.home": "Back to home",
-  "life.music": "Music",
-  "life.recentlyPlayedMusic": "Recently played",
-  "life.steamRecent": "Recently played",
-  "life.steamTotal": "Total playtime",
-  "life.hours": "{h} hrs",
   "life.copied": "Copied!",
 };
 export type UIStrings = typeof en;

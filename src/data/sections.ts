@@ -34,6 +34,4 @@ export type Section =
       title?: string;
       links: { label: string; url: string; note?: string }[];
     }
-  | { type: "markdown"; title?: string; body: string }
-  | { type: "steam" }
-  | { type: "music" };
+  | { type: "markdown"; title?: string; body: string };

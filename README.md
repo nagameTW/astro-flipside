@@ -31,10 +31,9 @@ pagination, search, and RSS.
 
 **Dual-face About**
 
-- Work/Life toggle with a 3D avatar flip. Both faces render from the same 12
+- Work/Life toggle with a 3D avatar flip. Both faces render from the same 9
   generic content blocks: text, chips, key-value, timeline, highlights,
-  cards, stats, links, freeform markdown, plus Steam/Last.fm blocks.
-  Edit data, not components.
+  cards, stats, links, freeform markdown. Edit data, not components.
 - Work face data in `src/data/about.ts`, Life face data in `src/data/life.ts`.
 - A `cards` block is a natural fit for listing projects. `src/data/projects.ts`
   and `ProjectCard.astro` ship as a scaffold for a future dedicated
@@ -55,9 +54,8 @@ pagination, search, and RSS.
 
 - Dark mode: follows OS preference, or an explicit toggle that persists.
 - Built-in en / zh-TW UI strings, switched with one config flag.
-- Optional, flag-gated: KaTeX math, Mermaid diagrams, giscus comments,
-  Steam/Last.fm stat blocks. Each compiles to zero bundle bytes when its
-  flag is off.
+- Optional, flag-gated: KaTeX math, Mermaid diagrams, giscus comments. Each
+  compiles to zero bundle bytes when its flag is off.
 
 ## Quick start
 
@@ -95,18 +93,6 @@ This repo deploys itself as a project page (`base: "/astro-flipside"`) at
 <https://nagametw.github.io/astro-flipside/> as a live demo.
 
 ## Optional modules
-
-**Steam / Last.fm stats** (Life face; the Music/Steam blocks self-hide
-until there's data):
-
-- Repo **secrets** (Settings → Secrets and variables → Actions → Secrets):
-  `STEAM_API_KEY`, `LASTFM_API_KEY`. Add only the ones you use; a source
-  with no secret is silently skipped.
-- Repo **variables** (same page → Variables): `STEAM_ACCOUNTS`
-  (comma-separated SteamIDs), `EXCLUDED_APPIDS`, `LASTFM_USER`.
-- `.github/workflows/gamestats.yml` runs `scripts/fetch_gamestats.py` daily
-  (and on manual dispatch), writes `src/data/gamestats.json`, commits if it
-  changed, and triggers a redeploy.
 
 **Trophies** (Life face, Highlights cards): edit `src/data/trophies.ts`.
 Screenshots go in `public/trophies/`. An empty `src` renders a placeholder
@@ -151,9 +137,8 @@ bigger so we can agree on the shape before you build it.
 
 [CONTRIBUTING.md](CONTRIBUTING.md) covers the dev setup, repo map, and
 conventions; the PR form walks you through the rest (type of change,
-testing, screenshots for visual changes). CI runs the same four checks
-you can run locally: `npm run check && npm run build && npm test` plus
-`python3 scripts/test_fetch_gamestats.py`.
+testing, screenshots for visual changes). CI runs the same three checks
+you can run locally: `npm run check && npm run build && npm test`.
 
 ## Acknowledgments
 

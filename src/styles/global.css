@@ -455,86 +455,9 @@
   }
 }
 
-/* Life face content blocks — Steam rows, stat tiles, the trophy wall and
-   the gear/sensitivity table. Each section renders only when its data
-   exists (gamestats.json is written by the gamestats workflow; trophies
-   and gear are owner-maintained lists). */
-/* Steam rows: capsule art from Steam's CDN, name (one line), hours on the
-   right; lifetime rows add a bar relative to the list's #1. */
-.steam-subhead {
-  font-size: var(--ts-font-size-tiny);
-  margin-bottom: 0.75rem;
-}
-/* 最近遊玩: cover-only cards side by side (five fit the wide column). */
-.recent-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(8rem, 100%), 1fr));
-  gap: 1rem;
-}
-.recent-cap {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 460 / 215;
-  border-radius: 0.25rem;
-}
-div.recent-cap {
-  background: var(--ts-gray-100); /* missing-art stand-in */
-}
-.recent-name {
-  margin-top: 0.5rem;
-  font-size: var(--ts-font-size-tiny);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.game-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 1rem;
-  align-items: center;
-}
-.game-row + .game-row {
-  margin-top: 0; /* the rows' padding now provides the separation */
-}
-.game-cap {
-  display: block;
-  width: 92px;
-  height: auto;
-  border-radius: 0.25rem;
-}
-/* Missing art keeps the column: a quiet box at the img's exact size (an
-   empty auto-column div has no width of its own to derive height from). */
-.game-cap-empty {
-  width: 92px;
-  aspect-ratio: 460 / 215;
-  background: var(--ts-gray-100);
-}
-.game-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.game-main {
-  min-width: 0; /* let the name ellipsize inside the grid column */
-}
-.game-bar {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--ts-gray-200);
-  margin-top: 0.375rem;
-}
-.game-bar > i {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--ts-gray-800);
-}
-.game-hours {
-  text-align: right;
-  white-space: nowrap;
-  font-size: var(--ts-font-size-tiny);
-}
+/* Life face content blocks — stat tiles, the trophy wall and the
+   gear/sensitivity table. Each section renders only when its data exists
+   (trophies and gear are owner-maintained lists). */
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
@@ -591,55 +514,6 @@ dialog.trophy-modal {
   background: var(--ts-gray-100);
 }
 
-/* Music (Last.fm): recent scrobbles as a list of album-art rows, top
-   artists as chips. */
-.track-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.track-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem;
-  margin-inline: -0.5rem;
-  border-radius: var(--ts-border-radius-container);
-  color: inherit;
-  text-decoration: none;
-  transition: background-color 0.15s ease;
-}
-.track-row:hover {
-  background: var(--ts-page-background-tertiary);
-}
-.track-art {
-  flex: 0 0 auto;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.25rem;
-  object-fit: cover;
-}
-.track-art-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--ts-gray-100);
-  color: var(--ts-gray-500);
-}
-.track-body {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-.track-name,
-.track-artist {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.track-artist {
-  font-size: var(--ts-font-size-tiny);
-}
 /* Gear cards: icon + type + model on the entry-note tint, three across on
    the wide column. */
 .gear-grid {
@@ -688,39 +562,25 @@ dialog.trophy-modal {
 }
 
 /* Hover feedback shared across the Life cards: a small lift + soft shadow,
-   the same language as the social-icon buttons. The hours list is a set of
-   rows, so those tint their background instead of lifting. */
+   the same language as the social-icon buttons. */
 .trophy-item img,
-.gear-card,
-.recent-card .recent-cap {
+.gear-card {
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease;
 }
 .trophy-item:hover img,
-.gear-card:hover,
-.recent-card:hover .recent-cap {
+.gear-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.25);
 }
-.game-row {
-  padding: 0.5rem;
-  margin-inline: -0.5rem;
-  border-radius: var(--ts-border-radius-container);
-  transition: background-color 0.15s ease;
-}
-.game-row:hover {
-  background: var(--ts-page-background-tertiary);
-}
 @media (prefers-reduced-motion: reduce) {
   .trophy-item img,
-  .gear-card,
-  .recent-card .recent-cap {
+  .gear-card {
     transition: box-shadow 0.15s ease;
   }
   .trophy-item:hover img,
-  .gear-card:hover,
-  .recent-card:hover .recent-cap {
+  .gear-card:hover {
     transform: none;
   }
 }
