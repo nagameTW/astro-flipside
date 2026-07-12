@@ -514,7 +514,9 @@
    container (`:root { overflow-y: scroll }` above) — overflow set on
    <body> never reaches the viewport, so a body-level lock is a no-op. */
 :root:has(dialog[open]) {
-  overflow-y: hidden;
+  /* Both axes: with only overflow-y hidden, overflow-x computes to auto
+     and any stray pixel of horizontal overflow paints a scrollbar. */
+  overflow: hidden;
 }
 dialog.trophy-modal {
   --width: min(52rem, 94vw);
@@ -1299,6 +1301,9 @@ dialog.search-dialog {
   display: block;
   font-size: var(--ts-font-size-tiny);
   color: var(--ts-gray-500);
+  /* Excerpts can carry long unbreakable tokens (file paths, URLs); let
+     them wrap instead of widening the panel into a horizontal scrollbar. */
+  overflow-wrap: anywhere;
 }
 
 /* ---- Medium-referenced reading experience (post pages) ---------------- */

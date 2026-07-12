@@ -130,10 +130,17 @@ import { t } from "@/locales";
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && dialog.open) closePanel();
   });
+  // Pagefind's zh query segmenter mangles multi-character CJK queries —
+  // 關東煮 effectively searches 關 alone, and 手搖飲 highlights only 手
+  // and 飲. Spacing the characters out (關 東 煮) makes each one its own
+  // required term and gets every one highlighted; the indexed content
+  // itself is unaffected. Latin words in mixed queries pass through.
+  const cjkSpaced = (q: string) =>
+    q.replace(/(\p{Script=Han})(?=\p{Script=Han})/gu, "$1 ");
   input.addEventListener("input", async () => {
     clear.hidden = input.value === "";
     if (!pagefind) return;
-    const { results } = await pagefind.search(input.value);
+    const { results } = await pagefind.search(cjkSpaced(input.value));
     const top = await Promise.all(
       results.slice(0, 8).map((r: any) => r.data()),
     );
