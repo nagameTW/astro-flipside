@@ -3,6 +3,7 @@ title: "功能總覽"
 description: "這個範本支援的 Markdown 功能，濃縮在同一篇文章裡。"
 pubDate: 2026-01-03
 tags: ["demo"]
+heroImage: "/gallery/gallery-3.svg"
 ---
 
 這篇文章示範 Markdown 轉換流程支援的所有排版功能，同時也用來驗證中文內容的閱讀時間估算、

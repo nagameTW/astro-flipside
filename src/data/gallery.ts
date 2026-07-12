@@ -14,38 +14,38 @@ export type GalleryPhoto = {
 export const GALLERY: GalleryPhoto[] = [
   {
     src: "/gallery/gallery-1.svg",
-    alt: "寧靜小徑上的黃金時刻",
-    caption: "下班後的散步，十月中旬。",
+    alt: "後台走廊，上台前最後一段路",
+    caption: "巡迴最後一場，開場前十分鐘。",
   },
   {
     src: "/gallery/gallery-2.svg",
-    alt: "靠窗角落桌上的咖啡",
+    alt: "錄音室裡靠窗的那杯手搖飲",
   },
   {
     src: "/gallery/gallery-3.svg",
-    alt: "日落後不久的城市天際線",
-    caption: "今年第一個寒冷的夜晚。",
+    alt: "深夜的編曲工作畫面",
+    caption: "半夜兩點，新歌的第三個版本。",
   },
   {
     src: "/gallery/gallery-4.svg",
-    alt: "午後陽光下的書架一角",
+    alt: "巡演途中車窗外掠過的風景",
   },
   {
     src: "/gallery/gallery-5.svg",
-    alt: "從火車窗外掠過的山景",
-    caption: "穿過隧道後的某處。",
+    alt: "後台休息室的吉他與筆記本",
+    caption: "副歌卡住的那個下午。",
   },
   {
     src: "/gallery/gallery-6.svg",
-    alt: "陽台植物上的新葉",
+    alt: "彩排時的舞台燈光測試",
   },
   {
     src: "/gallery/gallery-7.svg",
-    alt: "筆記本與畫到一半的素描",
-    caption: "這張還沒畫完。",
+    alt: "簽名會排隊人潮的一角",
+    caption: "沒想到會有人排這麼久。",
   },
   {
     src: "/gallery/gallery-8.svg",
-    alt: "藍色時刻，雨落在窗上",
+    alt: "雨天的錄音室窗景",
   },
 ];
