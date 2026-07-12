@@ -1150,21 +1150,33 @@ a.ts-box:hover,
   margin-top: 3rem;
 }
 
-/* Search panel (Pagefind): an Apple-style header extension. The dialog
-   (ts-modal) still covers the whole viewport — that is what keeps Esc and
-   the click-outside close working — but the visible part is a full-width
-   strip pinned to the top edge, sharing .site-header's glass recipe so it
-   reads as the header extending downward over the dimmed page. */
-dialog.search-dialog {
-  align-items: flex-start;
-  padding: 0;
+/* Search panel (Pagefind): an Apple-style header extension. The <dialog>
+   sits INSIDE the sticky header (Navbar.astro) and opens non-modally, so
+   the header itself stays crisp; the panel hangs off the header's bottom
+   edge and overlays the page instead of pushing it down. #search-veil dims
+   and click-guards the content below at z 99 — one notch under
+   .site-header's 100. Scroll locking still comes from the shared
+   body:has(dialog[open]) rule further up. */
+.search-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgb(0 0 0 / 0.5);
 }
-dialog.search-dialog > .content {
+.search-veil[hidden] {
+  display: none;
+}
+dialog.search-dialog {
+  position: absolute;
+  top: 100%;
+  left: 0;
   width: 100%;
+  max-width: none;
   margin: 0;
-  border-radius: 0 0 var(--ts-border-radius-container)
-    var(--ts-border-radius-container);
-  padding-block: 1.1rem 1.25rem;
+  border: 0;
+  padding: 0.35rem 0 1.25rem;
+  /* .site-header's glass recipe, so header + panel read as one slab
+     (opaque-first fallback for the same browsers, see the header rule). */
   background: var(--ts-page-background-default);
   background: color-mix(
     in srgb,
@@ -1173,11 +1185,14 @@ dialog.search-dialog > .content {
   );
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-radius: 0 0 var(--ts-border-radius-container)
+    var(--ts-border-radius-container);
+  box-shadow: var(--ts-elevated-shadow-modal);
 }
 @supports not (
   (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
 ) {
-  dialog.search-dialog > .content {
+  dialog.search-dialog {
     background: var(--ts-page-background-default);
   }
 }
@@ -1189,7 +1204,7 @@ dialog.search-dialog > .content {
   gap: 0.75rem;
 }
 @media (prefers-reduced-motion: no-preference) {
-  dialog.search-dialog[open] > .content {
+  dialog.search-dialog[open] {
     animation: search-drop 0.18s ease-out;
   }
   @keyframes search-drop {
@@ -1243,7 +1258,8 @@ dialog.search-dialog > .content {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  max-height: 60vh;
+  /* The panel starts below the header, so leave it headroom. */
+  max-height: 55vh;
   overflow-y: auto;
 }
 .search-results li a {

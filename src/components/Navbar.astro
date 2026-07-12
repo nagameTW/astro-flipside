@@ -1,5 +1,6 @@
 ---
 import SITE from "@/config";
+import Search from "@/components/Search.astro";
 import { t } from "@/locales";
 import { url } from "@/utils/url";
 
@@ -50,7 +51,16 @@ const isActive = (href: string) => {
       </nav>
     </div>
   </div>
+  {/* Inside the sticky header on purpose: the panel hangs off the header's
+      bottom edge (absolute, top:100%) so it reads as the header extending
+      downward, at the header's z-level. */}
+  <Search />
 </header>
+{/* Click-catching dim layer for the search panel. Lives OUTSIDE the header
+    because .site-header's backdrop-filter would trap a position:fixed child;
+    z 99 keeps it one notch under the header, so header + panel stay crisp
+    while the page dims. */}
+<div id="search-veil" class="search-veil" aria-hidden="true" hidden></div>
 
 <script is:inline>
   document.getElementById("theme-toggle")?.addEventListener("click", () => {
