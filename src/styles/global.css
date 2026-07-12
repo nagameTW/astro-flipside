@@ -1152,3 +1152,43 @@ a.ts-box:hover,
   font-size: var(--ts-font-size-tiny);
   color: var(--ts-gray-500);
 }
+
+/* ---- Medium-referenced reading experience (post pages) ---------------- */
+/* A big, tight title; an author meta row under it; larger body type in a
+   ~660px measure (the 220px left rail + gap already sets the column). */
+.post-title {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+.post-meta-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+}
+.post-meta-author {
+  font-weight: 600;
+  line-height: 1.35;
+}
+/* Bigger body type for long-form reading; back to the site size on small
+   screens where the wide measure that justifies it is gone. */
+.post-body .md-content {
+  font-size: 1.1875rem;
+}
+@media (max-width: 767px) {
+  .post-body .md-content {
+    font-size: 1.0625rem;
+  }
+  .post-title {
+    font-size: 1.9rem;
+  }
+}
+.post-tags {
+  margin-top: 3rem;
+}
