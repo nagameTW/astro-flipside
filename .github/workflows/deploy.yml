@@ -5,6 +5,7 @@ on:
     branches: main
   # Called by gamestats.yml, whose GITHUB_TOKEN push cannot trigger `push` above.
   workflow_call:
+  workflow_dispatch:
 
 permissions:
   contents: read
