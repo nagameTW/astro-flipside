@@ -48,6 +48,10 @@ npm run check && npm run build && npm test
 - 介面字串的改動要**同時**更新 `src/locales/en.ts` 和
   `src/locales/zh-TW.ts`，放在同一個 PR 裡。任何一份字典悄悄落後另一份，
   都算是一個 bug。
+- commit 訊息、PR 標題與內文、分支名稱**不得包含任何 AI 工具的署名或
+  痕跡**：不加 `Co-authored-by` 的 AI 署名、不留工具產生的會話連結或
+  簽名列（例如 `Claude-Session:`、`Generated with ...`）。用什麼工具寫
+  code 都可以，但進到 git 歷史的資訊只留人。
 
 ## Pull request
 
