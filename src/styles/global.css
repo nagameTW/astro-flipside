@@ -738,9 +738,17 @@ a.gear-card {
   align-items: baseline;
   gap: 0.5rem;
 }
+/* Text links site-wide (Links block, prose) show no underline at rest;
+   it appears on hover / keyboard focus. */
 .links-list a {
   color: inherit;
   font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+.links-list a:hover,
+.links-list a:focus-visible {
+  text-decoration: underline;
 }
 
 /* Hover feedback shared across the Life cards — a slight forward scale,
@@ -1108,13 +1116,16 @@ a.ts-box:hover,
 .md-content h4 {
   font-size: 1.1em;
 }
-/* rehype-autolink-headings appends this `#` link to every heading (id from
-   rehype-slug). Hidden until the heading is hovered or the link itself is
-   keyboard-focused, so it doesn't clutter the read. */
+/* Prose links match the site-wide text-link rule: underline only on
+   hover / keyboard focus. */
 .md-content a {
   color: inherit;
-  text-decoration: underline;
+  text-decoration: none;
   text-underline-offset: 3px;
+}
+.md-content a:hover,
+.md-content a:focus-visible {
+  text-decoration: underline;
 }
 .md-content ul,
 .md-content ol {
