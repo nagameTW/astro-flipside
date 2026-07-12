@@ -149,13 +149,15 @@
   }
   .site-header nav {
     width: 100%;
-    justify-content: space-between;
-    gap: 0;
+    gap: 0.25rem;
   }
   .site-header nav > .ts-button {
     flex: 0 0 auto;
   }
+  /* Tabs keep the left edge and swallow the spare width, so the search and
+     theme buttons sit together on the right. */
   .site-header .ts-tab {
+    flex: 1 1 auto;
     flex-wrap: nowrap;
     min-width: 0;
     overflow-x: auto;
@@ -874,6 +876,18 @@ a.ts-box:hover,
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
+/* The fixed-height body clips whatever the clamps let through; keep the
+   title and date whole and let only the description give way, at line
+   granularity — otherwise a squeezed column slices glyphs in half. */
+.post-card .ts-header,
+.post-card .ts-text.is-description {
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .post-card p.ts-text.is-secondary {
+    -webkit-line-clamp: 1;
+  }
+}
 /* Cards with heroImage: cover on the right, text on the left. Cards
    without one render only .post-card-body, so .ts-content stays a plain
    block and needs no override. */
@@ -1025,6 +1039,10 @@ a.ts-box:hover,
 .post-body {
   display: grid;
   gap: 2rem;
+  /* minmax(0, …): grid items default to min-width auto, so one unbreakable
+     token in the prose (a long inline-code path) would set the column's
+     minimum past a phone viewport and shove every line off-screen. */
+  grid-template-columns: minmax(0, 1fr);
 }
 /* Source order is (content, then rail). order: -1 moves the rail first at
    every width: below 1024px that stacks the collapsed ToC above the
@@ -1140,12 +1158,15 @@ a.ts-box:hover,
   color: var(--ts-gray-600);
 }
 /* Inline code only — fenced blocks render as expressive-code frames (their
-   own <pre><code>), which style themselves and must stay untouched here. */
+   own <pre><code>), which style themselves and must stay untouched here.
+   overflow-wrap: a long path/identifier may break mid-token on phones
+   rather than widen the line past the viewport. */
 .md-content :not(pre) > code {
   background: var(--ts-gray-100);
   border-radius: var(--ts-border-radius-secondary);
   padding: 0.15em 0.4em;
   font-size: 0.9em;
+  overflow-wrap: anywhere;
 }
 /* Defensive fallback for the ONE markdown pipeline expressive-code doesn't
    touch: Section.astro's `markdown` block (Markdown.astro) runs raw
