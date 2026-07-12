@@ -471,8 +471,11 @@
   grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
   gap: 1rem;
 }
-/* Cards are <button>s opening the lightbox — strip the UA chrome. */
-.trophy-item {
+/* Cards are <button>s opening the lightbox — strip the UA chrome. Shared
+   with .gallery-item (below): same "image + optional caption, click to
+   zoom" shape, just laid out in a masonry column instead of a grid cell. */
+.trophy-item,
+.gallery-item {
   display: block;
   width: 100%;
   padding: 0;
@@ -489,7 +492,8 @@
   cursor: pointer;
   text-decoration: none;
 }
-.trophy-grid img {
+.trophy-grid img,
+.gallery-item img {
   display: block;
   width: 100%;
   border-radius: 0.4rem;
@@ -497,14 +501,17 @@
 /* Lightbox sized to match the right content column (~812px), not full
    screen. `dialog.trophy-modal` (0,1,1) must out-specify Tocas's
    `dialog.ts-modal{--width:380px}`. */
-dialog.trophy-modal {
+dialog.trophy-modal,
+dialog.gallery-modal {
   --width: min(52rem, 94vw);
 }
-.trophy-modal .content img {
+.trophy-modal .content img,
+.gallery-modal .content img {
   display: block;
   width: 100%;
 }
-.trophy-caption {
+.trophy-caption,
+.gallery-caption {
   margin-top: 0.25rem;
 }
 /* Placeholder card while the owner's screenshots are pending. */
@@ -512,6 +519,19 @@ dialog.trophy-modal {
   aspect-ratio: 16 / 9;
   border-radius: 0.4rem;
   background: var(--ts-gray-100);
+}
+
+/* Gallery page: Pinterest-style masonry via native CSS multi-column —
+   items keep their natural aspect ratio and flow into the shortest column,
+   unlike trophy-grid's fixed same-height grid cells above. `columns: 240px`
+   picks the column count from the viewport itself (no media queries). */
+.gallery-masonry {
+  columns: 240px;
+  column-gap: 1rem;
+}
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
 }
 
 /* Gear cards: icon + type + model on the entry-note tint, three across on
@@ -561,25 +581,29 @@ dialog.trophy-modal {
   font-weight: 600;
 }
 
-/* Hover feedback shared across the Life cards: a small lift + soft shadow,
-   the same language as the social-icon buttons. */
+/* Hover feedback shared across the Life cards and the gallery wall: a small
+   lift + soft shadow, the same language as the social-icon buttons. */
 .trophy-item img,
+.gallery-item img,
 .gear-card {
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease;
 }
 .trophy-item:hover img,
+.gallery-item:hover img,
 .gear-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.25);
 }
 @media (prefers-reduced-motion: reduce) {
   .trophy-item img,
+  .gallery-item img,
   .gear-card {
     transition: box-shadow 0.15s ease;
   }
   .trophy-item:hover img,
+  .gallery-item:hover img,
   .gear-card:hover {
     transform: none;
   }

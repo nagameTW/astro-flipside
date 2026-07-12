@@ -3,6 +3,7 @@ import type { UIStrings } from "./en";
 const zhTW: UIStrings = {
   "nav.about": "關於",
   "nav.blog": "文章",
+  "nav.gallery": "相簿",
   "nav.themeToggle": "切換深淺色主題",
   "layout.backToTop": "回到頂部",
   "face.switchTo": "切換到 {name}",
@@ -21,6 +22,9 @@ const zhTW: UIStrings = {
   "blog.tagIndexDescription": "依標籤瀏覽文章",
   "blog.taggedWith": "標籤「{tag}」的文章",
   "blog.draft": "草稿",
+  "gallery.description": "生活的牆面",
+  "gallery.count": "共 {n} 張",
+  "gallery.empty": "還沒有內容。",
   "pagination.label": "分頁",
   "pagination.prev": "上一頁",
   "pagination.next": "下一頁",

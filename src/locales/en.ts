@@ -1,6 +1,7 @@
 const en = {
   "nav.about": "About",
   "nav.blog": "Blog",
+  "nav.gallery": "Gallery",
   "nav.themeToggle": "Toggle color theme",
   "layout.backToTop": "Back to top",
   "face.switchTo": "Switch to {name}", // {name} replaced with Work/Life
@@ -19,6 +20,9 @@ const en = {
   "blog.tagIndexDescription": "Posts by tag",
   "blog.taggedWith": 'Posts tagged "{tag}"',
   "blog.draft": "Draft",
+  "gallery.description": "A wall of moments",
+  "gallery.count": "{n} photos",
+  "gallery.empty": "Nothing here yet.",
   "pagination.label": "Pagination",
   "pagination.prev": "Previous page",
   "pagination.next": "Next page",

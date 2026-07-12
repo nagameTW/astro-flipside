@@ -50,6 +50,13 @@ pagination, search, and RSS.
   production builds and the RSS feed exclude it automatically.
 - RSS feed, Pagefind full-text search (static, no server involved).
 
+**Gallery**
+
+- Pinterest-style masonry layout — CSS multi-column, so photos keep their
+  own aspect ratio instead of being cropped into a fixed grid.
+- Data-driven: list photos in `src/data/gallery.ts`, drop the files in
+  `public/gallery/`. Click one to open it full-size in a lightbox.
+
 **Everywhere**
 
 - Dark mode: follows OS preference, or an explicit toggle that persists.
@@ -65,7 +72,8 @@ pagination, search, and RSS.
 3. Edit `src/config.ts`: site URL, base path, title, nav, socials, feature
    flags (see [Config reference](#config-reference)).
 4. Edit `src/data/*`: About content for both faces (`about.ts`, `life.ts`),
-   projects, trophies, gear.
+   projects, trophies, gear, gallery photos (`gallery.ts` + files in
+   `public/gallery/`).
 5. Write posts in `src/content/blog/`. Delete the demo posts (`welcome.md`,
    `kitchen-sink.md`, `kitchen-sink-zh.md`) when you're ready to publish your
    own.

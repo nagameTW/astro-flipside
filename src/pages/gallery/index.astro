@@ -1,0 +1,80 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { GALLERY } from "@/data/gallery";
+import { t, fill } from "@/locales";
+import { url } from "@/utils/url";
+
+// Same "public/ path or full URL" rule as BlogPost.astro's heroImage.
+const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
+---
+
+<Layout title={t["nav.gallery"]} description={t["gallery.description"]}>
+  <div class="section-title">
+    <h1 class="ts-header is-big is-heavy">{t["nav.gallery"]}</h1>
+    <span class="ts-text is-description"
+      >{fill(t["gallery.count"], { n: GALLERY.length })}</span
+    >
+  </div>
+  {
+    GALLERY.length === 0 ? (
+      <p class="ts-text is-secondary">{t["gallery.empty"]}</p>
+    ) : (
+      <div class="gallery-masonry">
+        {GALLERY.map((photo, i) => (
+          <button
+            type="button"
+            class="gallery-item"
+            data-modal={`gallery-modal-${i}`}
+          >
+            <img src={resolve(photo.src)} alt={photo.alt} loading="lazy" />
+            {photo.caption && (
+              <div class="gallery-caption ts-text is-tiny is-secondary">
+                {photo.caption}
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+    )
+  }
+  {
+    // In-page lightboxes, same shape as Cards.astro's trophy wall. Ids are
+    // index-based rather than slugified from text, so they stay unique and
+    // valid no matter what language alt/caption is written in.
+    GALLERY.map((photo, i) => (
+      <dialog
+        class="ts-modal gallery-modal"
+        id={`gallery-modal-${i}`}
+        aria-label={photo.alt}
+      >
+        <div class="content">
+          <img src={resolve(photo.src)} alt={photo.alt} loading="lazy" />
+          {photo.caption && (
+            <p class="gallery-caption ts-text is-secondary">{photo.caption}</p>
+          )}
+        </div>
+      </dialog>
+    ))
+  }
+</Layout>
+
+<script>
+  // Open the matching <dialog>, close on backdrop click (Esc is native
+  // <dialog> behavior) — identical pattern to Cards.astro's trophy wall.
+  document
+    .querySelectorAll<HTMLElement>(".gallery-item[data-modal]")
+    .forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const modal =
+          btn.dataset.modal && document.getElementById(btn.dataset.modal);
+        if (modal instanceof HTMLDialogElement) modal.showModal();
+      });
+    });
+  document
+    .querySelectorAll<HTMLDialogElement>("dialog.gallery-modal")
+    .forEach((d) => {
+      d.addEventListener("click", (e) => {
+        if (e.target === d) d.close();
+      });
+    });
+</script>
