@@ -59,21 +59,13 @@ the passion? In the end, one side gets to stand for all of you.
 Flipside's core idea is simple: why compromise.
 
 Like a coin: profession on the front, passion on the back. Both sides
-are the real you, and all it takes is a flip.
+are the real you. One flip, and visitors meet you from another angle.
 
-So the About page ships with a toggle. Click it and the avatar turns
-over: the Work face folds away, the Life face opens up. Your resume,
-your work, and your hobbies share one address, and visitors are not
-handed a single version of you; they choose the angle from which to
-know you.
-
-Flipside is a clean, easily customized Astro theme that treats
-Chinese users as first-class. It grew out of my own personal site: I
-removed everything private, kept the design thinking and engineering
-that accumulated along the way, and shaped it into a starting point
-you can use right away, so that more people can build a site that
-shows their profession without giving up what makes them who they
-are.
+Flipside is a clean, Chinese-friendly Astro theme. It grew out of my
+personal site: everything private removed, the design thinking kept,
+shaped into a starting point you can use right away, so that more
+people can build a site that shows their profession without giving up
+what makes them who they are.
 
 <img src="hero.jpg" alt="Flipside at a glance: the Work and Life faces, gallery, post list, code frames, and the dark theme">
 
