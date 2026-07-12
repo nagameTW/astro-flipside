@@ -31,6 +31,7 @@ const en = {
   "search.open": "Search",
   "search.placeholder": "Search posts…",
   "search.clear": "Clear search",
+  "search.noResults": "No matching results.",
   "notFound.message": "This page does not exist.",
   "notFound.home": "Back to home",
   "life.copied": "Copied!",

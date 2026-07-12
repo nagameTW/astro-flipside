@@ -33,6 +33,7 @@ const zhTW: UIStrings = {
   "search.open": "搜尋",
   "search.placeholder": "搜尋文章…",
   "search.clear": "清除搜尋",
+  "search.noResults": "沒有符合的結果。",
   "notFound.message": "找不到這個頁面。",
   "notFound.home": "回首頁",
   "life.copied": "已複製！",

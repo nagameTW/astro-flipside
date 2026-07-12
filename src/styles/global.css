@@ -1294,6 +1294,10 @@ dialog.search-dialog {
 .search-results li a:hover {
   background: var(--ts-page-background-tertiary);
 }
+.search-results li.search-empty {
+  color: var(--ts-gray-500);
+  padding-block: 0.25rem;
+}
 .search-results li strong {
   display: block;
 }

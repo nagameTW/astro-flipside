@@ -34,7 +34,13 @@ import { t } from "@/locales";
           <span class="ts-icon is-xmark-icon"></span>
         </button>
       </div>
-      <ol id="search-results" class="search-results" aria-live="polite"></ol>
+      <ol
+        id="search-results"
+        class="search-results"
+        aria-live="polite"
+        data-empty={t["search.noResults"]}
+      >
+      </ol>
     </div>
   </div>
 </dialog>
@@ -137,18 +143,46 @@ import { t } from "@/locales";
   // itself is unaffected. Latin words in mixed queries pass through.
   const cjkSpaced = (q: string) =>
     q.replace(/(\p{Script=Han})(?=\p{Script=Han})/gu, "$1 ");
+  // Guards against out-of-order responses while typing fast: only the
+  // newest query may write to the list.
+  let seq = 0;
   input.addEventListener("input", async () => {
     clear.hidden = input.value === "";
     if (!pagefind) return;
-    const { results } = await pagefind.search(cjkSpaced(input.value));
+    const mySeq = ++seq;
+    const raw = input.value.trim();
+    if (!raw) {
+      list.innerHTML = "";
+      return;
+    }
+    const { results } = await pagefind.search(cjkSpaced(raw));
     const top = await Promise.all(
-      results.slice(0, 8).map((r: any) => r.data()),
+      results.slice(0, 12).map((r: any) => r.data()),
     );
-    list.innerHTML = top
-      .map(
-        (d: any) =>
-          `<li><a href="${esc(d.url)}"><strong>${esc(d.meta.title ?? d.url)}</strong><span>${excerptSafe(d.excerpt)}</span></a></li>`,
+    if (mySeq !== seq) return;
+    // Pagefind also ranks pages that contain only SOME of the query's
+    // characters, which for CJK surfaces one-character junk matches.
+    // Require every contiguous Han run of the query verbatim in the page
+    // (title or body) — i.e. real phrase semantics for Chinese. Latin
+    // terms keep pagefind's own matching untouched.
+    const hanRuns = raw.match(/\p{Script=Han}+/gu) ?? [];
+    const kept = top
+      .filter((d: any) =>
+        hanRuns.every(
+          (run) =>
+            (d.content ?? "").includes(run) ||
+            (d.meta.title ?? "").includes(run),
+        ),
       )
-      .join("");
+      .slice(0, 8);
+    list.innerHTML =
+      kept.length === 0
+        ? `<li class="search-empty">${esc(list.dataset.empty ?? "")}</li>`
+        : kept
+            .map(
+              (d: any) =>
+                `<li><a href="${esc(d.url)}"><strong>${esc(d.meta.title ?? d.url)}</strong><span>${excerptSafe(d.excerpt)}</span></a></li>`,
+            )
+            .join("");
   });
 </script>
