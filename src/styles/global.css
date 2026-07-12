@@ -172,6 +172,34 @@
     font-size: 0.875rem;
   }
 }
+/* Template-content safety net: every slot that renders user-supplied text
+   wraps rather than escaping its container, even for a single unbreakable
+   token (long URL, path, identifier). This is a POLICY, not a bug patch —
+   the template's layouts must survive arbitrary future content. Verified
+   by an adversarial injection sweep at 390px and 1280px. */
+.site-header .ts-header,
+.ts-chip,
+.links-list a,
+.links-list .ts-text.is-secondary,
+.post-card .ts-header,
+.post-meta-author,
+.toc a,
+.post-title,
+.trophy-caption,
+.gallery-caption,
+.gear-label,
+.gear-body .ts-text.is-bold,
+.entry-note,
+.stat-grid,
+.md-content {
+  overflow-wrap: anywhere;
+}
+.ts-chip {
+  max-width: 100%;
+  height: auto;
+  min-height: var(--height, auto);
+}
+
 .site-footer {
   text-align: center;
   padding: 3rem 0 4rem;
