@@ -104,6 +104,10 @@ import { t } from "@/locales";
   const veil = document.getElementById("search-veil")!;
   const opener = document.getElementById("search-open");
   const openPanel = async () => {
+    // Reopening mid-close: drop the closing state so the armed
+    // animationend/timeout (guarded on this class) becomes a no-op.
+    dialog.classList.remove("is-closing");
+    veil.classList.remove("is-closing");
     // Set [open] directly instead of calling dialog.show(): show()'s
     // focusing steps asynchronously scroll-focus the panel, and since it
     // lives inside the sticky header at the top of the document, that
@@ -122,13 +126,37 @@ import { t } from "@/locales";
       },
     );
   };
-  const closePanel = () => {
+  // Closing is two-phase so it can animate: closePanel() adds .is-closing
+  // (global.css plays the open animations in reverse) and only when that
+  // animation ends does finishClose() flip the real [open]/[hidden] state.
+  // finishClose is guarded by the class so a stray animationend (e.g. the
+  // OPENING drop's own end, or an interrupted close) can never close a
+  // panel that is not actually closing.
+  const finishClose = () => {
+    if (!dialog.classList.contains("is-closing")) return;
+    dialog.classList.remove("is-closing");
+    veil.classList.remove("is-closing");
     dialog.close();
     veil.hidden = true;
     opener?.focus();
   };
-  // The magnifier toggles the panel; Esc and clicking the veil (the dimmed
-  // page) close it — non-modal dialogs get no close-on-Esc for free.
+  const closePanel = () => {
+    if (!dialog.open || dialog.classList.contains("is-closing")) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      dialog.classList.add("is-closing");
+      finishClose();
+      return;
+    }
+    dialog.classList.add("is-closing");
+    veil.classList.add("is-closing");
+    dialog.addEventListener("animationend", finishClose, { once: true });
+    // Fallback in case animationend never arrives; finishClose is
+    // idempotent thanks to the class guard.
+    window.setTimeout(finishClose, 250);
+  };
+  // The magnifier toggles the panel; Esc, clicking the veil (the dimmed
+  // page), and the pointer leaving the header all close it — non-modal
+  // dialogs get none of this for free.
   opener?.addEventListener("click", () =>
     dialog.open ? closePanel() : openPanel(),
   );
@@ -136,6 +164,16 @@ import { t } from "@/locales";
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && dialog.open) closePanel();
   });
+  // Auto-collapse when the mouse leaves the header+panel area, with a small
+  // grace window so grazing the boundary doesn't slam it shut. Mouse-only
+  // by nature (mouseleave) — keyboard and touch flows are unaffected.
+  const header = dialog.closest(".site-header")!;
+  let leaveTimer: number;
+  header.addEventListener("mouseleave", () => {
+    if (!dialog.open) return;
+    leaveTimer = window.setTimeout(closePanel, 200);
+  });
+  header.addEventListener("mouseenter", () => window.clearTimeout(leaveTimer));
   // Pagefind's zh query segmenter mangles multi-character CJK queries —
   // 關東煮 effectively searches 關 alone, and 手搖飲 highlights only 手
   // and 飲. Spacing the characters out (關 東 煮) makes each one its own
