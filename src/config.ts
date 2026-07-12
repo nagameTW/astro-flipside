@@ -12,7 +12,7 @@ const SITE = {
   base: "/astro-flipside",
   title: "Flipside",
   description: "雙面（Work / Life）個人網站與部落格模板",
-  author: "陸知遙",
+  author: "拍岸",
   /** UI language for every built-in string: "en" | "zh-TW". */
   locale: "zh-TW" as "en" | "zh-TW",
   /** Navigation. label is a locale key (see src/locales/). */
