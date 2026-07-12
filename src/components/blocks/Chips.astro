@@ -1,29 +1,12 @@
 ---
 // Plain tag row — interests (Life) and skills (Work) both use this exact
-// markup today.
+// markup today. Shell, heading, and empty-guard live in Section.astro.
 interface Props {
-  title?: string;
   items: string[];
 }
-const { title, items } = Astro.props;
+const { items } = Astro.props;
 ---
 
-{
-  items.length > 0 && (
-    <section class="ts-box">
-      <div class="ts-content">
-        {title && (
-          <h2 class="ts-header is-large is-heavy">
-            {title}
-            <span class="ts-divider" />
-          </h2>
-        )}
-        <div class="ts-wrap">
-          {items.map((i) => (
-            <div class="ts-chip is-circular is-outlined">{i}</div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
+<div class="ts-wrap">
+  {items.map((i) => <div class="ts-chip is-circular is-outlined">{i}</div>)}
+</div>

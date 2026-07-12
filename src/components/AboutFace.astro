@@ -1,0 +1,103 @@
+---
+// ONE identity-card + sections layout for both faces — which face you get
+// is pure data (avatar, name, socials, section list). Social buttons:
+// entries with `url` link out; entries with `copy` (e.g. Discord, which
+// has no add-friend URL) copy the handle to the clipboard — script below.
+import type { Section as SectionData } from "@/data/sections";
+import FaceToggle from "@/components/FaceToggle.astro";
+import Section from "@/components/Section.astro";
+import { url } from "@/utils/url";
+
+interface Props {
+  face: "personal" | "professional";
+  /** Ship the face hidden + inert (statically, so the non-default face
+   *  never flashes before JS runs). */
+  hidden?: boolean;
+  avatar: string;
+  name: string;
+  /** Subtitle line. Omitted → an invisible placeholder keeps both cards'
+   *  geometry identical, or the face cross-fade reads as the card
+   *  shifting and flickering. */
+  headline?: string;
+  socials: { name: string; icon: string; url?: string; copy?: string }[];
+  sections: SectionData[];
+}
+const { face, hidden = false, avatar, name, headline, socials, sections } =
+  Astro.props;
+const isExternal = (href?: string) => !!href && href.startsWith("http");
+---
+
+<div
+  class:list={["about-layout", "face", { "is-hidden": hidden }]}
+  data-face={face}
+  inert={hidden}
+>
+  <aside class="about-aside ts-box about-card">
+    <div class="ts-content">
+      <img class="about-avatar" src={url(avatar)} width="136" height="136" alt="" />
+      <div class="ts-header is-large is-heavy has-top-spaced">{name}</div>
+      {
+        headline ? (
+          <div class="ts-text is-secondary">{headline}</div>
+        ) : (
+          <div class="ts-text is-secondary" aria-hidden="true">
+            &nbsp;
+          </div>
+        )
+      }
+      <div class="social-icons has-top-spaced">
+        {
+          socials.map((l) =>
+            l.url ? (
+              <a
+                class="ts-button is-icon is-circular"
+                href={l.url}
+                aria-label={l.name}
+                target={isExternal(l.url) ? "_blank" : undefined}
+                rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
+              >
+                <span class={`ts-icon ${l.icon}`} />
+              </a>
+            ) : (
+              <button
+                type="button"
+                class="ts-button is-icon is-circular"
+                data-copy={l.copy}
+                aria-label={l.name}
+              >
+                <span class={`ts-icon ${l.icon}`} />
+              </button>
+            ),
+          )
+        }
+      </div>
+      <FaceToggle />
+    </div>
+  </aside>
+
+  <div class="about-main">
+    {sections.map((s) => <Section section={s} />)}
+  </div>
+</div>
+
+<script>
+  import { t } from "@/locales";
+
+  // Copy-to-clipboard socials: flash a confirmation in the tooltip
+  // (aria-label drives the CSS tooltip). Astro dedupes this script — it
+  // runs once per page and covers both faces' [data-copy] buttons.
+  document
+    .querySelectorAll<HTMLElement>(".social-icons [data-copy]")
+    .forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.copy!);
+          const prev = btn.getAttribute("aria-label")!;
+          btn.setAttribute("aria-label", t["life.copied"]);
+          setTimeout(() => btn.setAttribute("aria-label", prev), 1500);
+        } catch {
+          /* clipboard blocked — the handle still shows in the tooltip */
+        }
+      });
+    });
+</script>

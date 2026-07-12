@@ -1,28 +1,10 @@
 ---
-// Plain paragraphs, e.g. the bio/intro section on both faces. Heading is
-// `h1`: both faces' "About" section renders it that way today (the page's
-// de facto h1), so this block keeps it rather than "fixing" it to h2.
+// Plain paragraphs, e.g. the bio/intro section on both faces. Shell,
+// heading, and empty-guard live in Section.astro.
 interface Props {
-  title?: string;
   paragraphs: string[];
 }
-const { title, paragraphs } = Astro.props;
+const { paragraphs } = Astro.props;
 ---
 
-{
-  paragraphs.length > 0 && (
-    <section class="ts-box">
-      <div class="ts-content">
-        {title && (
-          <h1 class="ts-header is-large is-heavy">
-            {title}
-            <span class="ts-divider" />
-          </h1>
-        )}
-        {paragraphs.map((p) => (
-          <p>{p}</p>
-        ))}
-      </div>
-    </section>
-  )
-}
+{paragraphs.map((p) => <p>{p}</p>)}

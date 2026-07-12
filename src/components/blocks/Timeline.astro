@@ -9,56 +9,42 @@
 //    "thesis title" line (empty `text` when there's no description)
 //  - project experience: no `end` (bare year), a single nameless duty (its
 //    `name` is "", so the bold line is skipped and only the paragraph shows)
+// Shell, heading, and empty-guard live in Section.astro.
 import type { TimelineEntry } from "@/data/sections";
 
 interface Props {
-  title?: string;
   entries: TimelineEntry[];
 }
-const { title, entries } = Astro.props;
+const { entries } = Astro.props;
 ---
 
-{
-  entries.length > 0 && (
-    <section class="ts-box">
-      <div class="ts-content">
-        {title && (
-          <h2 class="ts-header is-large is-heavy">
-            {title}
-            <span class="ts-divider" />
-          </h2>
-        )}
-        <div class="ts-timeline">
-          {entries.map((e) => (
-            <div class="item">
-              <div class="aside ts-text is-description">
-                <div>{e.start}</div>
-                {e.end && <div>– {e.end}</div>}
-              </div>
-              <div class="indicator">
-                <span class="ts-icon is-briefcase-icon" />
-              </div>
-              <div class="content">
-                <div class="ts-text is-bold">{e.title}</div>
-                {e.subtitle && (
-                  <div class="ts-text is-secondary">{e.subtitle}</div>
-                )}
-                {e.duties && e.duties.length > 0 && (
-                  <div class="entry-note">
-                    {e.duties.map((d, i) => (
-                      <>
-                        {i > 0 && <div class="ts-divider is-section" />}
-                        {d.name && <div class="ts-text is-bold">{d.name}</div>}
-                        {d.text && <p class="ts-text is-secondary">{d.text}</p>}
-                      </>
-                    ))}
-                  </div>
-                )}
-              </div>
+<div class="ts-timeline">
+  {
+    entries.map((e) => (
+      <div class="item">
+        <div class="aside ts-text is-description">
+          <div>{e.start}</div>
+          {e.end && <div>– {e.end}</div>}
+        </div>
+        <div class="indicator">
+          <span class="ts-icon is-briefcase-icon" />
+        </div>
+        <div class="content">
+          <div class="ts-text is-bold">{e.title}</div>
+          {e.subtitle && <div class="ts-text is-secondary">{e.subtitle}</div>}
+          {e.duties && e.duties.length > 0 && (
+            <div class="entry-note">
+              {e.duties.map((d, i) => (
+                <>
+                  {i > 0 && <div class="ts-divider is-section" />}
+                  {d.name && <div class="ts-text is-bold">{d.name}</div>}
+                  {d.text && <p class="ts-text is-secondary">{d.text}</p>}
+                </>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  )
-}
+    ))
+  }
+</div>

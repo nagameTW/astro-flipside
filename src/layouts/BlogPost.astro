@@ -6,7 +6,7 @@ import FormattedDate from "@/components/FormattedDate.astro";
 import Toc from "@/components/Toc.astro";
 import Comments from "@/components/Comments.astro";
 import { t, fill } from "@/locales";
-import { url } from "@/utils/url";
+import { resolveImg, url } from "@/utils/url";
 import SITE from "@/config";
 // The byline wears the WORK avatar: posts are the musician identity's
 // output (the Life face's cat stays on the about page).
@@ -81,7 +81,7 @@ const hasToc = headings.some(
       heroImage && (
         <img
           class="post-hero"
-          src={/^https?:\/\//.test(heroImage) ? heroImage : url(heroImage)}
+          src={resolveImg(heroImage)}
           alt=""
         />
       )
@@ -119,21 +119,21 @@ const hasToc = headings.some(
     {
       (prev || next) && (
         <nav class="cards-grid post-nav">
-          {prev && (
-            <a class="ts-box" rel="prev" href={url(`/blog/${prev.id}/`)}>
-              <div class="ts-content">
-                <div class="ts-text is-description">{t["blog.prev"]}</div>
-                <div class="ts-header is-heavy">{prev.title}</div>
-              </div>
-            </a>
-          )}
-          {next && (
-            <a class="ts-box" rel="next" href={url(`/blog/${next.id}/`)}>
-              <div class="ts-content">
-                <div class="ts-text is-description">{t["blog.next"]}</div>
-                <div class="ts-header is-heavy">{next.title}</div>
-              </div>
-            </a>
+          {(
+            [
+              { rel: "prev", label: t["blog.prev"], post: prev },
+              { rel: "next", label: t["blog.next"], post: next },
+            ] as const
+          ).map(
+            ({ rel, label, post }) =>
+              post && (
+                <a class="ts-box" rel={rel} href={url(`/blog/${post.id}/`)}>
+                  <div class="ts-content">
+                    <div class="ts-text is-description">{label}</div>
+                    <div class="ts-header is-heavy">{post.title}</div>
+                  </div>
+                </a>
+              ),
           )}
         </nav>
       )

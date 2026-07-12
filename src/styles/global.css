@@ -191,6 +191,7 @@
 .gear-body .ts-text.is-bold,
 .entry-note,
 .stat-grid,
+.search-results li a,
 .md-content {
   overflow-wrap: anywhere;
 }
@@ -209,6 +210,9 @@
 /* 404 page banner spacing. */
 .hero {
   padding: 6rem 0 4rem;
+}
+.hero.not-found {
+  text-align: center;
 }
 .section-title {
   display: flex;
@@ -559,8 +563,9 @@
   object-fit: cover;
 }
 /* Lightbox sized to match the right content column (~812px), not full
-   screen. `dialog.trophy-modal` (0,1,1) must out-specify Tocas's
-   `dialog.ts-modal{--width:380px}`. */
+   screen. `dialog.ts-modal.trophy-modal` (0,2,1) genuinely out-specifies
+   Tocas's `dialog.ts-modal{--width:380px}` (0,1,1) — the previous
+   single-class selector only tied and won by stylesheet load order. */
 /* Any open modal locks the page behind it (native <dialog> doesn't). The
    lock sits on :root because this stylesheet makes <html> the scroll
    container (`:root { overflow-y: scroll }` above) — overflow set on
@@ -570,7 +575,7 @@
      and any stray pixel of horizontal overflow paints a scrollbar. */
   overflow: hidden;
 }
-dialog.trophy-modal {
+dialog.ts-modal.trophy-modal {
   --width: min(52rem, 94vw);
 }
 /* Same viewport-fit policy as the gallery lightbox: media letterboxes to
@@ -1225,14 +1230,13 @@ a.ts-box:hover,
 }
 /* Inline code only — fenced blocks render as expressive-code frames (their
    own <pre><code>), which style themselves and must stay untouched here.
-   overflow-wrap: a long path/identifier may break mid-token on phones
-   rather than widen the line past the viewport. */
+   (overflow-wrap comes from the .md-content safety-net rule above and
+   inherits into inline code.) */
 .md-content :not(pre) > code {
   background: var(--ts-gray-100);
   border-radius: var(--ts-border-radius-secondary);
   padding: 0.15em 0.4em;
   font-size: 0.9em;
-  overflow-wrap: anywhere;
 }
 /* Defensive fallback for the ONE markdown pipeline expressive-code doesn't
    touch: Section.astro's `markdown` block (Markdown.astro) runs raw
@@ -1448,9 +1452,6 @@ dialog.search-dialog {
   border-radius: var(--ts-border-radius-container);
   color: inherit;
   text-decoration: none;
-  /* Long unbreakable tokens (file paths in titles or excerpts) wrap
-     instead of widening the row. */
-  overflow-wrap: anywhere;
 }
 .search-results li a:hover {
   background: var(--ts-page-background-tertiary);

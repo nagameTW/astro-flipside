@@ -1,11 +1,13 @@
 ---
-// Merges the trophy-wall grid (image-or-placeholder card + caption, zoom
+// Merges the trophy-wall grid (image-or-placeholder card + caption, click
 // lightbox) with a generic clickable card (title/subtitle, wraps in a link
 // when `url` is set). Precedence per card: `url` set → link; else `img` set
 // → lightbox button (today's trophy behavior); else a plain, non-interactive
 // placeholder card (e.g. certifications, which have neither).
+// Shell, heading, and empty-guard live in Section.astro; `title` is still
+// received here because the modal ids are namespaced by it.
 import type { CardEntry } from "@/data/sections";
-import { url } from "@/utils/url";
+import { resolveImg } from "@/utils/url";
 
 interface Props {
   title?: string;
@@ -13,12 +15,6 @@ interface Props {
 }
 const { title, cards } = Astro.props;
 const isExternal = (u?: string) => !!u && u.startsWith("http");
-// Same rule as gallery/index.astro and BlogPost.astro's heroImage: a card
-// image is a public/ path (base-prefixed here) or a full https:// URL (used
-// as-is). Trophy entries were always "" until real photos landed, so this
-// path went untested — a bare `<img src={c.img}>` would 404 under a
-// non-root `base` (see src/config.ts).
-const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
 // Modal ids must be unique across the whole page — both faces (and every
 // Cards usage on them) are in the DOM at once — so they're namespaced by
 // this block's own title rather than a bare per-card index. HTML ids allow
@@ -28,98 +24,80 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
 const slug = (title ?? "cards").replace(/\s+/g, "-");
 ---
 
-{
-  cards.length > 0 && (
-    <section class="ts-box">
-      <div class="ts-content">
-        {title && (
-          <h2 class="ts-header is-large is-heavy">
-            {title}
-            <span class="ts-divider" />
-          </h2>
-        )}
-        <div class="trophy-grid">
-          {cards.map((c, i) => {
-            const media = c.img ? (
-              <img src={resolve(c.img)} alt="" loading="lazy" />
-            ) : (
-              <div class="trophy-empty" />
-            );
-            const caption = (
-              <>
-                <div class="trophy-caption ts-text is-tiny is-secondary">
-                  {c.title}
-                </div>
-                {c.subtitle && (
-                  <div class="ts-text is-tiny is-secondary">{c.subtitle}</div>
-                )}
-              </>
-            );
-            return c.url ? (
-              <a
-                class="trophy-item is-link"
-                href={c.url}
-                target={isExternal(c.url) ? "_blank" : undefined}
-                rel={isExternal(c.url) ? "noopener noreferrer" : undefined}
-              >
-                {media}
-                {caption}
-              </a>
-            ) : c.img ? (
-              <button
-                type="button"
-                class="trophy-item"
-                data-modal={`card-modal-${slug}-${i}`}
-              >
-                {media}
-                {caption}
-              </button>
-            ) : (
-              <div>
-                {media}
-                {caption}
-              </div>
-            );
-          })}
+<div class="trophy-grid">
+  {
+    cards.map((c, i) => {
+      const media = c.img ? (
+        <img src={resolveImg(c.img)} alt="" loading="lazy" />
+      ) : (
+        <div class="trophy-empty" />
+      );
+      const caption = (
+        <>
+          <div class="trophy-caption ts-text is-tiny is-secondary">
+            {c.title}
+          </div>
+          {c.subtitle && (
+            <div class="ts-text is-tiny is-secondary">{c.subtitle}</div>
+          )}
+        </>
+      );
+      return c.url ? (
+        <a
+          class="trophy-item is-link"
+          href={c.url}
+          target={isExternal(c.url) ? "_blank" : undefined}
+          rel={isExternal(c.url) ? "noopener noreferrer" : undefined}
+        >
+          {media}
+          {caption}
+        </a>
+      ) : c.img ? (
+        <button
+          type="button"
+          class="trophy-item"
+          data-modal={`card-modal-${slug}-${i}`}
+        >
+          {media}
+          {caption}
+        </button>
+      ) : (
+        <div>
+          {media}
+          {caption}
         </div>
-        {/* In-page lightboxes: Tocas modals on the native <dialog>. Backdrop
-            click and Esc close them. Only cards with an image and no `url`
-            get one (the trophy-wall case). */}
-        {cards.map(
-          (c, i) =>
-            !c.url &&
-            c.img && (
-              <dialog
-                class="ts-modal trophy-modal"
-                id={`card-modal-${slug}-${i}`}
-                aria-label={c.title}
-              >
-                <div class="content">
-                  <img src={resolve(c.img)} alt="" loading="lazy" />
-                </div>
-              </dialog>
-            ),
-        )}
-      </div>
-    </section>
+      );
+    })
+  }
+</div>
+{/* In-page lightboxes: Tocas modals on the native <dialog>. Backdrop
+    click and Esc close them. Only cards with an image and no `url` get
+    one (the trophy-wall case). */}
+{
+  cards.map(
+    (c, i) =>
+      !c.url &&
+      c.img && (
+        <dialog
+          class="ts-modal trophy-modal"
+          id={`card-modal-${slug}-${i}`}
+          aria-label={c.title}
+        >
+          <div class="content">
+            <img src={resolveImg(c.img)} alt="" loading="lazy" />
+          </div>
+        </dialog>
+      ),
   )
 }
 
 <script>
-  // Trophy-style lightboxes: open the matching <dialog>, close on backdrop
-  // click (the dialog element itself IS the dimmed overlay in Tocas) — Esc
-  // is native. Queries the whole document, so this works no matter how many
-  // Cards instances are on the page. getElementById, not querySelector — a
-  // modal id built from a CJK title has no CSS-selector-escaping guarantee.
-  document
-    .querySelectorAll<HTMLElement>(".trophy-item[data-modal]")
-    .forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const modal =
-          btn.dataset.modal && document.getElementById(btn.dataset.modal);
-        if (modal instanceof HTMLDialogElement) modal.showModal();
-      });
-    });
+  import { wireModalOpeners } from "@/utils/dialogs";
+  // Opening is the shared wiring (queries the whole document, so any number
+  // of Cards instances work); closing stays here — in a Tocas ts-modal the
+  // dialog element itself IS the dimmed overlay, so a click that lands on
+  // it (not the content box) closes. Esc is native.
+  wireModalOpeners(".trophy-item[data-modal]");
   document
     .querySelectorAll<HTMLDialogElement>("dialog.trophy-modal")
     .forEach((d) => {

@@ -125,6 +125,10 @@ import { t } from "@/locales";
         return null;
       },
     );
+    // Keystrokes that landed while the runtime was still loading hit the
+    // `if (!pagefind) return` guard and rendered nothing — re-run the
+    // query they left behind now that search is ready.
+    if (pagefind && input.value) input.dispatchEvent(new Event("input"));
   };
   // Closing is two-phase so it can animate: closePanel() adds .is-closing
   // (global.css plays the open animations in reverse) and only when that

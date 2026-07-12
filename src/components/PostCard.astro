@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "@/components/FormattedDate.astro";
-import { url } from "@/utils/url";
+import { resolveImg, url } from "@/utils/url";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -40,11 +40,7 @@ const { post } = Astro.props;
       post.data.heroImage && (
         <img
           class="post-card-cover"
-          src={
-            /^https?:\/\//.test(post.data.heroImage)
-              ? post.data.heroImage
-              : url(post.data.heroImage)
-          }
+          src={resolveImg(post.data.heroImage)}
           alt=""
           loading="lazy"
         />
