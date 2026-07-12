@@ -132,9 +132,8 @@ Every later push to `main` redeploys automatically. If the site comes up
 unstyled or without images, go back to step 3 and check `base`. Your
 content lives in the three arrowed spots under
 [Project structure](#-project-structure); every other field in
-`src/config.ts` (title, description, socials, feature flags) carries its
-own comment, so fill them in as you go. Delete the demo posts once
-you've read them.
+`src/config.ts` carries its own comment, so fill them in as you go.
+Delete the demo posts once you've read them.
 
 Netlify, Vercel, and Cloudflare Pages work too: the template is fully
 static, so importing the repo is enough (set `base` to `""`). See the
@@ -158,8 +157,8 @@ The sections below are technical reference. Come back when you build.
 
 - [x] Expressive Code fenced blocks: filenames, line numbers, diff
       highlighting
-- [x] Table of contents with scroll-spy (desktop left rail, mobile
-      disclosure), heading anchors, and CJK-aware reading time
+- [x] Table of contents with scroll-spy, heading anchors, and CJK-aware
+      reading time
 - [x] Pagefind full-text search, static, no server involved
 - [x] Tags with a tag index, pagination, and prev/next navigation
 - [x] RSS feed
@@ -192,8 +191,8 @@ All commands run from the project root, in a terminal:
 | :---------------- | :------------------------------------------------------------------- |
 | `npm run dev`     | Starts the local dev server at `localhost:4321`                      |
 | `npm run build`   | Builds the production site to `dist/`, then indexes it with Pagefind |
-| `npm run preview` | Previews the production build locally, before deploying              |
-| `npm run check`   | Type-checks the project (Astro and TypeScript)                       |
+| `npm run preview` | Previews the production build locally                                |
+| `npm run check`   | Type-checks the project                                              |
 | `npm test`        | Runs the plugin unit tests (`plugins/*.test.mjs`)                    |
 | `npm run fmt`     | Formats the codebase with Prettier                                   |
 
@@ -222,8 +221,7 @@ and publishes through GitHub Pages' native Actions deployment
 (`actions/deploy-pages`) on every push to `main`. Enable it once:
 **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
-`site` and `base` in `src/config.ts` (the single source of truth;
-`astro.config.mjs` reads both from there) must match how the repo is
+`site` and `base` in `src/config.ts` must match how the repo is
 published:
 
 | Deployment             | Repo name          | `site`                       | `base`           | Result                                  |
@@ -231,15 +229,15 @@ published:
 | Project page           | anything           | `"https://<user>.github.io"` | `"/<repo-name>"` | `https://<user>.github.io/<repo-name>/` |
 | User/organization page | `<user>.github.io` | `"https://<user>.github.io"` | `""`             | `https://<user>.github.io/`             |
 
-This repo deploys itself as a project page (`base: "/astro-flipside"`) at
-<https://nagametw.github.io/astro-flipside/> as a live demo.
+This repo deploys itself as a project page; the live demo is at
+<https://nagametw.github.io/astro-flipside/>.
 
 ## 🌐 Locale
 
-The whole UI (not per-post) reads one locale, and it now defaults to
-`"zh-TW"`. Set `locale: "en"` in `src/config.ts` to switch to the English
-strings instead. Both dictionaries live in `src/locales/`; add another
-language by copying `en.ts`'s keys.
+The UI reads one locale, and it defaults to `"zh-TW"`. Set
+`locale: "en"` in `src/config.ts` to switch to the English strings
+instead. Both dictionaries live in `src/locales/`; add another language
+by copying `en.ts`'s keys.
 
 ## 🗺️ Roadmap
 
@@ -258,9 +256,9 @@ straight to a PR, and it's worth opening an issue first for anything
 bigger so we can agree on the shape before you build it.
 
 [CONTRIBUTING.md](../CONTRIBUTING.md) covers the dev setup, repo map, and
-conventions; the PR form walks you through the rest (type of change,
-testing, screenshots for visual changes). CI runs the same three checks
-you can run locally: `npm run check && npm run build && npm test`.
+conventions; the PR form walks you through the rest. CI runs the same
+three checks you can run locally:
+`npm run check && npm run build && npm test`.
 
 ## 📄 License
 
