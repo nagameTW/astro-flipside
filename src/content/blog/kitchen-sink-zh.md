@@ -43,8 +43,8 @@ export function add(a: number, b: number): number {
 
 行內程式碼像 `npm run build` 可以直接放在句子中間，不會打斷閱讀。
 
-> 引言區塊：以下所有內容都是從這一個 Markdown 檔案產生的——主題樣式、閱讀時間、
-> 目錄，全部都讀同一份原始檔。
+> 引言區塊：以下所有內容都是從這一個 Markdown 檔案產生的（主題樣式、閱讀時間、
+> 目錄，全部都讀同一份原始檔）。
 
 ## 表格
 
@@ -69,7 +69,7 @@ export function add(a: number, b: number): number {
   資源管線就會接手處理、最佳化並自動帶上 base 前綴，跟從 `src/` import
   進來的圖片完全相同（已驗證：會渲染成
   `/astro-flipside/_astro/avatar.<hash>.svg`）。純 Markdown 的
-  `![](/avatar.svg)` 不會有這層處理——只有 frontmatter 的 `heroImage`
+  `![](/avatar.svg)` 不會有這層處理，只有 frontmatter 的 `heroImage`
   （見 BlogPost.astro）和這種 colocated 相對路徑才會自動帶 base 前綴。
 -->
 
@@ -99,5 +99,5 @@ graph TD
 這篇文章的閱讀時間也是從渲染後的文字內容計算出來的，中文字同樣算在內[^1]。
 
 [^1]:
-    參見 `plugins/remark-reading-time.mjs`——它用 `reading-time` 套件計算
+    參見 `plugins/remark-reading-time.mjs`：它用 `reading-time` 套件計算
     `mdast` 樹的內容，中文字是逐字計算，不是逐詞計算。
