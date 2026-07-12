@@ -114,19 +114,28 @@ export default defineConfig({
       useDarkModeMediaQuery: true,
       plugins: [pluginLineNumbers()],
       defaultProps: { showLineNumbers: false },
-      // Flat, Tocas-gray code surfaces. Literal colors mirror the site
-      // palette (--ts-gray-100/200/300 in both modes) because expressive-code
-      // runs contrast checks on these values at build time — a var() string
-      // can't be color-parsed there. Filename tabs flatten into a plain
-      // label strip (no tab chrome, no indicators), terminals lose the
-      // macOS window dots, and every frame shadow is gone.
+      // Per-theme code/terminal backgrounds are set on the THEMES, not as a
+      // styleOverrides resolver: a `({ theme }) => …` on the top-level
+      // codeBackground makes the emitted ec.*.css hash disagree with the URL
+      // injected into <link> tags — pages then reference a css file that
+      // does not exist and every block renders unstyled (reproduced
+      // 2026-07-12; frame-level resolvers below are unaffected). Light
+      // value sits between --ts-gray-75 (250) and gray-100 (242): gray-100
+      // read too heavy against the white page (owner call). Dark mirrors
+      // dark gray-100.
+      customizeTheme: (theme) => {
+        const bg = theme.type === "dark" ? "#333333" : "#f6f6f6";
+        theme.colors["editor.background"] = bg;
+        theme.colors["terminal.background"] = bg;
+        return theme;
+      },
+      // Flat, Tocas-gray code surfaces (values mirror --ts-gray-200/300 in
+      // both modes). Filename tabs flatten into a plain label strip (no tab
+      // chrome, no indicators), terminals lose the macOS window dots, and
+      // every frame shadow and border is gone.
       styleOverrides: {
         borderRadius: "0.4rem",
         codeFontSize: "0.9em",
-        // Light value sits between --ts-gray-75 (250) and gray-100 (242):
-        // gray-100 read too heavy against the white page (owner call).
-        codeBackground: ({ theme }) =>
-          theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(246, 246, 246)",
         borderWidth: "0",
         frames: {
           frameBoxShadowCssValue: "none",
@@ -138,8 +147,6 @@ export default defineConfig({
           editorActiveTabBorderColor: "transparent",
           editorActiveTabIndicatorTopColor: "transparent",
           editorActiveTabIndicatorBottomColor: "transparent",
-          terminalBackground: ({ theme }) =>
-            theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(246, 246, 246)",
           terminalTitlebarBackground: ({ theme }) =>
             theme.type === "dark" ? "rgb(56, 56, 56)" : "rgb(238, 238, 238)",
           terminalTitlebarBorderBottomColor: ({ theme }) =>
