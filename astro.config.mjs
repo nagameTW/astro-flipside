@@ -13,6 +13,9 @@ import rehypeKatex from "rehype-katex";
 import { remarkReadingTime } from "./plugins/remark-reading-time.mjs";
 import { remarkMermaid } from "./plugins/remark-mermaid.mjs";
 import SITE from "./src/config.ts";
+// Works from config-land because src/locales uses relative imports only —
+// the config loader does not resolve the `@/` alias.
+import { t } from "./src/locales/index.ts";
 
 // Vite statically discovers `import("katex/dist/katex.min.css")` no matter which
 // runtime branch guards it, so a conditional dynamic import still ships the CSS
@@ -80,6 +83,14 @@ export default defineConfig({
   site: SITE.site,
   base: SITE.base || undefined,
   markdown: {
+    // GFM footnotes ship an English sr-only "Footnotes" heading and a "↩"
+    // back-reference that reads like a stray newline glyph — localize both
+    // (the visible back link becomes plain text, styled in global.css).
+    remarkRehype: {
+      footnoteLabel: t["post.footnotesLabel"],
+      footnoteBackContent: t["post.footnoteBack"],
+      footnoteBackLabel: t["post.footnoteBack"],
+    },
     // remarkMermaid goes first: it must turn ```mermaid fences into a raw
     // <div> before expressive-code's own remark-time processing sees them.
     remarkPlugins: [

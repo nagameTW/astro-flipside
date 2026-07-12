@@ -32,6 +32,8 @@ const en = {
   "search.placeholder": "Search…",
   "search.clear": "Clear search",
   "search.noResults": "No matching results.",
+  "post.footnotesLabel": "Footnotes",
+  "post.footnoteBack": "Back to text",
   "notFound.message": "This page does not exist.",
   "notFound.home": "Back to home",
   "life.copied": "Copied!",
