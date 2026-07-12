@@ -6,6 +6,7 @@
 // Section.astro.
 import type { HighlightEntry } from "@/data/sections";
 import { markYears } from "@/utils/timeline";
+import Icon from "@/components/Icon.astro";
 
 interface Props {
   entries: HighlightEntry[];
@@ -20,7 +21,7 @@ const ROWS = markYears(entries, (e) => e.date);
       <div class="item">
         <div class="aside ts-text is-description">{year}</div>
         <div class="indicator">
-          <span class="ts-icon is-trophy-icon" />
+          <Icon name="trophy" />
         </div>
         <div class="content">
           <div class="ts-text is-bold">{e.title}</div>

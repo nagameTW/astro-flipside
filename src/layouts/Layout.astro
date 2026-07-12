@@ -3,6 +3,7 @@ import BaseHead from "@/components/BaseHead.astro";
 import Navbar from "@/components/Navbar.astro";
 import Footer from "@/components/Footer.astro";
 import ImageLightbox from "@/components/ImageLightbox.astro";
+import Icon from "@/components/Icon.astro";
 import { t, LOCALE } from "@/locales";
 
 interface Props {
@@ -45,7 +46,7 @@ const { title, description, noindex } = Astro.props;
       class="ts-button is-icon is-circular is-secondary"
       aria-label={t["layout.backToTop"]}
     >
-      <span class="ts-icon is-arrow-up-icon"></span>
+      <Icon name="arrow-up" />
     </button>
     <script>
       const backToTop = document.getElementById("back-to-top")!;

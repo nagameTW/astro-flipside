@@ -7,6 +7,7 @@
 // growing taller. Esc/veil-click closing is wired up by hand below —
 // that is the price of skipping showModal's backdrop.
 import { t } from "@/locales";
+import Icon from "@/components/Icon.astro";
 ---
 
 <dialog id="search-dialog" class="search-dialog" aria-label={t["search.open"]}>
@@ -17,8 +18,7 @@ import { t } from "@/locales";
           X is hidden in global.css; the project-styled clear button
           appears once there is text. */}
       <div class="search-row">
-        <span class="ts-icon is-magnifying-glass-icon" aria-hidden="true"
-        ></span>
+        <Icon name="magnifying-glass" />
         <input
           id="search-input"
           type="search"
@@ -31,7 +31,7 @@ import { t } from "@/locales";
           aria-label={t["search.clear"]}
           hidden
         >
-          <span class="ts-icon is-xmark-icon"></span>
+          <Icon name="xmark" />
         </button>
       </div>
       <ol

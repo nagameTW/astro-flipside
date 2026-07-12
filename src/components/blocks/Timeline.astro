@@ -11,6 +11,7 @@
 //    `name` is "", so the bold line is skipped and only the paragraph shows)
 // Shell, heading, and empty-guard live in Section.astro.
 import type { TimelineEntry } from "@/data/sections";
+import Icon from "@/components/Icon.astro";
 
 interface Props {
   entries: TimelineEntry[];
@@ -27,7 +28,7 @@ const { entries } = Astro.props;
           {e.end && <div>– {e.end}</div>}
         </div>
         <div class="indicator">
-          <span class="ts-icon is-briefcase-icon" />
+          <Icon name="briefcase" />
         </div>
         <div class="content">
           <div class="ts-text is-bold">{e.title}</div>

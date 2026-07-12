@@ -26,6 +26,19 @@
   color: var(--ts-gray-50);
 }
 
+/* Inline SVG icons (Icon.astro). The -0.125em shift seats the glyph on the
+   text baseline the way the old icon font did (same value Font Awesome's
+   own SVG styles use). */
+.icon {
+  vertical-align: -0.125em;
+}
+/* Tocas's .ts-button.is-start-icon spacing targets .ts-icon; mirror it for
+   SVG icons so the button pattern keeps working. */
+.ts-button.is-start-icon .icon {
+  margin-right: 0.5em;
+  font-size: 1.2em;
+}
+
 /* Tocas lays the document out as a table (`html{display:table}`,
    `body{display:table-cell}`) — a legacy full-height hack this site does not
    use. A table root cannot take the viewport's overflow, so <html> becomes its
@@ -757,7 +770,7 @@ a.gear-card {
   color: inherit;
   text-decoration: none;
 }
-.gear-card > .ts-icon {
+.gear-card > .icon {
   font-size: 1.25rem;
   color: var(--ts-gray-600);
   margin-top: 0.125rem;
@@ -999,7 +1012,7 @@ a.ts-box:hover,
     color 0.15s ease,
     transform 0.15s ease;
 }
-.social-icons > * .ts-icon {
+.social-icons > * .icon {
   color: inherit;
 }
 .social-icons > *:hover {
@@ -1393,7 +1406,7 @@ dialog.search-dialog {
   align-items: center;
   gap: 0.8rem;
 }
-.search-row > .ts-icon {
+.search-row > .icon {
   font-size: 1.3rem;
   color: var(--ts-gray-500);
 }

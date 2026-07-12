@@ -27,7 +27,8 @@ export type Section =
       type: "kv";
       title?: string;
       // href makes the whole row card a link (e.g. to a store or product
-      // page); external http(s) links open in a new tab.
+      // page); external http(s) links open in a new tab. icon is a name
+      // from src/components/Icon.astro.
       rows: { label: string; value: string; icon?: string; href?: string }[];
     }
   | { type: "timeline"; title?: string; entries: TimelineEntry[] }

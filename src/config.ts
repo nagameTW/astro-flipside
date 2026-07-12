@@ -21,35 +21,36 @@ const SITE = {
     { label: "nav.blog", href: "/blog/" },
     { label: "nav.gallery", href: "/gallery/" },
   ] satisfies { label: keyof UIStrings; href: string }[],
-  /** Life-face identity-card social buttons. `url` opens; `copy` copies text (Discord-style). */
+  /** Life-face identity-card social buttons. `url` opens; `copy` copies text
+   *  (Discord-style). `icon` is a name from src/components/Icon.astro. */
   socials: [
     {
       name: "Instagram",
-      icon: "is-instagram-icon",
+      icon: "instagram",
       url: "https://example.com/instagram/your-name",
     },
     {
       name: "Threads",
-      icon: "is-threads-icon",
+      icon: "threads",
       url: "https://example.com/threads/your-name",
     },
-    { name: "Discord", icon: "is-discord-icon", copy: "your-discord-handle" },
+    { name: "Discord", icon: "discord", copy: "your-discord-handle" },
   ] as { name: string; icon: string; url?: string; copy?: string }[],
   /** Work-face identity-card social buttons — same `url`/`copy` shape. */
   socialsWork: [
     {
       name: "Spotify",
-      icon: "is-spotify-icon",
+      icon: "spotify",
       url: "https://example.com/spotify/your-name",
     },
     {
       name: "YouTube",
-      icon: "is-youtube-icon",
+      icon: "youtube",
       url: "https://example.com/youtube/your-name",
     },
     {
       name: "SoundCloud",
-      icon: "is-soundcloud-icon",
+      icon: "soundcloud",
       url: "https://example.com/soundcloud/your-name",
     },
   ] as { name: string; icon: string; url?: string; copy?: string }[],

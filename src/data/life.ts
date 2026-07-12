@@ -35,19 +35,19 @@ const GEAR: { label: string; item: string; icon: string; href?: string }[] = [
   {
     label: "麥克風",
     item: "聲學 AT-01 麥克風",
-    icon: "is-microphone-icon",
+    icon: "microphone",
     href: "https://example.com/shop/at-01",
   },
   {
     label: "監聽耳機",
     item: "聲學 IH-02 監聽耳機",
-    icon: "is-headphones-icon",
+    icon: "headphones",
     href: "https://example.com/shop/ih-02",
   },
   {
     label: "主奏吉他",
     item: "聲學 GT-3 木吉他",
-    icon: "is-guitar-icon",
+    icon: "guitar",
   },
 ];
 

@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import { GALLERY } from "@/data/gallery";
 import { t, fill } from "@/locales";
 import SmartImage from "@/components/SmartImage.astro";
+import Icon from "@/components/Icon.astro";
 // The masonry carries data-pagefind-body: captions and alt text are unique
 // content, so the gallery joins the search index (see index.astro's note;
 // the lightbox copies below the masonry stay out of it).
@@ -63,7 +64,7 @@ import SmartImage from "@/components/SmartImage.astro";
           data-open={`gallery-modal-${(i - 1 + GALLERY.length) % GALLERY.length}`}
           aria-label={t["gallery.prev"]}
         >
-          <span class="ts-icon is-angle-left-icon" />
+          <Icon name="angle-left" />
         </button>
         <figure class="gallery-modal-figure">
           <SmartImage
@@ -83,7 +84,7 @@ import SmartImage from "@/components/SmartImage.astro";
           data-open={`gallery-modal-${(i + 1) % GALLERY.length}`}
           aria-label={t["gallery.next"]}
         >
-          <span class="ts-icon is-angle-right-icon" />
+          <Icon name="angle-right" />
         </button>
       </dialog>
     ))

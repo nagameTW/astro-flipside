@@ -3,6 +3,7 @@
 // until there's real content to show — see src/data/projects.ts); kept as
 // a worked example consumers can re-enable.
 import type { Project } from "@/data/projects";
+import Icon from "@/components/Icon.astro";
 
 interface Props {
   project: Project;
@@ -28,7 +29,7 @@ const { project } = Astro.props;
       target="_blank"
       rel="noopener noreferrer"
     >
-      <span class="ts-icon is-github-icon"></span> GitHub
+      <Icon name="github" /> GitHub
     </a>
   </div>
 </div>

@@ -8,6 +8,7 @@ import type { Section as SectionData } from "@/data/sections";
 import { Image } from "astro:assets";
 import FaceToggle from "@/components/FaceToggle.astro";
 import Section from "@/components/Section.astro";
+import Icon from "@/components/Icon.astro";
 
 interface Props {
   face: "personal" | "professional";
@@ -78,7 +79,7 @@ const isExternal = (href?: string) => !!href && href.startsWith("http");
                 target={isExternal(l.url) ? "_blank" : undefined}
                 rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
               >
-                <span class={`ts-icon ${l.icon}`} />
+                <Icon name={l.icon} />
               </a>
             ) : (
               <button
@@ -87,7 +88,7 @@ const isExternal = (href?: string) => !!href && href.startsWith("http");
                 data-copy={l.copy}
                 aria-label={l.name}
               >
-                <span class={`ts-icon ${l.icon}`} />
+                <Icon name={l.icon} />
               </button>
             ),
           )
