@@ -1012,11 +1012,11 @@ a.ts-box:hover,
 }
 /* Bigger body type for long-form reading; back to the site size on small
    screens where the wide measure that justifies it is gone. */
-.post-body .md-content {
+[data-pagefind-body] .md-content {
   font-size: 1.1875rem;
 }
 @media (max-width: 767px) {
-  .post-body .md-content {
+  [data-pagefind-body] .md-content {
     font-size: 1.0625rem;
   }
   .post-title {

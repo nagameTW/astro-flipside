@@ -30,7 +30,11 @@ import { t } from "@/locales";
   // ever escapes into text-content. The escape sets differ on purpose:
   // do not unify them.
   const esc = (s: string) =>
-    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
 
   // Pagefind stores excerpts as decoded text, so a `<mark>`-wrapped match
   // next to raw HTML from a source code block (e.g. an `<img onerror=…>`
@@ -38,7 +42,9 @@ import { t } from "@/locales";
   // innerHTML below. Escape everything, then restore only pagefind's own
   // <mark> tags (never user/content-controlled) as real elements.
   const excerptSafe = (e: string) =>
-    esc(e).replace(/&lt;mark&gt;/g, "<mark>").replace(/&lt;\/mark&gt;/g, "</mark>");
+    esc(e)
+      .replace(/&lt;mark&gt;/g, "<mark>")
+      .replace(/&lt;\/mark&gt;/g, "</mark>");
 
   // Only pagefind.js's own import path needs the base prefixed by hand: the
   // pagefind runtime auto-detects the site base from wherever pagefind.js
@@ -74,12 +80,12 @@ import { t } from "@/locales";
       // Dev note: the index only exists after `npm run build` (postbuild).
       // `astro dev` has no dist/pagefind/, so this 404s, the catch below
       // keeps search a silent no-op, and the input stays inert.
-      pagefind ??= await importPagefind(
-        `${base}/pagefind/pagefind.js`,
-      ).catch(() => {
-        console.info("Pagefind index not found (run npm run build first).");
-        return null;
-      });
+      pagefind ??= await importPagefind(`${base}/pagefind/pagefind.js`).catch(
+        () => {
+          console.info("Pagefind index not found (run npm run build first).");
+          return null;
+        },
+      );
     });
   input.addEventListener("input", async () => {
     if (!pagefind) return;
