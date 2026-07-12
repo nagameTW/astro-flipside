@@ -24,6 +24,8 @@ const zhTW: UIStrings = {
   "blog.draft": "草稿",
   "gallery.description": "生活的牆面",
   "gallery.count": "共 {n} 張",
+  "gallery.prev": "上一張",
+  "gallery.next": "下一張",
   "gallery.empty": "還沒有內容。",
   "pagination.label": "分頁",
   "pagination.prev": "上一頁",
