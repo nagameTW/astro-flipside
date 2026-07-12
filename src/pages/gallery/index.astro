@@ -48,7 +48,7 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
         aria-label={photo.alt}
       >
         <div class="content">
-          <img src={resolve(photo.src)} alt={photo.alt} loading="lazy" />
+          <img src={resolve(photo.src)} alt="" loading="lazy" />
           {photo.caption && (
             <p class="gallery-caption ts-text is-secondary">{photo.caption}</p>
           )}
