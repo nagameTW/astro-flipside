@@ -2,6 +2,7 @@
 import BaseHead from "@/components/BaseHead.astro";
 import Navbar from "@/components/Navbar.astro";
 import Footer from "@/components/Footer.astro";
+import ImageLightbox from "@/components/ImageLightbox.astro";
 import { t, LOCALE } from "@/locales";
 
 interface Props {
@@ -38,6 +39,7 @@ const { title, description, noindex } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <ImageLightbox />
     <button
       id="back-to-top"
       class="ts-button is-icon is-circular is-secondary"
