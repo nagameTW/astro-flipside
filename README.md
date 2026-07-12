@@ -31,10 +31,9 @@ pagination, search, and RSS.
 
 **Dual-face About**
 
-- Work/Life toggle with a 3D avatar flip. Both faces render from the same 12
+- Work/Life toggle with a 3D avatar flip. Both faces render from the same 9
   generic content blocks: text, chips, key-value, timeline, highlights,
-  cards, stats, links, freeform markdown, plus Steam/osu!/Last.fm blocks.
-  Edit data, not components.
+  cards, stats, links, freeform markdown. Edit data, not components.
 - Work face data in `src/data/about.ts`, Life face data in `src/data/life.ts`.
 - A `cards` block is a natural fit for listing projects. `src/data/projects.ts`
   and `ProjectCard.astro` ship as a scaffold for a future dedicated
@@ -50,14 +49,22 @@ pagination, search, and RSS.
 - Drafts: `draft: true` in frontmatter shows the post only in `astro dev`;
   production builds and the RSS feed exclude it automatically.
 - RSS feed, Pagefind full-text search (static, no server involved).
+- `heroImage` in frontmatter doubles as a cover image on the post's card in
+  the blog index — set it once, get both.
+
+**Gallery**
+
+- Pinterest-style masonry layout — CSS multi-column, so photos keep their
+  own aspect ratio instead of being cropped into a fixed grid.
+- Data-driven: list photos in `src/data/gallery.ts`, drop the files in
+  `public/gallery/`. Click one to open it full-size in a lightbox.
 
 **Everywhere**
 
 - Dark mode: follows OS preference, or an explicit toggle that persists.
 - Built-in en / zh-TW UI strings, switched with one config flag.
-- Optional, flag-gated: KaTeX math, Mermaid diagrams, giscus comments,
-  Steam/osu!/Last.fm stat blocks. Each compiles to zero bundle bytes when its
-  flag is off.
+- Optional, flag-gated: KaTeX math, Mermaid diagrams, giscus comments. Each
+  compiles to zero bundle bytes when its flag is off.
 
 ## Quick start
 
@@ -67,7 +74,8 @@ pagination, search, and RSS.
 3. Edit `src/config.ts`: site URL, base path, title, nav, socials, feature
    flags (see [Config reference](#config-reference)).
 4. Edit `src/data/*`: About content for both faces (`about.ts`, `life.ts`),
-   projects, trophies, gear.
+   projects, trophies, gear, gallery photos (`gallery.ts` + files in
+   `public/gallery/`).
 5. Write posts in `src/content/blog/`. Delete the demo posts (`welcome.md`,
    `kitchen-sink.md`, `kitchen-sink-zh.md`) when you're ready to publish your
    own.
@@ -95,18 +103,6 @@ This repo deploys itself as a project page (`base: "/astro-flipside"`) at
 <https://nagametw.github.io/astro-flipside/> as a live demo.
 
 ## Optional modules
-
-**Steam / osu! / Last.fm stats** (Life face; the Music/Steam/osu! blocks
-self-hide until there's data):
-
-- Repo **secrets** (Settings → Secrets and variables → Actions → Secrets):
-  `STEAM_API_KEY`, `OSU_CLIENT_ID`, `OSU_CLIENT_SECRET`, `LASTFM_API_KEY`.
-  Add only the ones you use; a source with no secret is silently skipped.
-- Repo **variables** (same page → Variables): `STEAM_ACCOUNTS`
-  (comma-separated SteamIDs), `EXCLUDED_APPIDS`, `OSU_USER_ID`, `LASTFM_USER`.
-- `.github/workflows/gamestats.yml` runs `scripts/fetch_gamestats.py` daily
-  (and on manual dispatch), writes `src/data/gamestats.json`, commits if it
-  changed, and triggers a redeploy.
 
 **Trophies** (Life face, Highlights cards): edit `src/data/trophies.ts`.
 Screenshots go in `public/trophies/`. An empty `src` renders a placeholder
@@ -141,6 +137,18 @@ The whole UI (not per-post) reads one locale: set `locale: "zh-TW"` in
 live in `src/locales/`; add another language by copying `en.ts`'s keys.
 
 繁體中文版說明：[docs/README.zh-TW.md](docs/README.zh-TW.md)
+
+## Contributing
+
+Issues and pull requests are welcome. Bug reports and feature ideas go
+through the [issue forms](../../issues/new/choose); small fixes can go
+straight to a PR, and it's worth opening an issue first for anything
+bigger so we can agree on the shape before you build it.
+
+[CONTRIBUTING.md](CONTRIBUTING.md) covers the dev setup, repo map, and
+conventions; the PR form walks you through the rest (type of change,
+testing, screenshots for visual changes). CI runs the same three checks
+you can run locally: `npm run check && npm run build && npm test`.
 
 ## Acknowledgments
 

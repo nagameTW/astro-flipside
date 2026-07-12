@@ -1,6 +1,7 @@
 const en = {
   "nav.about": "About",
   "nav.blog": "Blog",
+  "nav.gallery": "Gallery",
   "nav.themeToggle": "Toggle color theme",
   "layout.backToTop": "Back to top",
   "face.switchTo": "Switch to {name}", // {name} replaced with Work/Life
@@ -19,6 +20,9 @@ const en = {
   "blog.tagIndexDescription": "Posts by tag",
   "blog.taggedWith": 'Posts tagged "{tag}"',
   "blog.draft": "Draft",
+  "gallery.description": "A wall of moments",
+  "gallery.count": "{n} photos",
+  "gallery.empty": "Nothing here yet.",
   "pagination.label": "Pagination",
   "pagination.prev": "Previous page",
   "pagination.next": "Next page",
@@ -26,20 +30,7 @@ const en = {
   "search.placeholder": "Search posts…",
   "notFound.message": "This page does not exist.",
   "notFound.home": "Back to home",
-  "life.music": "Music",
-  "life.recentlyPlayedMusic": "Recently played",
-  "life.steamRecent": "Recently played",
-  "life.steamTotal": "Total playtime",
-  "life.hours": "{h} hrs",
   "life.copied": "Copied!",
-  "osu.worldRank": "Global rank",
-  "osu.countryRank": "Country rank",
-  "osu.totalTime": "Play time",
-  "osu.accuracy": "Accuracy",
-  "osu.rankChartLabel":
-    "90-day world rank chart — best {best}, latest {latest}",
-  "osu.today": "Today",
-  "osu.daysAgo": "{n} days ago",
 };
 export type UIStrings = typeof en;
 export default en;

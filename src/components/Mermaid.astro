@@ -12,7 +12,7 @@
 // No-op when a page has no diagrams; the `mermaid` package itself is only
 // pulled in by the dynamic import below, once a real .mermaid node exists.
 //
-// Plain JS, not TS, unlike Toc.astro/OsuRankChart.astro's scripts: injected
+// Plain JS, not TS, unlike Toc.astro's scripts: injected
 // via injectScript as raw text into a virtual .js module, so there's no
 // Astro-compiler pass here to strip TS syntax. A `<HTMLElement>` generic on
 // querySelectorAll was tried first — esbuild parsed it as two `<`/`>`

@@ -79,6 +79,22 @@ Inline code like `npm run build` sits in a sentence without breaking it.
 
 ![Flipside's placeholder avatar](./avatar.svg)
 
+By default an image fills the column's width; add a `width` attribute to
+shrink it, like the sized example below.
+
+<!--
+  Sizing needs a real `width` attribute, and Markdown's `![]()` syntax has
+  no way to set one, so this is raw HTML — which Astro's Markdown pipeline
+  passes straight through unprocessed (verified with `npm run build`: the
+  `src` comes out byte-for-byte, no hashing, no base prefix). That also
+  means the usual root-relative shortcut 404s here (confirmed against
+  `npm run preview`): the only `src` that actually resolves is a `public/`
+  file with the base prefix spelled out by hand, the same string as
+  `SITE.base` in `src/config.ts`.
+-->
+
+<img src="/astro-flipside/avatar.svg" width="160" alt="Sized image demo">
+
 ## Math and diagrams
 
 `features.math` and `features.mermaid` (in `src/config.ts`) ship **off** by

@@ -13,7 +13,6 @@ Before opening a PR, verify locally exactly what CI checks:
 
 ```bash
 npm run check && npm run build && npm test
-python3 scripts/test_fetch_gamestats.py
 ```
 
 `npm audit` may still list advisories against `astro`/`esbuild`: clearing
@@ -29,9 +28,8 @@ them weekly (`.github/dependabot.yml`).
 - `src/locales/en.ts`, `src/locales/zh-TW.ts`: every built-in UI string, one
   dictionary per locale. `SITE.locale` in `src/config.ts` picks which loads.
 - `src/data/*.ts`: content data, work/life "about" copy (`about.ts`,
-  `life.ts`), portfolio entries (`projects.ts`), the shared block-content
-  type definitions (`sections.ts`), and optional game-stats data
-  (`gamestats.ts`, refreshed by `scripts/fetch_gamestats.py`).
+  `life.ts`), portfolio entries (`projects.ts`), and the shared block-content
+  type definitions (`sections.ts`).
 - `src/components/blocks/*.astro`: the generic content blocks (text, chips,
   timeline, cards, stats, ...) that both about-faces render from
   `src/data/sections.ts` entries. See Conventions below.
@@ -51,21 +49,29 @@ them weekly (`.github/dependabot.yml`).
   `src/locales/zh-TW.ts` in the same PR. One locale silently falling behind
   the other is treated as a bug.
 
+## Pull requests
+
+Small fixes can go straight to a PR. For features or behavior changes,
+open an issue first so the shape is agreed before you build. The PR form
+asks for a description, the type of change, how you tested it, and
+before/after screenshots for anything visual; the PR title follows
+Conventional Commits because it becomes the squash-merge commit message.
+
 ## Personal data
 
 This template ships with obviously-fake demo content (see `src/data/life.ts`)
 so nothing personal to the template's maintainer leaks into your fork. Don't
 introduce real names, employer/organization affiliations, phone numbers,
 government or account IDs, or links to a real person's social/gaming
-profiles anywhere under `src/`, `public/`, `scripts/`, `.github/`,
-`package.json`, or `astro.config.mjs`.
+profiles anywhere under `src/`, `public/`, `.github/`, `package.json`, or
+`astro.config.mjs`.
 
 A partial, safe-to-run version of the check (catches accidental real social
 links; maintainers additionally check for a few maintainer-specific
 identifiers during review that aren't listed here):
 
 ```bash
-grep -rniE "steamcommunity|gravatar|instagram|facebook" src/ public/ scripts/ .github/ package.json astro.config.mjs
+grep -rniE "steamcommunity|gravatar|instagram|facebook" src/ public/ .github/ package.json astro.config.mjs
 ```
 
 Any hit should be a vendored/generic reference (e.g. an icon class name in

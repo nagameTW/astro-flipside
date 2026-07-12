@@ -20,6 +20,20 @@ const { post } = Astro.props;
   */
 }
 <div class="ts-box post-card">
+  {
+    post.data.heroImage && (
+      <img
+        class="post-card-cover"
+        src={
+          /^https?:\/\//.test(post.data.heroImage)
+            ? post.data.heroImage
+            : url(post.data.heroImage)
+        }
+        alt=""
+        loading="lazy"
+      />
+    )
+  }
   <div class="ts-content">
     <div class="ts-header is-heavy">
       <a class="post-card-link" href={url(`/blog/${post.id}/`)}

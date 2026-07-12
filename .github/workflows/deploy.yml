@@ -3,8 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: main
-  # Called by gamestats.yml, whose GITHUB_TOKEN push cannot trigger `push` above.
-  workflow_call:
   workflow_dispatch:
 
 permissions:
@@ -20,11 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Build the branch tip, not the SHA that started the run: when gamestats.yml
-      # calls this workflow, its fresh data commit is newer than that SHA.
       - uses: actions/checkout@v4
-        with:
-          ref: main
 
       - uses: actions/setup-node@v6
         with:
