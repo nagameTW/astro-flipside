@@ -726,21 +726,23 @@ dialog.gallery-modal::backdrop {
   font-weight: 600;
 }
 
-/* Hover feedback shared across the Life cards — flat, per the site-wide
-   flat style (owner call 2026-07-12): a tint shift only, no lift, no
-   shadow. (Gallery tiles opt out — their hover response is the Pinterest
-   scrim alone.) */
+/* Hover feedback shared across the Life cards — a slight forward scale,
+   nothing else: no shadow, no tint (site-wide flat style, owner call
+   2026-07-12). (Gallery tiles opt out — their hover response is the
+   Pinterest scrim alone.) */
 .trophy-item img,
 .gear-card {
-  transition:
-    filter 0.15s ease,
-    background-color 0.15s ease;
+  transition: transform 0.15s ease;
 }
-.trophy-item:hover img {
-  filter: brightness(0.94);
-}
+.trophy-item:hover img,
 .gear-card:hover {
-  background: var(--ts-gray-100);
+  transform: scale(1.02);
+}
+@media (prefers-reduced-motion: reduce) {
+  .trophy-item:hover img,
+  .gear-card:hover {
+    transform: none;
+  }
 }
 
 /* Card grids: fluid responsive columns via native CSS grid — Tocas's
@@ -754,20 +756,26 @@ dialog.gallery-modal::backdrop {
   grid-template-columns: repeat(auto-fill, minmax(min(384px, 100%), 1fr));
 }
 
-/* Cards as links (blog posts, prev/next nav) — same flat hover as the
-   Life cards, site-wide. `.post-card` (PostCard.astro) is a div, not an
-   <a>: it holds a real tag-chip link inside it, and an <a> can't contain
-   another <a>. */
+/* Cards as links (blog posts, prev/next nav) — same forward-scale hover
+   as the Life cards, site-wide. `.post-card` (PostCard.astro) is a div,
+   not an <a>: it holds a real tag-chip link inside it, and an <a> can't
+   contain another <a>. */
 a.ts-box,
 .post-card {
   display: block;
   color: inherit;
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  transition: transform 0.15s ease;
 }
 a.ts-box:hover,
 .post-card:hover {
-  background: var(--ts-gray-100);
+  transform: scale(1.02);
+}
+@media (prefers-reduced-motion: reduce) {
+  a.ts-box:hover,
+  .post-card:hover {
+    transform: none;
+  }
 }
 /* Cards breathe: 24px inside, 16px between their rows, 24px between
    timeline entries. */
@@ -899,13 +907,22 @@ a.ts-box:hover,
   color: var(--ts-gray-800);
   transition:
     background-color 0.15s ease,
-    color 0.15s ease;
+    color 0.15s ease,
+    transform 0.15s ease;
 }
 .social-icons > * .ts-icon {
   color: inherit;
 }
 .social-icons > *:hover {
   background: var(--ts-gray-200);
+  /* Same forward-scale response as the cards; small circles need a
+     bigger factor to register. */
+  transform: scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .social-icons > *:hover {
+    transform: none;
+  }
 }
 .social-icons > *:active {
   background: var(--ts-gray-900);
@@ -946,7 +963,16 @@ a.ts-box:hover,
   pointer-events: none;
   transition:
     opacity 0.2s ease,
-    visibility 0.2s;
+    visibility 0.2s,
+    transform 0.15s ease;
+}
+#back-to-top:hover {
+  transform: scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  #back-to-top:hover {
+    transform: none;
+  }
 }
 #back-to-top.is-shown {
   opacity: 1;
@@ -1196,13 +1222,15 @@ dialog.search-dialog {
   .search-veil:not([hidden]) {
     animation: veil-fade 0.18s ease-out;
   }
-  /* Closing plays the same keyframes backwards; the [open]/[hidden]
-     attributes only flip after animationend (see Search.astro). */
+  /* Closing gets its own keyframes ending at opacity 0 (reversing the
+     open ones would stop at their 0.4 starting opacity and leave a ghost
+     of the query text until animationend); the [open]/[hidden] attributes
+     only flip after animationend (see Search.astro). */
   dialog.search-dialog[open].is-closing {
-    animation: search-drop 0.16s ease-in reverse forwards;
+    animation: search-close 0.16s ease-in forwards;
   }
   .search-veil:not([hidden]).is-closing {
-    animation: veil-fade 0.16s ease-in reverse forwards;
+    animation: veil-hide 0.16s ease-in forwards;
   }
   @keyframes search-drop {
     from {
@@ -1212,6 +1240,17 @@ dialog.search-dialog {
   }
   @keyframes veil-fade {
     from {
+      opacity: 0;
+    }
+  }
+  @keyframes search-close {
+    to {
+      transform: translateY(-0.5rem);
+      opacity: 0;
+    }
+  }
+  @keyframes veil-hide {
+    to {
       opacity: 0;
     }
   }
