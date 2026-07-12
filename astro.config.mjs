@@ -1,5 +1,5 @@
 // @ts-check
-import { cp } from "node:fs/promises";
+import { cp, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
@@ -37,6 +37,49 @@ const katexAssets = () => ({
         recursive: true,
         force: true,
       });
+    },
+  },
+});
+
+// Noto Sans TC's @font-face declarations are 95% of the page CSS bundle
+// (315 blocks x ~1.2 KB: 3 weights x 105 CJK unicode-range slices — the
+// slicing itself is right, browsers only fetch the slices a page uses,
+// but the declarations are a fixed cost). Importing @fontsource CSS in
+// BaseHead put all of it in the render-blocking bundle (~160 KB gzip,
+// 900 ms of LCP on a cold load). Instead this integration copies the
+// declarations + woff2 files into dist/fonts/ and BaseHead loads that
+// stylesheet ASYNC (media="print" swap): text paints immediately with
+// the system fallback and upgrades to Noto when the declarations land —
+// the same reflow font-display:swap already allowed. woff fallbacks are
+// dropped (every browser with @font-face unicode-range support does
+// woff2). Build-only like katexAssets: the dev server shows system fonts.
+/** @type {() => import("astro").AstroIntegration} */
+const notoFonts = () => ({
+  name: "noto-fonts",
+  hooks: {
+    "astro:build:done": async ({ dir }) => {
+      const src = "node_modules/@fontsource/noto-sans-tc";
+      const out = fileURLToPath(new URL("fonts/", dir));
+      await mkdir(out + "files", { recursive: true });
+      let css = "";
+      for (const w of [400, 500, 700])
+        css += await readFile(`${src}/${w}.css`, "utf8");
+      css = css.replace(
+        /,\s*url\(\.\/files\/[^)]*\.woff\)\s*format\('woff'\)/g,
+        "",
+      );
+      await writeFile(out + "noto-sans-tc.css", css);
+      // Copy exactly the files the stripped CSS references — a filename
+      // filter either drags in the unreferenced combined-CJK woff2s or,
+      // tightened to numbered slices, drops the referenced combined
+      // latin/cyrillic ones. Deriving from the CSS keeps referenced ==
+      // copied by construction.
+      const referenced = [...css.matchAll(/url\(\.\/files\/([^)]+)\)/g)].map(
+        (m) => m[1],
+      );
+      await Promise.all(
+        referenced.map((f) => copyFile(`${src}/files/${f}`, `${out}files/${f}`)),
+      );
     },
   },
 });
@@ -166,6 +209,7 @@ export default defineConfig({
     }),
     mdx(),
     sitemap(),
+    notoFonts(),
     ...(SITE.features.math ? [katexAssets()] : []),
     ...(SITE.features.mermaid ? [mermaidClient()] : []),
   ],

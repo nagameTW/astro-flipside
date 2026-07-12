@@ -1,9 +1,11 @@
 ---
-// Self-hosted Noto Sans TC (Tocas UI's primary font-family) — weights 400/500/700
-// per the official docs, bundled so there's no external font request.
-import "@fontsource/noto-sans-tc/400.css";
-import "@fontsource/noto-sans-tc/500.css";
-import "@fontsource/noto-sans-tc/700.css";
+// Self-hosted Noto Sans TC (Tocas UI's primary font-family) is NOT imported
+// here: its @font-face declarations were 95% of the render-blocking CSS
+// bundle. The notoFonts integration (astro.config.mjs) copies them to
+// /fonts/ at build time and the <link media="print"> below applies them
+// asynchronously — system font first, Noto upgrade when ready (the same
+// reflow font-display:swap already allowed). Dev server: system fonts only,
+// like the KaTeX vendored assets.
 import "@/styles/global.css";
 import SITE from "@/config";
 import { url } from "@/utils/url";
@@ -44,6 +46,17 @@ const imageURL = new URL(url(image), Astro.site);
   href={url("/rss.xml")}
 />
 <link rel="stylesheet" href={url("/vendor/tocas/tocas.min.css")} />
+{/* Async font declarations: media="print" keeps the request off the render-
+    blocking path; onload flips it live. Standard Filament Group pattern. */}
+<link
+  rel="stylesheet"
+  href={url("/fonts/noto-sans-tc.css")}
+  media="print"
+  onload="this.media='all'"
+/>
+<noscript>
+  <link rel="stylesheet" href={url("/fonts/noto-sans-tc.css")} />
+</noscript>
 {
   SITE.features.math && (
     <link rel="stylesheet" href={url("/vendor/katex/katex.min.css")} />
