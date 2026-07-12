@@ -1,3 +1,11 @@
+
+/* Anchor jumps (TOC, heading anchors) glide instead of teleporting —
+   skipped for users who prefer reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
 /* Site styles on top of Tocas UI. Tocas has no prose styling, so
    .md-content maps rendered Markdown onto its design tokens.
 
@@ -792,10 +800,6 @@ a.ts-box:hover,
   position: absolute;
   inset: 0;
 }
-.post-card .ts-wrap {
-  position: relative;
-  z-index: 1;
-}
 /* Text content of a post card. Its own `gap` replaces the generic
    `.ts-box .ts-content > * + *` stacking margin (below) once .ts-content
    becomes a flex row for the has-cover layout — a plain block child would
@@ -803,11 +807,45 @@ a.ts-box:hover,
 .post-card-body {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  /* Title hugs the cover's top edge, date its bottom edge; the
+     description floats between. */
+  justify-content: space-between;
+  align-self: stretch;
+  gap: 0.5rem;
   /* Flex items default to min-width: auto, which refuses to shrink below
      the longest unbroken run of text — a long title would push the cover
      out of the row instead of wrapping. */
   min-width: 0;
+  /* The card is fixed-height (below); whatever doesn't fit is cut. */
+  overflow: hidden;
+}
+/* Fixed-layout cards: every card is the same height with the same slots,
+   no matter how long the text or how big the source image. Overlong text
+   truncates (title one line, description two, tags one row) instead of
+   growing the card. */
+.post-card {
+  height: calc(160px + 3rem);
+}
+.post-card .ts-content {
+  height: 100%;
+  align-items: stretch;
+}
+.post-card .ts-content .post-card-cover {
+  align-self: center;
+}
+.post-card .ts-header {
+  font-size: 1.3rem;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.post-card p.ts-text.is-secondary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 /* Cards with heroImage: cover on the right, text on the left. Cards
    without one render only .post-card-body, so .ts-content stays a plain
@@ -828,16 +866,19 @@ a.ts-box:hover,
 .post-card-cover {
   display: block;
   flex-shrink: 0;
-  width: 112px;
-  height: 112px;
+  width: 160px;
+  height: 160px;
   aspect-ratio: 1 / 1;
   border-radius: var(--ts-border-radius-element);
   object-fit: cover;
 }
 @media (max-width: 767px) {
   .post-card-cover {
-    width: 88px;
-    height: 88px;
+    width: 128px;
+    height: 128px;
+  }
+  .post-card {
+    height: calc(128px + 3rem);
   }
 }
 .ts-timeline {
@@ -931,6 +972,10 @@ a.ts-box:hover,
 }
 .post-hero {
   width: 100%;
+  /* Banner treatment: a fixed wide ratio, source image center-cropped —
+     any picture reads as a header strip instead of dictating page height. */
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
   border-radius: var(--ts-border-radius-element);
   margin-bottom: 2rem;
 }
