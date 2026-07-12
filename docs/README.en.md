@@ -1,36 +1,89 @@
-# astro-flipside
+# Flipside
 
-[繁體中文 →](../README.md)
+Nobody is just one thing.
 
-[![CI](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml/badge.svg)](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
-![Astro](https://img.shields.io/badge/astro-5.1.3-BC52EE?logo=astro&logoColor=white)
+At work you answer email, sit in meetings, print a job title on a
+business card. After hours you practice guitar, shoot hoops, log on
+under a handle only your people would recognize. Both are you, yet
+they rarely share a page. A personal site usually hands you one
+layout, so you pick one self to show.
 
-astro-flipside is a personal-site template for Astro built around one idea: a
-single Work/Life toggle flips the About page between a professional profile
-and a personal one. Same layout, same content blocks, different data. Behind
-it sits a Markdown blog with code blocks, a table of contents, tags,
-pagination, search, and RSS.
+Flipside says: don't pick. Like a coin, one side is your profession,
+the other is what you love, and flipping it is all it takes.
 
-![Home page, Life face, light theme](screenshot-home-light.png)
+So the About page ships with a toggle. Press it and the avatar flips:
+Work folds away, Life unfolds. Your resume and your hobbies live at
+the same address, and visitors decide which you to meet.
 
-<details>
-<summary>More screenshots: dark mode, Work face, a blog post</summary>
+It is a clean, Chinese-friendly Astro theme, distilled from my own
+personal site. I stripped out the private parts, kept the lessons
+learned, and left a starting point you can build on directly.
 
 <table>
   <tr>
-    <td><img src="screenshot-home-dark.png" width="260" alt="Home page, Life face, dark theme"></td>
-    <td><img src="screenshot-work.png" width="260" alt="Home page, Work face"></td>
-    <td><img src="screenshot-post.png" width="260" alt="Blog post with a table of contents and a code block"></td>
+    <td><img src="screenshot-work.png" alt="The Work face: resume, skills, experience"></td>
+    <td><img src="screenshot-home-light.png" alt="The Life face: interests, collections, everyday life"></td>
   </tr>
   <tr>
-    <td align="center"><sub>Life face (dark)</sub></td>
     <td align="center"><sub>Work face</sub></td>
-    <td align="center"><sub>Blog post (TOC + code block)</sub></td>
+    <td align="center"><sub>Life face, same URL</sub></td>
+  </tr>
+</table>
+
+README in [繁體中文](../README.md) / **English**
+
+<details>
+<summary>More screenshots: dark theme, a blog post</summary>
+
+<table>
+  <tr>
+    <td><img src="screenshot-home-dark.png" width="380" alt="Home, Life face, dark theme"></td>
+    <td><img src="screenshot-post.png" width="380" alt="A blog post with the table of contents and a code frame"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Dark theme</sub></td>
+    <td align="center"><sub>Blog post (TOC + code frame)</sub></td>
   </tr>
 </table>
 
 </details>
+
+## What it wants to do for you
+
+The details writers care about come prewired: code frames carry file
+names and line numbers, the table of contents follows your scroll,
+full-text search needs no server, and drafts never ship by accident.
+
+If you shoot photos, there is a masonry gallery that keeps every
+picture's own aspect ratio and opens a lightbox on click.
+
+Chinese users will feel at home: the interface is built on Tocas UI,
+a framework designed for Chinese typography. Traditional Chinese is
+the default; English is one config line away.
+
+The whole site builds to static files. No server, no secrets, no cron
+jobs; push to GitHub and it lives. The full list is under
+[Features](#features).
+
+## Getting started
+
+1. Click **Use this template** on GitHub (or run
+   `gh repo create --template nagameTW/astro-flipside`), then `npm install`.
+2. Edit `src/config.ts`: site URL, base path, title, nav, socials, and
+   feature flags. See [Config reference](#config-reference).
+3. Fill in your content.
+   - `src/data/*`: About content for both faces (`about.ts`, `life.ts`),
+     projects, trophies, gear, and gallery photos (`gallery.ts` plus files
+     in `public/gallery/`).
+   - `src/content/blog/`: write your posts, then delete the demo ones
+     (`welcome.md`, `kitchen-sink.md`, `kitchen-sink-zh.md`).
+4. In the repo's **Settings → Pages**, set **Source** to **GitHub Actions**.
+   Run `npm run dev` to preview locally; push to `main` to deploy (see
+   [Deploy](#deploy)).
+
+---
+
+Everything below is technical reference. Come back when you build.
 
 ## Features
 
@@ -74,22 +127,6 @@ pagination, search, and RSS.
       comments, each at zero bundle cost when off
 - [x] Base-path support for GitHub project pages
 - [x] Fully static output: zero secrets, zero server
-
-## Getting started
-
-1. Click **Use this template** on GitHub (or run
-   `gh repo create --template nagameTW/astro-flipside`), then `npm install`.
-2. Edit `src/config.ts`: site URL, base path, title, nav, socials, and
-   feature flags. See [Config reference](#config-reference).
-3. Fill in your content.
-   - `src/data/*`: About content for both faces (`about.ts`, `life.ts`),
-     projects, trophies, gear, and gallery photos (`gallery.ts` plus files
-     in `public/gallery/`).
-   - `src/content/blog/`: write your posts, then delete the demo ones
-     (`welcome.md`, `kitchen-sink.md`, `kitchen-sink-zh.md`).
-4. In the repo's **Settings → Pages**, set **Source** to **GitHub Actions**.
-   Run `npm run dev` to preview locally; push to `main` to deploy (see
-   [Deploy](#deploy)).
 
 ## Commands
 
@@ -195,6 +232,10 @@ you can run locally: `npm run check && npm run build && npm test`.
 Built on [Tocas UI](https://tocas-ui.com/). Blog scaffolding follows the
 official Astro blog starter.
 
-## License
+## License and status
+
+[![CI](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml/badge.svg)](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
+![Astro](https://img.shields.io/badge/astro-5.1.3-BC52EE?logo=astro&logoColor=white)
 
 MIT. See [LICENSE](../LICENSE).
