@@ -948,27 +948,24 @@ a.ts-box:hover,
   margin-bottom: 2rem;
 }
 
-/* Table of contents: content + sticky rail from 1024px up (a 220px rail
+/* Table of contents: sticky rail on the LEFT from 1024px up (a 220px rail
    needs room beside the prose without crowding it); a single column with a
    native <details> above the content below that breakpoint. */
 .post-body {
   display: grid;
   gap: 2rem;
 }
-/* Below 1024px .post-body stays a single column, stacking in source order
-   (content, then rail) — reorder so the collapsed ToC sits above the
-   article instead of trailing after it. Grid auto-placement follows
-   order-modified order, so this must be undone once the rail becomes a
-   real second column below, or it would auto-place into the wide column. */
+/* Source order is (content, then rail). order: -1 moves the rail first at
+   every width: below 1024px that stacks the collapsed ToC above the
+   article; at 1024px+ grid auto-placement follows order-modified order,
+   which drops the rail into the first (220px) column of the template
+   below. One rule, both layouts. */
 .post-rail {
   order: -1;
 }
 @media (min-width: 1024px) {
   .post-body {
-    grid-template-columns: minmax(0, 1fr) 220px;
-  }
-  .post-rail {
-    order: 0;
+    grid-template-columns: 220px minmax(0, 1fr);
   }
   .post-rail .toc {
     position: sticky;
