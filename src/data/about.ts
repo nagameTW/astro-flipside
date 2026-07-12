@@ -42,7 +42,7 @@ export type Discography = {
 // nowrap column, and a wider one squeezes the entry beside it.
 
 export const PROFILE = {
-  name: "陸知遙",
+  name: "拍岸",
   headline: "創作歌手・製作人",
   bio: [
     "目前隸屬浪聲唱片，身兼創作歌手與製作人，曲風橫跨民謠、電子與爵士，不喜歡被單一標籤定義。",
