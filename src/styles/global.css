@@ -676,6 +676,16 @@ a.ts-box:hover,
   position: relative;
   z-index: 1;
 }
+/* Cover image: optional, only when a post sets heroImage. Sits above
+   .ts-content as a sibling, still inside .ts-box (position: relative,
+   overflow: hidden), so .post-card-link::after's stretched-link overlay
+   and the box's own corner radius both keep covering/clipping it. */
+.post-card-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
 .ts-timeline {
   --ts-timeline-content-distance: 1.5rem;
 }
@@ -917,6 +927,7 @@ a.ts-box:hover,
 }
 .md-content img {
   max-width: 100%;
+  height: auto;
   border-radius: 0.4rem;
 }
 .md-content table {

@@ -49,6 +49,8 @@ pagination, search, and RSS.
 - Drafts: `draft: true` in frontmatter shows the post only in `astro dev`;
   production builds and the RSS feed exclude it automatically.
 - RSS feed, Pagefind full-text search (static, no server involved).
+- `heroImage` in frontmatter doubles as a cover image on the post's card in
+  the blog index — set it once, get both.
 
 **Gallery**
 

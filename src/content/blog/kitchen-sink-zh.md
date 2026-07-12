@@ -75,6 +75,19 @@ export function add(a: number, b: number): number {
 
 ![Flipside 的預留大頭貼](./avatar.svg)
 
+圖片預設會撐滿整個欄寬；加上 `width` 屬性就能縮小，像下面這個示範一樣。
+
+<!--
+  縮放需要一個真正的 width 屬性，但 Markdown 的 ![]() 語法沒辦法設定，所以
+  這裡改用 raw HTML —— Astro 的 Markdown 管線會原封不動地照抄過去（已用
+  `npm run build` 驗證：src 完全照字面輸出，沒有雜湊、也沒有加上 base
+  前綴）。這也代表常見的 root-relative 捷徑在這裡會 404（已對照
+  `npm run preview` 確認）：唯一真的能解析成功的 src，是手動把 base 前綴寫
+  進 `public/` 檔案路徑裡，跟 `src/config.ts` 的 `SITE.base` 是同一個字串。
+-->
+
+<img src="/astro-flipside/avatar.svg" width="160" alt="圖片縮放示範">
+
 ## 數學與圖表
 
 `src/config.ts` 裡的 `features.math` 與 `features.mermaid` 預設都是 **關閉**
