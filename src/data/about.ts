@@ -176,7 +176,7 @@ const STATS_TILES: { value: string; label: string }[] = [
 const LINKS: { label: string; url: string; note?: string }[] = [
   {
     label: "浪聲唱片｜藝人頁面",
-    url: "https://example.com/labels/wave-sound/lu-zhiyao",
+    url: "https://example.com/labels/wave-sound/pai-an",
     note: "官方資料",
   },
   {
