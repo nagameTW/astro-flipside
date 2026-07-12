@@ -8,7 +8,6 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { remarkReadingTime } from "./plugins/remark-reading-time.mjs";
@@ -89,19 +88,10 @@ export default defineConfig({
       ...(SITE.features.math ? [remarkMath] : []),
     ],
     rehypePlugins: [
+      // rehypeSlug alone: heading ids for the TOC's deep links, without
+      // the hover "#" anchor a rehype-autolink-headings setup would add
+      // (owner removed it 2026-07-12).
       rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "append",
-          properties: {
-            className: ["heading-anchor"],
-            ariaHidden: "true",
-            tabIndex: -1,
-          },
-          content: { type: "text", value: "#" },
-        },
-      ],
       ...(SITE.features.math ? [rehypeKatex] : []),
     ],
   },
@@ -135,8 +125,7 @@ export default defineConfig({
         codeFontSize: "0.9em",
         codeBackground: ({ theme }) =>
           theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(242, 242, 242)",
-        borderColor: ({ theme }) =>
-          theme.type === "dark" ? "rgb(71, 71, 71)" : "rgb(225, 225, 225)",
+        borderWidth: "0",
         frames: {
           frameBoxShadowCssValue: "none",
           editorTabBarBackground: ({ theme }) =>

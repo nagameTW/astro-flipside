@@ -1071,6 +1071,10 @@ a.ts-box:hover,
 }
 .md-content h2 {
   font-size: 1.5em;
+  /* Section accent: a vertical bar in front of every h2, monochrome like
+     the rest of the site. */
+  border-inline-start: 0.25rem solid var(--ts-gray-800);
+  padding-inline-start: 0.6rem;
 }
 .md-content h3 {
   font-size: 1.25em;
@@ -1081,15 +1085,6 @@ a.ts-box:hover,
 /* rehype-autolink-headings appends this `#` link to every heading (id from
    rehype-slug). Hidden until the heading is hovered or the link itself is
    keyboard-focused, so it doesn't clutter the read. */
-.md-content .heading-anchor {
-  margin-inline-start: 0.35em;
-  opacity: 0;
-  text-decoration: none;
-}
-.md-content :is(h1, h2, h3, h4):hover .heading-anchor,
-.md-content .heading-anchor:focus-visible {
-  opacity: 0.6;
-}
 .md-content a {
   color: inherit;
   text-decoration: underline;
