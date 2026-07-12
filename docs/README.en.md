@@ -1,5 +1,9 @@
 # Flipside
 
+[![CI](https://img.shields.io/github/actions/workflow/status/nagameTW/astro-flipside/ci.yml?label=CI&style=for-the-badge)](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-2F3741?style=for-the-badge)](../LICENSE)
+![Astro](https://img.shields.io/badge/Astro-5.1.3-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
+
 Nobody is just one thing.
 
 At work you answer email, sit in meetings, print a job title on a
@@ -23,10 +27,6 @@ learned, and left a starting point you can build on directly.
   <tr>
     <td><img src="screenshot-work.png" alt="The Work face: resume, skills, experience"></td>
     <td><img src="screenshot-home-light.png" alt="The Life face: interests, collections, everyday life"></td>
-  </tr>
-  <tr>
-    <td align="center"><sub>Work face</sub></td>
-    <td align="center"><sub>Life face, same URL</sub></td>
   </tr>
 </table>
 
@@ -67,19 +67,56 @@ jobs; push to GitHub and it lives. The full list is under
 
 ## Getting started
 
-1. Click **Use this template** on GitHub (or run
-   `gh repo create --template nagameTW/astro-flipside`), then `npm install`.
-2. Edit `src/config.ts`: site URL, base path, title, nav, socials, and
-   feature flags. See [Config reference](#config-reference).
-3. Fill in your content.
-   - `src/data/*`: About content for both faces (`about.ts`, `life.ts`),
-     projects, trophies, gear, and gallery photos (`gallery.ts` plus files
-     in `public/gallery/`).
-   - `src/content/blog/`: write your posts, then delete the demo ones
-     (`welcome.md`, `kitchen-sink.md`, `kitchen-sink-zh.md`).
-4. In the repo's **Settings → Pages**, set **Source** to **GitHub Actions**.
-   Run `npm run dev` to preview locally; push to `main` to deploy (see
-   [Deploy](#deploy)).
+**1. Create your repo**
+
+Click **Use this template** at the top, or use the GitHub CLI:
+
+```bash
+gh repo create my-site --template nagameTW/astro-flipside --public --clone
+```
+
+The repo name decides your URL: name it `<user>.github.io` and the site
+lives at `https://<user>.github.io/`; any other name (say `my-site`) puts
+it at `https://<user>.github.io/my-site/`.
+
+**2. Run it locally**
+
+```bash
+cd my-site
+npm install
+npm run dev     # http://localhost:4321, live-reloads as you edit
+```
+
+**3. Point it at your URL**
+
+Edit the top two fields of `src/config.ts` to match step 1:
+
+```ts
+site: "https://<user>.github.io",
+base: "/my-site", // leave "" when the repo is named <user>.github.io
+```
+
+**4. Turn on GitHub Pages**
+
+In the repo's **Settings → Pages**, set **Source** to **GitHub Actions**.
+One-time setup.
+
+**5. Deploy**
+
+```bash
+git add -A
+git commit -m "first deploy"
+git push        # Actions builds and deploys; live in about a minute
+```
+
+Every later push to `main` redeploys automatically. If the site comes up
+unstyled or without images, go back to step 3 and check `base`. Filling
+in your content (both faces' data, posts, the gallery) is covered by the
+sections below; delete the demo posts once you've read them.
+
+Netlify, Vercel, and Cloudflare Pages work too: the template is fully
+static, so importing the repo is enough (set `base` to `""`). See the
+[Astro deployment guide](https://docs.astro.build/en/guides/deploy/).
 
 ---
 
@@ -232,10 +269,6 @@ you can run locally: `npm run check && npm run build && npm test`.
 Built on [Tocas UI](https://tocas-ui.com/). Blog scaffolding follows the
 official Astro blog starter.
 
-## License and status
-
-[![CI](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml/badge.svg)](https://github.com/nagameTW/astro-flipside/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
-![Astro](https://img.shields.io/badge/astro-5.1.3-BC52EE?logo=astro&logoColor=white)
+## License
 
 MIT. See [LICENSE](../LICENSE).
