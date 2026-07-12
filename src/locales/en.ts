@@ -29,7 +29,7 @@ const en = {
   "pagination.prev": "Previous page",
   "pagination.next": "Next page",
   "search.open": "Search",
-  "search.placeholder": "Search posts…",
+  "search.placeholder": "Search…",
   "search.clear": "Clear search",
   "search.noResults": "No matching results.",
   "notFound.message": "This page does not exist.",

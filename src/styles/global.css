@@ -1282,6 +1282,15 @@ dialog.search-dialog {
   /* The panel starts below the header, so leave it headroom. */
   max-height: 55vh;
   overflow-y: auto;
+  /* An <ol> for semantics only — no 1./2./3. markers, no indent. */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* The rows bleed 0.5rem past the list on both sides (hover background,
+     negative margins below), so the scroll container is always 1rem
+     "overflowing": on Windows-style classic scrollbars that paints a
+     permanent horizontal bar. Clip that axis instead. */
+  overflow-x: hidden;
 }
 .search-results li a {
   display: block;
@@ -1290,6 +1299,9 @@ dialog.search-dialog {
   border-radius: var(--ts-border-radius-container);
   color: inherit;
   text-decoration: none;
+  /* Long unbreakable tokens (file paths in titles or excerpts) wrap
+     instead of widening the row. */
+  overflow-wrap: anywhere;
 }
 .search-results li a:hover {
   background: var(--ts-page-background-tertiary);
@@ -1305,9 +1317,6 @@ dialog.search-dialog {
   display: block;
   font-size: var(--ts-font-size-tiny);
   color: var(--ts-gray-500);
-  /* Excerpts can carry long unbreakable tokens (file paths, URLs); let
-     them wrap instead of widening the panel into a horizontal scrollbar. */
-  overflow-wrap: anywhere;
 }
 
 /* ---- Medium-referenced reading experience (post pages) ---------------- */
