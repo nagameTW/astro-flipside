@@ -31,11 +31,19 @@ export type Highlight = {
   note?: string;
 };
 
+// Photo: Satyam Pathak, https://unsplash.com/photos/WI5e-s1ky0Y (Unsplash
+// License). Silhouetted hand holding headphones — no visible face, fits
+// the persona rule the Life avatar follows.
+/** Work-face avatar (the Life face keeps data/life.ts's AVATAR). */
+export const AVATAR_WORK = "/avatar-work.jpg";
+
 /** A released work — repurposed from a certification-style card. */
 export type Discography = {
   name: string;
   issuer: string;
   year: string;
+  /** Cover art (public/ path or full URL); omit for a placeholder card. */
+  img?: string;
 };
 
 // Dates read `YYYY.MM`, kept short: the timeline renders them in a
@@ -119,10 +127,30 @@ export const HIGHLIGHTS: Highlight[] = [
   },
 ];
 
+// Cover credits (Unsplash License — free to use and modify; no third-party
+// brand or face visible):
+// - tide.jpg:  Mamun Srizon, https://unsplash.com/photos/pSPoLYF_AAA
+// - night.jpg: Tsuyoshi Kozu, https://unsplash.com/photos/luAFESue6Ws
+// - dawn.jpg:  Alan Jones, https://unsplash.com/photos/OQsxdghBKrU
 export const DISCOGRAPHY: Discography[] = [
-  { name: "《潮汐圖》", issuer: "浪聲唱片", year: "2025" },
-  { name: "《夜行動物園》", issuer: "浪聲唱片", year: "2023" },
-  { name: "《拂曉前》EP", issuer: "拂曉音樂工作室", year: "2020" },
+  {
+    name: "《潮汐圖》",
+    issuer: "浪聲唱片",
+    year: "2025",
+    img: "/discography/tide.jpg",
+  },
+  {
+    name: "《夜行動物園》",
+    issuer: "浪聲唱片",
+    year: "2023",
+    img: "/discography/night.jpg",
+  },
+  {
+    name: "《拂曉前》EP",
+    issuer: "拂曉音樂工作室",
+    year: "2020",
+    img: "/discography/dawn.jpg",
+  },
 ];
 
 // --- Section-block wiring for AboutProfessional -----------------------
@@ -162,7 +190,7 @@ const HIGHLIGHTS_ENTRIES: HighlightEntry[] = HIGHLIGHTS.map((h) => ({
 const DISCOGRAPHY_CARDS: CardEntry[] = DISCOGRAPHY.map((d) => ({
   title: d.name,
   subtitle: `${d.issuer} · ${d.year}`,
-  img: "",
+  img: d.img ?? "",
 }));
 
 // Quick-facts strip; playful values are deliberate (this is placeholder data).

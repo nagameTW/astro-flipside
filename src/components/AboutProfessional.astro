@@ -1,10 +1,9 @@
 ---
 import SITE from "@/config";
-import { PROFILE, PROFESSIONAL_SECTIONS } from "@/data/about";
+import { AVATAR_WORK, PROFILE, PROFESSIONAL_SECTIONS } from "@/data/about";
 import FaceToggle from "@/components/FaceToggle.astro";
 import Section from "@/components/Section.astro";
 import { url } from "@/utils/url";
-import { AVATAR } from "@/data/life";
 
 // Work face keeps exactly one social affordance: the SITE.github link.
 // Template users who want LinkedIn, email, etc. on this face should add a
@@ -18,7 +17,7 @@ import { AVATAR } from "@/data/life";
     <div class="ts-content">
       <img
         class="about-avatar"
-        src={url(AVATAR)}
+        src={url(AVATAR_WORK)}
         width="136"
         height="136"
         alt=""

@@ -4,7 +4,7 @@ import { TROPHIES } from "@/data/trophies";
 // Photo: Baruk Granda, https://unsplash.com/photos/OHLRskxOpjI (Unsplash
 // License — free to use, modify, and redistribute; see
 // https://unsplash.com/license). Silhouette only, no visible face.
-/** Shared by both faces. */
+/** Life-face avatar (the Work face has its own, see data/about.ts). */
 export const AVATAR = "/avatar.jpg";
 
 // Casual self-intro — obviously-fake demo persona.
