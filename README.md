@@ -12,7 +12,7 @@
 <h3 align="center">Flipside</h3>
 
 <p align="center">
-  每個人都不只一種樣子。一個雙面的個人網站模板：正面是專業，反面是熱愛。
+  每個人都不只一種樣子。一個可以翻面的個人網站模板：正面是專業，反面是熱愛。
   <br />
   <br />
   <a href="https://nagametw.github.io/astro-flipside/">線上示範</a>
@@ -140,7 +140,7 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 
 ## 功能總覽
 
-**雙面「關於」頁**
+**會翻面的「關於」頁**
 
 - Work/Life 切換鈕，附 3D 大頭貼翻轉動畫
 - 兩個面都用同一組 9 種通用內容區塊組成：text（文字）、chips（標籤）、

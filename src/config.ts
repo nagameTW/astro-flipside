@@ -11,7 +11,7 @@ const SITE = {
   /** Sub-path when deployed as a GitHub project page, e.g. "/astro-flipside". "" for root. */
   base: "/astro-flipside",
   title: "Flipside",
-  description: "雙面（Work / Life）個人網站與部落格模板",
+  description: "能在 Work 與 Life 之間翻面的個人網站與部落格模板",
   author: "拍岸",
   /** UI language for every built-in string: "en" | "zh-TW". */
   locale: "zh-TW" as "en" | "zh-TW",

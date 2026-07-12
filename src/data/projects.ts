@@ -11,7 +11,7 @@ export type Project = {
 export const PROJECTS: Project[] = [
   {
     name: "這個範本",
-    description: "你現在看到的這個雙面個人網站。",
+    description: "你現在看到的這個會翻面的個人網站。",
     tech: ["Astro", "TypeScript"],
     url: "https://github.com/your-name/astro-flipside",
   },
