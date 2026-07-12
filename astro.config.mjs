@@ -124,7 +124,38 @@ export default defineConfig({
       useDarkModeMediaQuery: true,
       plugins: [pluginLineNumbers()],
       defaultProps: { showLineNumbers: false },
-      styleOverrides: { borderRadius: "0.4rem", codeFontSize: "0.9em" },
+      // Flat, Tocas-gray code surfaces. Literal colors mirror the site
+      // palette (--ts-gray-100/200/300 in both modes) because expressive-code
+      // runs contrast checks on these values at build time — a var() string
+      // can't be color-parsed there. Filename tabs flatten into a plain
+      // label strip (no tab chrome, no indicators), terminals lose the
+      // macOS window dots, and every frame shadow is gone.
+      styleOverrides: {
+        borderRadius: "0.4rem",
+        codeFontSize: "0.9em",
+        codeBackground: ({ theme }) =>
+          theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(242, 242, 242)",
+        borderColor: ({ theme }) =>
+          theme.type === "dark" ? "rgb(71, 71, 71)" : "rgb(225, 225, 225)",
+        frames: {
+          frameBoxShadowCssValue: "none",
+          editorTabBarBackground: ({ theme }) =>
+            theme.type === "dark" ? "rgb(56, 56, 56)" : "rgb(238, 238, 238)",
+          editorTabBarBorderBottomColor: ({ theme }) =>
+            theme.type === "dark" ? "rgb(71, 71, 71)" : "rgb(225, 225, 225)",
+          editorActiveTabBackground: "transparent",
+          editorActiveTabBorderColor: "transparent",
+          editorActiveTabIndicatorTopColor: "transparent",
+          editorActiveTabIndicatorBottomColor: "transparent",
+          terminalBackground: ({ theme }) =>
+            theme.type === "dark" ? "rgb(51, 51, 51)" : "rgb(242, 242, 242)",
+          terminalTitlebarBackground: ({ theme }) =>
+            theme.type === "dark" ? "rgb(56, 56, 56)" : "rgb(238, 238, 238)",
+          terminalTitlebarBorderBottomColor: ({ theme }) =>
+            theme.type === "dark" ? "rgb(71, 71, 71)" : "rgb(225, 225, 225)",
+          terminalTitlebarDotsOpacity: "0",
+        },
+      },
     }),
     mdx(),
     sitemap(),
