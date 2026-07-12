@@ -1,15 +1,15 @@
 ---
 // Search.astro — Pagefind-powered site search. Reuses Tocas's own
 // dialog.ts-modal + .content pattern (see Cards.astro's trophy-modal) rather
-// than hand-rolling a bordered/dimmed dialog: `is-large` is Tocas's built-in
-// 580px modal-width preset, so `.search-dialog` below only styles content
-// padding and `.search-results` only styles the result rows.
+// than hand-rolling a bordered/dimmed dialog: `is-big` is Tocas's built-in
+// 780px modal-width preset, so `.search-dialog` below only styles content
+// padding, the pill-shaped input, and the result rows.
 import { t } from "@/locales";
 ---
 
 <dialog
   id="search-dialog"
-  class="ts-modal is-large search-dialog"
+  class="ts-modal is-big search-dialog"
   aria-label={t["search.open"]}
 >
   <div class="content">

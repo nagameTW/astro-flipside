@@ -1159,6 +1159,16 @@ a.ts-box:hover,
   flex-direction: column;
   gap: 0.75rem;
 }
+/* Pill-shaped query field: Tocas inputs read their corner rounding from
+   --border-radius, but cover the bare element too since the class sits
+   directly on the <input>. Extra inline padding keeps the text off the
+   rounded ends. */
+.search-dialog .ts-input,
+.search-dialog .ts-input :where(input) {
+  --border-radius: 9999px;
+  border-radius: 9999px;
+  padding-inline: 1.1rem;
+}
 .search-results {
   display: flex;
   flex-direction: column;
