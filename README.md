@@ -143,6 +143,19 @@ live in `src/locales/`; add another language by copying `en.ts`'s keys.
 
 繁體中文版說明：[docs/README.zh-TW.md](docs/README.zh-TW.md)
 
+## Contributing
+
+Issues and pull requests are welcome. Bug reports and feature ideas go
+through the [issue forms](../../issues/new/choose); small fixes can go
+straight to a PR, and it's worth opening an issue first for anything
+bigger so we can agree on the shape before you build it.
+
+[CONTRIBUTING.md](CONTRIBUTING.md) covers the dev setup, repo map, and
+conventions; the PR form walks you through the rest (type of change,
+testing, screenshots for visual changes). CI runs the same four checks
+you can run locally: `npm run check && npm run build && npm test` plus
+`python3 scripts/test_fetch_gamestats.py`.
+
 ## Acknowledgments
 
 Built on [Tocas UI](https://tocas-ui.com/). Blog scaffolding follows the

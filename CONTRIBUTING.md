@@ -51,6 +51,14 @@ them weekly (`.github/dependabot.yml`).
   `src/locales/zh-TW.ts` in the same PR. One locale silently falling behind
   the other is treated as a bug.
 
+## Pull requests
+
+Small fixes can go straight to a PR. For features or behavior changes,
+open an issue first so the shape is agreed before you build. The PR form
+asks for a description, the type of change, how you tested it, and
+before/after screenshots for anything visual; the PR title follows
+Conventional Commits because it becomes the squash-merge commit message.
+
 ## Personal data
 
 This template ships with obviously-fake demo content (see `src/data/life.ts`)
