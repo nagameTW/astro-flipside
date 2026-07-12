@@ -605,23 +605,8 @@
      0px on overlay-scrollbar platforms). */
   padding-right: var(--scrollbar-w, 0px);
 }
-/* The lightbox box hugs the image: Tocas gives .ts-modal > .content a
-   fixed width and a light background, so any picture narrower than the
-   box (portraits, square album art letterboxed by max-height) showed as
-   white bars on both sides. fit-content shrinks the box to the picture;
-   the size cap moves onto the image itself (94vw minus the dialog's 1rem
-   side padding). `dialog.ts-modal.trophy-modal .content` (0,3,1)
-   out-specifies Tocas's `.ts-modal > .content` (0,2,0). */
-dialog.ts-modal.trophy-modal .content {
-  width: fit-content;
-}
-.trophy-modal .content img {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: min(52rem, calc(94vw - 2rem));
-  max-height: calc(100vh - 14rem);
-}
+/* Card lightboxes (Cards.astro) reuse dialog.gallery-modal below — one
+   full-viewport dark stage site-wide. No card-specific rules needed. */
 /* Gallery lightbox: an X/FB-style viewer. The dialog IS the dark stage —
    full viewport, no border chrome — and the image letterboxes inside it,
    whole picture always visible, never a scrollbar. A caption line is
@@ -636,6 +621,13 @@ dialog.gallery-modal {
   padding: 0;
   border: 0;
   background: rgba(12, 12, 14, 0.94);
+}
+/* Card lightboxes (Cards.astro) sit inside a section's .ts-content, whose
+   row-spacing rule (`.ts-box .ts-content > * + *`, 0,2,0) outranks the
+   margin:0 above and shoved the fixed stage 1rem down — a white slit above
+   the backdrop. (0,3,1) puts the stage back at the viewport edge. */
+.ts-box .ts-content > dialog.gallery-modal {
+  margin: 0;
 }
 dialog.gallery-modal[open] {
   display: flex;
