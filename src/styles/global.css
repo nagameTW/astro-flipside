@@ -121,13 +121,22 @@
   gap: 0.5rem;
 }
 /* Tocas's tab items have no hover state; give them the same feedback as the
-   ghost icon button (theme toggle). The active tab keeps Tocas's filled
-   pill, so it's excluded here. */
+   ghost icon button (theme toggle). The active tab stays a filled pill but
+   must still read and act as a link: Tocas ships it cursor:default, and
+   without a hover response it feels dead even though the <a> works. */
 .site-header .ts-tab .item {
-  transition: background-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    filter 0.15s ease;
 }
 .site-header .ts-tab .item:not(.is-active):hover {
   background: var(--ts-gray-100);
+}
+.site-header .ts-tab .item.is-active {
+  cursor: pointer;
+}
+.site-header .ts-tab .item.is-active:hover {
+  filter: brightness(1.25);
 }
 
 /* A sticky header must stay shallow on phones. Tighten it so the nav items
@@ -717,29 +726,21 @@ dialog.gallery-modal::backdrop {
   font-weight: 600;
 }
 
-/* Hover feedback shared across the Life cards: a small lift + soft shadow,
-   the same language as the social-icon buttons. (Gallery tiles opt out —
-   their hover response is the Pinterest scrim alone.) */
+/* Hover feedback shared across the Life cards — flat, per the site-wide
+   flat style (owner call 2026-07-12): a tint shift only, no lift, no
+   shadow. (Gallery tiles opt out — their hover response is the Pinterest
+   scrim alone.) */
 .trophy-item img,
 .gear-card {
   transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+    filter 0.15s ease,
+    background-color 0.15s ease;
 }
-.trophy-item:hover img,
+.trophy-item:hover img {
+  filter: brightness(0.94);
+}
 .gear-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.25);
-}
-@media (prefers-reduced-motion: reduce) {
-  .trophy-item img,
-  .gear-card {
-    transition: box-shadow 0.15s ease;
-  }
-  .trophy-item:hover img,
-  .gear-card:hover {
-    transform: none;
-  }
+  background: var(--ts-gray-100);
 }
 
 /* Card grids: fluid responsive columns via native CSS grid — Tocas's
@@ -753,32 +754,20 @@ dialog.gallery-modal::backdrop {
   grid-template-columns: repeat(auto-fill, minmax(min(384px, 100%), 1fr));
 }
 
-/* Cards as links (blog posts) — same hover lift as the Life cards,
-   site-wide. `.post-card` (PostCard.astro) is a div, not an <a>: it holds a
-   real tag-chip link inside it, and an <a> can't contain another <a>. */
+/* Cards as links (blog posts, prev/next nav) — same flat hover as the
+   Life cards, site-wide. `.post-card` (PostCard.astro) is a div, not an
+   <a>: it holds a real tag-chip link inside it, and an <a> can't contain
+   another <a>. */
 a.ts-box,
 .post-card {
   display: block;
   color: inherit;
   text-decoration: none;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: background-color 0.15s ease;
 }
 a.ts-box:hover,
 .post-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.25);
-}
-@media (prefers-reduced-motion: reduce) {
-  a.ts-box,
-  .post-card {
-    transition: box-shadow 0.15s ease;
-  }
-  a.ts-box:hover,
-  .post-card:hover {
-    transform: none;
-  }
+  background: var(--ts-gray-100);
 }
 /* Cards breathe: 24px inside, 16px between their rows, 24px between
    timeline entries. */
@@ -909,23 +898,18 @@ a.ts-box:hover,
   border: 1px solid var(--ts-gray-300);
   color: var(--ts-gray-800);
   transition:
-    transform 0.12s ease,
     background-color 0.15s ease,
-    color 0.15s ease,
-    box-shadow 0.15s ease;
+    color 0.15s ease;
 }
 .social-icons > * .ts-icon {
   color: inherit;
 }
 .social-icons > *:hover {
   background: var(--ts-gray-200);
-  transform: translateY(-3px);
-  box-shadow: 0 5px 12px -3px rgba(0, 0, 0, 0.2);
 }
 .social-icons > *:active {
   background: var(--ts-gray-900);
   color: var(--ts-gray-50);
-  transform: translateY(-1px) scale(0.9);
 }
 .social-icons > *::after {
   content: attr(aria-label);
@@ -957,7 +941,6 @@ a.ts-box:hover,
   right: 1.5rem;
   bottom: 1.5rem;
   z-index: 100;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -1210,10 +1193,26 @@ dialog.search-dialog {
   dialog.search-dialog[open] {
     animation: search-drop 0.18s ease-out;
   }
+  .search-veil:not([hidden]) {
+    animation: veil-fade 0.18s ease-out;
+  }
+  /* Closing plays the same keyframes backwards; the [open]/[hidden]
+     attributes only flip after animationend (see Search.astro). */
+  dialog.search-dialog[open].is-closing {
+    animation: search-drop 0.16s ease-in reverse forwards;
+  }
+  .search-veil:not([hidden]).is-closing {
+    animation: veil-fade 0.16s ease-in reverse forwards;
+  }
   @keyframes search-drop {
     from {
       transform: translateY(-0.5rem);
       opacity: 0.4;
+    }
+  }
+  @keyframes veil-fade {
+    from {
+      opacity: 0;
     }
   }
 }
