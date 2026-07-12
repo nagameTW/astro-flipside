@@ -43,16 +43,32 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
     // valid no matter what language alt/caption is written in.
     GALLERY.map((photo, i) => (
       <dialog
-        class="ts-modal gallery-modal"
+        class="gallery-modal"
         id={`gallery-modal-${i}`}
         aria-label={photo.alt}
       >
-        <div class="content">
+        <button
+          type="button"
+          class="gallery-nav is-prev"
+          data-open={`gallery-modal-${(i - 1 + GALLERY.length) % GALLERY.length}`}
+          aria-label={t["gallery.prev"]}
+        >
+          <span class="ts-icon is-angle-left-icon" />
+        </button>
+        <figure class="gallery-modal-figure">
           <img src={resolve(photo.src)} alt="" loading="lazy" />
-          {photo.caption && (
-            <p class="gallery-caption ts-text is-secondary">{photo.caption}</p>
-          )}
-        </div>
+          <figcaption class="ts-text is-secondary">
+            {photo.caption ?? ""}
+          </figcaption>
+        </figure>
+        <button
+          type="button"
+          class="gallery-nav is-next"
+          data-open={`gallery-modal-${(i + 1) % GALLERY.length}`}
+          aria-label={t["gallery.next"]}
+        >
+          <span class="ts-icon is-angle-right-icon" />
+        </button>
       </dialog>
     ))
   }
@@ -70,11 +86,29 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
         if (modal instanceof HTMLDialogElement) modal.showModal();
       });
     });
+  document.querySelectorAll<HTMLButtonElement>(".gallery-nav").forEach((nav) => {
+    nav.addEventListener("click", () => {
+      const target = nav.dataset.open && document.getElementById(nav.dataset.open);
+      if (!(target instanceof HTMLDialogElement)) return;
+      nav.closest("dialog")?.close();
+      target.showModal();
+    });
+  });
   document
     .querySelectorAll<HTMLDialogElement>("dialog.gallery-modal")
     .forEach((d) => {
       d.addEventListener("click", (e) => {
-        if (e.target === d) d.close();
+        // The whole dialog is the dark stage; clicking anywhere off the
+        // image, its caption, or the nav arrows closes, X/FB style.
+        if (!(e.target as Element).closest(".gallery-modal-figure, .gallery-nav"))
+          d.close();
+      });
+      // Arrow keys walk the wall (wrapping at both ends), same as the
+      // on-stage chevrons.
+      d.addEventListener("keydown", (e) => {
+        const dir =
+          e.key === "ArrowRight" ? ".is-next" : e.key === "ArrowLeft" ? ".is-prev" : null;
+        if (dir) (d.querySelector(dir) as HTMLButtonElement | null)?.click();
       });
     });
 </script>

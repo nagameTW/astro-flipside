@@ -22,6 +22,8 @@ const en = {
   "blog.draft": "Draft",
   "gallery.description": "A wall of moments",
   "gallery.count": "{n} photos",
+  "gallery.prev": "Previous image",
+  "gallery.next": "Next image",
   "gallery.empty": "Nothing here yet.",
   "pagination.label": "Pagination",
   "pagination.prev": "Previous page",
