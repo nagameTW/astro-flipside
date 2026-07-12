@@ -19,8 +19,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 // Default share image: the template expects a 1200×630 social-share image
 // at public/og.png (a demo asset ships with the template; replace it with
 // your own) — a page can override with its own `image`.
-const { title, description = SITE.description, image = "/og.png", noindex } =
-  Astro.props;
+const {
+  title,
+  description = SITE.description,
+  image = "/og.png",
+  noindex,
+} = Astro.props;
 const pageTitle = title ? `${title} | ${SITE.title}` : SITE.title;
 const imageURL = new URL(url(image), Astro.site);
 ---
@@ -33,7 +37,12 @@ const imageURL = new URL(url(image), Astro.site);
 <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
 <meta name="generator" content={Astro.generator} />
 <link rel="sitemap" href={url("/sitemap-index.xml")} />
-<link rel="alternate" type="application/rss+xml" title={SITE.title} href={url("/rss.xml")} />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE.title}
+  href={url("/rss.xml")}
+/>
 <link rel="stylesheet" href={url("/vendor/tocas/tocas.min.css")} />
 {
   SITE.features.math && (

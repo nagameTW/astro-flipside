@@ -20,6 +20,7 @@ const SITE = {
   nav: [
     { label: "nav.about", href: "/" },
     { label: "nav.blog", href: "/blog/" },
+    { label: "nav.gallery", href: "/gallery/" },
   ] satisfies { label: keyof UIStrings; href: string }[],
   /** Life-face identity-card social buttons. `url` opens; `copy` copies text (Discord-style). */
   socials: [
