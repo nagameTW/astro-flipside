@@ -10,7 +10,6 @@ import Stats from "@/components/blocks/Stats.astro";
 import Links from "@/components/blocks/Links.astro";
 import Markdown from "@/components/blocks/Markdown.astro";
 import Steam from "@/components/blocks/Steam.astro";
-import Osu from "@/components/blocks/Osu.astro";
 import Music from "@/components/blocks/Music.astro";
 
 interface Props {
@@ -28,7 +27,6 @@ const blocks = {
   links: Links,
   markdown: Markdown,
   steam: Steam,
-  osu: Osu,
   music: Music,
 } as const;
 const Block = blocks[section.type];

@@ -36,5 +36,4 @@ export type Section =
     }
   | { type: "markdown"; title?: string; body: string }
   | { type: "steam" }
-  | { type: "osu" }
   | { type: "music" };

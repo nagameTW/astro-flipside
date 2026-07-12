@@ -55,11 +55,10 @@ const MISC_BODY = `Sometimes there's no clean block for what I want to say — t
 export const PERSONAL_SECTIONS: Section[] = [
   { type: "text", title: "About", paragraphs: INTRO },
   { type: "chips", title: "Interests", items: INTERESTS },
-  // music/steam/osu self-hide until gamestats.json is populated — see
+  // music/steam self-hide until gamestats.json is populated — see
   // src/data/gamestats.ts and the README for enabling the fetch workflow.
   { type: "music" },
   { type: "steam" },
-  { type: "osu" },
   { type: "cards", title: "Highlights", cards: TROPHY_CARDS },
   {
     type: "kv",

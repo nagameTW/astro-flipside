@@ -10,24 +10,12 @@ diff and never publishes an accidental wipe.
 import json
 import os
 import pathlib
-import subprocess
-import sys
 import sys
 import tempfile
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
 import fetch_gamestats  # noqa: E402
-
-
-def osu_stats_fixture() -> dict:
-    return {
-        "pp": 4523.77,
-        "global_rank": None,
-        "country_rank": 321,
-        "hit_accuracy": 98.7654,
-        "play_time": 913_140,  # seconds -> 254h
-    }
 
 
 def main() -> None:
@@ -110,31 +98,6 @@ def main() -> None:
     assert arted["recent"][0]["header"] == "https://example.invalid/h.jpg", arted
     assert arted["top"][0]["header"] == "https://example.invalid/h.jpg", arted
     assert "header" not in arted["top"][1], arted
-
-    # osu! ranks may be null (inactive account) and must pass through as
-    # null rather than raising — the page drops null tiles. rank_history
-    # can itself be null and play_time arrives in seconds; the page needs
-    # a list / whole hours either way.
-    osu = fetch_gamestats.shape_osu(
-        {
-            "statistics": osu_stats_fixture(),
-            "rank_history": {"mode": "mania", "data": [452246, 452470, 436703]},
-        }
-    )
-    assert osu == {
-        "mode": fetch_gamestats.OSU_MODE,
-        "pp": 4524,
-        "globalRank": None,
-        "countryRank": 321,
-        "accuracy": 98.77,
-        "playTimeHours": 254,
-        "rankHistory": [452246, 452470, 436703],
-    }, osu
-    no_history = fetch_gamestats.shape_osu(
-        {"statistics": osu_stats_fixture(), "rank_history": None}
-    )
-    assert no_history["rankHistory"] == [], no_history
-    assert no_history["playTimeHours"] == 254, no_history
 
     # Last.fm: newest first, now-playing flagged, and the star "no image"
     # placeholder maps to '' so the page shows its own placeholder.
@@ -239,22 +202,20 @@ def main() -> None:
 
     # No env at all -> main() is a pure no-op; the existing file survives
     # byte-identical (the workflow's commit-if-changed step must stay quiet).
-    # STEAM_ACCOUNTS/EXCLUDED_APPIDS/OSU_USER_ID/LASTFM_USER are frozen into
-    # module globals at import time, so popping their env vars here can't
-    # gate main() — set the globals directly instead. Secrets ARE read
-    # fresh on every call, so those stay plain env pops.
-    for var in ("STEAM_API_KEY", "OSU_CLIENT_ID", "OSU_CLIENT_SECRET", "LASTFM_API_KEY"):
+    # STEAM_ACCOUNTS/EXCLUDED_APPIDS/LASTFM_USER are frozen into module
+    # globals at import time, so popping their env vars here can't gate
+    # main() — set the globals directly instead. Secrets ARE read fresh on
+    # every call, so those stay plain env pops.
+    for var in ("STEAM_API_KEY", "LASTFM_API_KEY"):
         os.environ.pop(var, None)
-    previous = {"osu": osu}
+    previous = {"music": music}
     saved_config = (
         fetch_gamestats.STEAM_ACCOUNTS,
         fetch_gamestats.EXCLUDED_APPIDS,
-        fetch_gamestats.OSU_USER_ID,
         fetch_gamestats.LASTFM_USER,
     )
     fetch_gamestats.STEAM_ACCOUNTS = []
     fetch_gamestats.EXCLUDED_APPIDS = frozenset()
-    fetch_gamestats.OSU_USER_ID = ""
     fetch_gamestats.LASTFM_USER = ""
     try:
         with tempfile.TemporaryDirectory() as tmp:
@@ -267,7 +228,6 @@ def main() -> None:
         (
             fetch_gamestats.STEAM_ACCOUNTS,
             fetch_gamestats.EXCLUDED_APPIDS,
-            fetch_gamestats.OSU_USER_ID,
             fetch_gamestats.LASTFM_USER,
         ) = saved_config
 
@@ -278,18 +238,14 @@ def main() -> None:
     # secret can never reach a real API call.
     for var, val in (
         ("STEAM_API_KEY", "x"),
-        ("OSU_CLIENT_ID", "x"),
-        ("OSU_CLIENT_SECRET", "x"),
         ("LASTFM_API_KEY", "x"),
     ):
         os.environ[var] = val
     saved_config = (
         fetch_gamestats.STEAM_ACCOUNTS,
-        fetch_gamestats.OSU_USER_ID,
         fetch_gamestats.LASTFM_USER,
     )
     fetch_gamestats.STEAM_ACCOUNTS = []
-    fetch_gamestats.OSU_USER_ID = ""
     fetch_gamestats.LASTFM_USER = ""
     try:
         with tempfile.TemporaryDirectory() as tmp:
@@ -299,11 +255,10 @@ def main() -> None:
             fetch_gamestats.main()
             assert json.loads(out.read_text()) == previous, out.read_text()
     finally:
-        for var in ("STEAM_API_KEY", "OSU_CLIENT_ID", "OSU_CLIENT_SECRET", "LASTFM_API_KEY"):
+        for var in ("STEAM_API_KEY", "LASTFM_API_KEY"):
             os.environ.pop(var, None)
         (
             fetch_gamestats.STEAM_ACCOUNTS,
-            fetch_gamestats.OSU_USER_ID,
             fetch_gamestats.LASTFM_USER,
         ) = saved_config
 
@@ -314,27 +269,6 @@ def main() -> None:
     raw = committed.read_text()
     canonical = json.dumps(json.loads(raw), ensure_ascii=False, indent=2) + "\n"
     assert raw == canonical, f"{committed} is not in the script's canonical format"
-
-    # shape_osu stamps the configured ruleset into the JSON (the Osu block's
-    # heading reads it), and a bogus OSU_MODE must die loudly at import.
-    saved_mode = fetch_gamestats.OSU_MODE
-    try:
-        fetch_gamestats.OSU_MODE = "mania"
-        shaped = fetch_gamestats.shape_osu(
-            {"statistics": {"pp": 1.0, "hit_accuracy": 99.0, "play_time": 3600}}
-        )
-        assert shaped["mode"] == "mania", shaped
-    finally:
-        fetch_gamestats.OSU_MODE = saved_mode
-    bad_env = dict(os.environ, OSU_MODE="bogus")
-    proc = subprocess.run(
-        [sys.executable, "-c", "import fetch_gamestats"],
-        cwd=pathlib.Path(__file__).resolve().parent,
-        env=bad_env,
-        capture_output=True,
-        text=True,
-    )
-    assert proc.returncode != 0 and "OSU_MODE" in proc.stderr, proc.stderr
 
     print("all checks passed")
 

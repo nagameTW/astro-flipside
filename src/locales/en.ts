@@ -32,14 +32,6 @@ const en = {
   "life.steamTotal": "Total playtime",
   "life.hours": "{h} hrs",
   "life.copied": "Copied!",
-  "osu.worldRank": "Global rank",
-  "osu.countryRank": "Country rank",
-  "osu.totalTime": "Play time",
-  "osu.accuracy": "Accuracy",
-  "osu.rankChartLabel":
-    "90-day world rank chart — best {best}, latest {latest}",
-  "osu.today": "Today",
-  "osu.daysAgo": "{n} days ago",
 };
 export type UIStrings = typeof en;
 export default en;

@@ -33,7 +33,7 @@ pagination, search, and RSS.
 
 - Work/Life toggle with a 3D avatar flip. Both faces render from the same 12
   generic content blocks: text, chips, key-value, timeline, highlights,
-  cards, stats, links, freeform markdown, plus Steam/osu!/Last.fm blocks.
+  cards, stats, links, freeform markdown, plus Steam/Last.fm blocks.
   Edit data, not components.
 - Work face data in `src/data/about.ts`, Life face data in `src/data/life.ts`.
 - A `cards` block is a natural fit for listing projects. `src/data/projects.ts`
@@ -56,7 +56,7 @@ pagination, search, and RSS.
 - Dark mode: follows OS preference, or an explicit toggle that persists.
 - Built-in en / zh-TW UI strings, switched with one config flag.
 - Optional, flag-gated: KaTeX math, Mermaid diagrams, giscus comments,
-  Steam/osu!/Last.fm stat blocks. Each compiles to zero bundle bytes when its
+  Steam/Last.fm stat blocks. Each compiles to zero bundle bytes when its
   flag is off.
 
 ## Quick start
@@ -96,15 +96,14 @@ This repo deploys itself as a project page (`base: "/astro-flipside"`) at
 
 ## Optional modules
 
-**Steam / osu! / Last.fm stats** (Life face; the Music/Steam/osu! blocks
-self-hide until there's data):
+**Steam / Last.fm stats** (Life face; the Music/Steam blocks self-hide
+until there's data):
 
 - Repo **secrets** (Settings → Secrets and variables → Actions → Secrets):
-  `STEAM_API_KEY`, `OSU_CLIENT_ID`, `OSU_CLIENT_SECRET`, `LASTFM_API_KEY`.
-  Add only the ones you use; a source with no secret is silently skipped.
+  `STEAM_API_KEY`, `LASTFM_API_KEY`. Add only the ones you use; a source
+  with no secret is silently skipped.
 - Repo **variables** (same page → Variables): `STEAM_ACCOUNTS`
-  (comma-separated SteamIDs), `EXCLUDED_APPIDS`, `OSU_USER_ID`, `OSU_MODE`
-  (ruleset: `osu`/`taiko`/`fruits`/`mania`, default `osu`), `LASTFM_USER`.
+  (comma-separated SteamIDs), `EXCLUDED_APPIDS`, `LASTFM_USER`.
 - `.github/workflows/gamestats.yml` runs `scripts/fetch_gamestats.py` daily
   (and on manual dispatch), writes `src/data/gamestats.json`, commits if it
   changed, and triggers a redeploy.

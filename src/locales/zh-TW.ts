@@ -34,12 +34,5 @@ const zhTW: UIStrings = {
   "life.steamTotal": "總遊戲時數",
   "life.hours": "{h} 小時",
   "life.copied": "已複製！",
-  "osu.worldRank": "世界排名",
-  "osu.countryRank": "國家排名",
-  "osu.totalTime": "總時間",
-  "osu.accuracy": "準確率",
-  "osu.rankChartLabel": "近 90 天世界排名折線圖，最佳 {best}，最新 {latest}",
-  "osu.today": "今天",
-  "osu.daysAgo": "{n} 天前",
 };
 export default zhTW;

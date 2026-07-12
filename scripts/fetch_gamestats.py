@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Fetch Steam and osu! stats into src/data/gamestats.json.
+"""Fetch Steam and Last.fm stats into src/data/gamestats.json.
 
-Secrets (STEAM_API_KEY, OSU_CLIENT_ID, OSU_CLIENT_SECRET, LASTFM_API_KEY) and
-account config (STEAM_ACCOUNTS, EXCLUDED_APPIDS, OSU_USER_ID, LASTFM_USER)
-both come from the environment. A source missing either its secret or its
-config is skipped and its previous data kept, so the scheduled run is a
-harmless no-op until the repo secrets and variables exist. An API failure
-with both present raises — a red run is the signal.
+Secrets (STEAM_API_KEY, LASTFM_API_KEY) and account config (STEAM_ACCOUNTS,
+EXCLUDED_APPIDS, LASTFM_USER) both come from the environment. A source
+missing either its secret or its config is skipped and its previous data
+kept, so the scheduled run is a harmless no-op until the repo secrets and
+variables exist. An API failure with both present raises — a red run is
+the signal.
 
 The output carries no timestamp on purpose: identical stats produce an
 identical file, and the workflow's commit-if-changed step stays quiet.
@@ -42,11 +42,7 @@ def _split_ints(name: str) -> frozenset[int]:
 STEAM_ACCOUNTS = _split_env("STEAM_ACCOUNTS")
 # Comma-separated appids to hide from every Steam list; the next games fill in.
 EXCLUDED_APPIDS = _split_ints("EXCLUDED_APPIDS")
-OSU_USER_ID = os.environ.get("OSU_USER_ID", "").strip()
 LASTFM_USER = os.environ.get("LASTFM_USER", "").strip()
-OSU_MODE = os.environ.get("OSU_MODE", "osu").strip() or "osu"
-if OSU_MODE not in {"osu", "taiko", "fruits", "mania"}:
-    raise SystemExit(f"OSU_MODE must be one of osu/taiko/fruits/mania; got {OSU_MODE!r}")
 TIMEOUT = 30
 
 
@@ -112,25 +108,6 @@ def shape_steam(
         key=lambda g: (-g["playtime_forever"], g["appid"]),
     )
     return {"recent": [row(g) for g in recent[:cap]], "top": [row(g) for g in top[:cap]]}
-
-
-def shape_osu(user: dict) -> dict:
-    """Ranks may be null for inactive accounts; the page skips null tiles.
-
-    rank_history is the official profile's 90-day world-rank line, oldest
-    first; it can outlive the current rank (an inactive account keeps the
-    history while global_rank reads null). play_time arrives in seconds.
-    """
-    stats = user["statistics"]
-    return {
-        "mode": OSU_MODE,
-        "pp": round(stats["pp"]),
-        "globalRank": stats.get("global_rank"),
-        "countryRank": stats.get("country_rank"),
-        "accuracy": round(stats["hit_accuracy"], 2),
-        "playTimeHours": round((stats.get("play_time") or 0) / 3600),
-        "rankHistory": (user.get("rank_history") or {}).get("data") or [],
-    }
 
 
 def add_headers(shaped: dict, headers: dict[int, str | None]) -> dict:
@@ -263,24 +240,6 @@ def fetch_music(api_key: str) -> dict:
     return shape_music(recent, top)
 
 
-def fetch_osu(client_id: str, client_secret: str) -> dict:
-    token = http_json(
-        "https://osu.ppy.sh/oauth/token",
-        data={
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "grant_type": "client_credentials",
-            "scope": "public",
-        },
-    )["access_token"]
-    # Stats AND rank_history are mode-specific; OSU_MODE picks the ruleset.
-    user = http_json(
-        f"https://osu.ppy.sh/api/v2/users/{OSU_USER_ID}/{OSU_MODE}?key=id",
-        headers={"Authorization": f"Bearer {token}"},
-    )
-    return shape_osu(user)
-
-
 def main() -> None:
     data = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
 
@@ -289,13 +248,6 @@ def main() -> None:
         data["steam"] = fetch_steam(steam_key)
     else:
         print("STEAM_API_KEY/STEAM_ACCOUNTS not set - keeping previous Steam data")
-
-    osu_id = os.environ.get("OSU_CLIENT_ID")
-    osu_secret = os.environ.get("OSU_CLIENT_SECRET")
-    if osu_id and osu_secret and OSU_USER_ID:
-        data["osu"] = fetch_osu(osu_id, osu_secret)
-    else:
-        print("OSU_CLIENT_ID/OSU_CLIENT_SECRET/OSU_USER_ID not set - keeping previous osu! data")
 
     lastfm_key = os.environ.get("LASTFM_API_KEY")
     if lastfm_key and LASTFM_USER:

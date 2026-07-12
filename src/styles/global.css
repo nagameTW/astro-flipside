@@ -455,8 +455,8 @@
   }
 }
 
-/* Life face content blocks — Steam rows, osu! stat tiles, the trophy wall
-   and the gear/sensitivity table. Each section renders only when its data
+/* Life face content blocks — Steam rows, stat tiles, the trophy wall and
+   the gear/sensitivity table. Each section renders only when its data
    exists (gamestats.json is written by the gamestats workflow; trophies
    and gear are owner-maintained lists). */
 /* Steam rows: capsule art from Steam's CDN, name (one line), hours on the
@@ -539,67 +539,6 @@ div.recent-cap {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
   gap: 1rem;
-}
-/* osu! rank sparkline: one monochrome 2px line, inverted y (best rank on
-   top), native <title> tooltips on invisible per-day hit strips. The panel
-   wears the same recessed tint as .entry-note. */
-.rank-chart {
-  margin: 0;
-  padding: 1rem;
-  border-radius: var(--ts-border-radius-container);
-  background: var(--ts-page-background-tertiary);
-}
-.rank-chart .rank-grid {
-  stroke: var(--ts-gray-300);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-.rank-chart svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.rank-chart .rank-line {
-  fill: none;
-  stroke: var(--ts-gray-800);
-  stroke-width: 2;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-}
-.rank-chart .rank-hit {
-  fill: transparent;
-}
-.rank-chart .rank-dot {
-  fill: var(--ts-gray-800);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.1s ease;
-}
-.rank-chart .rank-hit:hover + .rank-dot {
-  opacity: 1;
-}
-/* Same bubble as the social-icon tooltips, riding the hovered day's dot. */
-.rank-chart {
-  position: relative;
-}
-.rank-tip {
-  position: absolute;
-  transform: translate(-50%, calc(-100% - 0.45rem));
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  background: #1f2430;
-  color: #fff;
-  font-size: var(--ts-font-size-tiny);
-  line-height: 1.4;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-  z-index: 20;
-}
-.rank-tip.is-shown {
-  opacity: 1;
 }
 .stat-grid .ts-text.is-secondary {
   font-size: var(--ts-font-size-tiny);
