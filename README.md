@@ -103,7 +103,8 @@ self-hide until there's data):
   `STEAM_API_KEY`, `OSU_CLIENT_ID`, `OSU_CLIENT_SECRET`, `LASTFM_API_KEY`.
   Add only the ones you use; a source with no secret is silently skipped.
 - Repo **variables** (same page → Variables): `STEAM_ACCOUNTS`
-  (comma-separated SteamIDs), `EXCLUDED_APPIDS`, `OSU_USER_ID`, `LASTFM_USER`.
+  (comma-separated SteamIDs), `EXCLUDED_APPIDS`, `OSU_USER_ID`, `OSU_MODE`
+  (ruleset: `osu`/`taiko`/`fruits`/`mania`, default `osu`), `LASTFM_USER`.
 - `.github/workflows/gamestats.yml` runs `scripts/fetch_gamestats.py` daily
   (and on manual dispatch), writes `src/data/gamestats.json`, commits if it
   changed, and triggers a redeploy.

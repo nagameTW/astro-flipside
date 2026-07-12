@@ -12,7 +12,9 @@ export type SteamGame = {
 };
 
 export type OsuStats = {
-  /** osu!mania mode stats — the owner's mode. */
+  /** Ruleset the stats were fetched for; absent in data from older fetches. */
+  mode?: string;
+  /** osu! stats for the configured ruleset (OSU_MODE: osu/taiko/fruits/mania). */
   pp: number;
   /** Ranks are null while the account counts as inactive. */
   globalRank: number | null;

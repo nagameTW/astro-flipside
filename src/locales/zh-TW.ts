@@ -35,7 +35,7 @@ const zhTW: UIStrings = {
   "life.hours": "{h} 小時",
   "life.copied": "已複製！",
   "osu.worldRank": "世界排名",
-  "osu.countryRank": "台灣排名",
+  "osu.countryRank": "國家排名",
   "osu.totalTime": "總時間",
   "osu.accuracy": "準確率",
   "osu.rankChartLabel": "近 90 天世界排名折線圖，最佳 {best}，最新 {latest}",

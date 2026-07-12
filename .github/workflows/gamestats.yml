@@ -34,6 +34,7 @@ jobs:
           STEAM_ACCOUNTS: ${{ vars.STEAM_ACCOUNTS }}
           EXCLUDED_APPIDS: ${{ vars.EXCLUDED_APPIDS }}
           OSU_USER_ID: ${{ vars.OSU_USER_ID }}
+          OSU_MODE: ${{ vars.OSU_MODE }}
           LASTFM_USER: ${{ vars.LASTFM_USER }}
         run: python3 scripts/fetch_gamestats.py
 

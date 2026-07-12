@@ -44,6 +44,9 @@ STEAM_ACCOUNTS = _split_env("STEAM_ACCOUNTS")
 EXCLUDED_APPIDS = _split_ints("EXCLUDED_APPIDS")
 OSU_USER_ID = os.environ.get("OSU_USER_ID", "").strip()
 LASTFM_USER = os.environ.get("LASTFM_USER", "").strip()
+OSU_MODE = os.environ.get("OSU_MODE", "osu").strip() or "osu"
+if OSU_MODE not in {"osu", "taiko", "fruits", "mania"}:
+    raise SystemExit(f"OSU_MODE must be one of osu/taiko/fruits/mania; got {OSU_MODE!r}")
 TIMEOUT = 30
 
 
@@ -120,6 +123,7 @@ def shape_osu(user: dict) -> dict:
     """
     stats = user["statistics"]
     return {
+        "mode": OSU_MODE,
         "pp": round(stats["pp"]),
         "globalRank": stats.get("global_rank"),
         "countryRank": stats.get("country_rank"),
@@ -269,9 +273,9 @@ def fetch_osu(client_id: str, client_secret: str) -> dict:
             "scope": "public",
         },
     )["access_token"]
-    # The owner plays mania — stats AND rank_history are mode-specific.
+    # Stats AND rank_history are mode-specific; OSU_MODE picks the ruleset.
     user = http_json(
-        f"https://osu.ppy.sh/api/v2/users/{OSU_USER_ID}/mania?key=id",
+        f"https://osu.ppy.sh/api/v2/users/{OSU_USER_ID}/{OSU_MODE}?key=id",
         headers={"Authorization": f"Bearer {token}"},
     )
     return shape_osu(user)

@@ -10,6 +10,8 @@ diff and never publishes an accidental wipe.
 import json
 import os
 import pathlib
+import subprocess
+import sys
 import sys
 import tempfile
 
@@ -120,6 +122,7 @@ def main() -> None:
         }
     )
     assert osu == {
+        "mode": fetch_gamestats.OSU_MODE,
         "pp": 4524,
         "globalRank": None,
         "countryRank": 321,
@@ -311,6 +314,27 @@ def main() -> None:
     raw = committed.read_text()
     canonical = json.dumps(json.loads(raw), ensure_ascii=False, indent=2) + "\n"
     assert raw == canonical, f"{committed} is not in the script's canonical format"
+
+    # shape_osu stamps the configured ruleset into the JSON (the Osu block's
+    # heading reads it), and a bogus OSU_MODE must die loudly at import.
+    saved_mode = fetch_gamestats.OSU_MODE
+    try:
+        fetch_gamestats.OSU_MODE = "mania"
+        shaped = fetch_gamestats.shape_osu(
+            {"statistics": {"pp": 1.0, "hit_accuracy": 99.0, "play_time": 3600}}
+        )
+        assert shaped["mode"] == "mania", shaped
+    finally:
+        fetch_gamestats.OSU_MODE = saved_mode
+    bad_env = dict(os.environ, OSU_MODE="bogus")
+    proc = subprocess.run(
+        [sys.executable, "-c", "import fetch_gamestats"],
+        cwd=pathlib.Path(__file__).resolve().parent,
+        env=bad_env,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode != 0 and "OSU_MODE" in proc.stderr, proc.stderr
 
     print("all checks passed")
 

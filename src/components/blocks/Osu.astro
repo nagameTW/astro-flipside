@@ -1,5 +1,6 @@
 ---
-// osu!mania module — rank tiles above the chart, pp/time/accuracy below.
+// osu! module — rank tiles above the chart, pp/time/accuracy below. The
+// heading names the configured ruleset (mode travels in gamestats.json).
 // An inactive account reports null ranks and pp 0 — those tiles drop
 // instead of rendering "#null" / a misleading "0pp".
 import { OSU } from "@/data/gamestats";
@@ -37,7 +38,7 @@ const OSU_STATS = OSU
     <section class="ts-box">
       <div class="ts-content">
         <h2 class="ts-header is-large is-heavy">
-          osu!mania
+          {OSU?.mode && OSU.mode !== "osu" ? `osu!${OSU.mode === "fruits" ? "catch" : OSU.mode}` : "osu!"}
           <span class="ts-divider" />
         </h2>
         {OSU_RANKS.length > 0 && (
