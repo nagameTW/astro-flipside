@@ -8,12 +8,14 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { remarkReadingTime } from "./plugins/remark-reading-time.mjs";
 import { remarkMermaid } from "./plugins/remark-mermaid.mjs";
 import SITE from "./src/config.ts";
+// Works from config-land because src/locales uses relative imports only —
+// the config loader does not resolve the `@/` alias.
+import { t } from "./src/locales/index.ts";
 
 // Vite statically discovers `import("katex/dist/katex.min.css")` no matter which
 // runtime branch guards it, so a conditional dynamic import still ships the CSS
@@ -81,6 +83,12 @@ export default defineConfig({
   site: SITE.site,
   base: SITE.base || undefined,
   markdown: {
+    // GFM footnotes ship an English sr-only "Footnotes" heading — localize
+    // it. The ↩ back-reference link is hidden entirely in global.css
+    // (owner: redundant on posts this short).
+    remarkRehype: {
+      footnoteLabel: t["post.footnotesLabel"],
+    },
     // remarkMermaid goes first: it must turn ```mermaid fences into a raw
     // <div> before expressive-code's own remark-time processing sees them.
     remarkPlugins: [
@@ -89,19 +97,10 @@ export default defineConfig({
       ...(SITE.features.math ? [remarkMath] : []),
     ],
     rehypePlugins: [
+      // rehypeSlug alone: heading ids for the TOC's deep links, without
+      // the hover "#" anchor a rehype-autolink-headings setup would add
+      // (owner removed it 2026-07-12).
       rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "append",
-          properties: {
-            className: ["heading-anchor"],
-            ariaHidden: "true",
-            tabIndex: -1,
-          },
-          content: { type: "text", value: "#" },
-        },
-      ],
       ...(SITE.features.math ? [rehypeKatex] : []),
     ],
   },
@@ -124,7 +123,46 @@ export default defineConfig({
       useDarkModeMediaQuery: true,
       plugins: [pluginLineNumbers()],
       defaultProps: { showLineNumbers: false },
-      styleOverrides: { borderRadius: "0.4rem", codeFontSize: "0.9em" },
+      // Per-theme code/terminal backgrounds are set on the THEMES, not as a
+      // styleOverrides resolver: a `({ theme }) => …` on the top-level
+      // codeBackground makes the emitted ec.*.css hash disagree with the URL
+      // injected into <link> tags — pages then reference a css file that
+      // does not exist and every block renders unstyled (reproduced
+      // 2026-07-12; frame-level resolvers below are unaffected). Light
+      // value sits between --ts-gray-75 (250) and gray-100 (242): gray-100
+      // read too heavy against the white page (owner call). Dark mirrors
+      // dark gray-100.
+      customizeTheme: (theme) => {
+        const bg = theme.type === "dark" ? "#333333" : "#f6f6f6";
+        theme.colors["editor.background"] = bg;
+        theme.colors["terminal.background"] = bg;
+        return theme;
+      },
+      // Flat, Tocas-gray code surfaces (values mirror --ts-gray-200/300 in
+      // both modes). Filename tabs flatten into a plain label strip (no tab
+      // chrome, no indicators), terminals lose the macOS window dots, and
+      // every frame shadow and border is gone.
+      styleOverrides: {
+        borderRadius: "0.4rem",
+        codeFontSize: "0.9em",
+        borderWidth: "0",
+        frames: {
+          frameBoxShadowCssValue: "none",
+          editorTabBarBackground: ({ theme }) =>
+            theme.type === "dark" ? "rgb(56, 56, 56)" : "rgb(238, 238, 238)",
+          editorTabBarBorderBottomColor: ({ theme }) =>
+            theme.type === "dark" ? "rgb(71, 71, 71)" : "rgb(225, 225, 225)",
+          editorActiveTabBackground: "transparent",
+          editorActiveTabBorderColor: "transparent",
+          editorActiveTabIndicatorTopColor: "transparent",
+          editorActiveTabIndicatorBottomColor: "transparent",
+          terminalTitlebarBackground: ({ theme }) =>
+            theme.type === "dark" ? "rgb(56, 56, 56)" : "rgb(238, 238, 238)",
+          terminalTitlebarBorderBottomColor: ({ theme }) =>
+            theme.type === "dark" ? "rgb(71, 71, 71)" : "rgb(225, 225, 225)",
+          terminalTitlebarDotsOpacity: "0",
+        },
+      },
     }),
     mdx(),
     sitemap(),

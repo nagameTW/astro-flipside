@@ -25,7 +25,7 @@ const {
   image = "/og.png",
   noindex,
 } = Astro.props;
-const pageTitle = title ? `${title} | ${SITE.title}` : SITE.title;
+const pageTitle = title ? `${title} - ${SITE.title}` : SITE.title;
 const imageURL = new URL(url(image), Astro.site);
 ---
 

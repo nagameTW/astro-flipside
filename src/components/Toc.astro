@@ -26,7 +26,10 @@ const items = headings.filter(
         <ul>
           {items.map((h) => (
             <li class:list={["toc-item", `is-depth-${h.depth}`]}>
-              <a href={`#${h.slug}`}>{h.text}</a>
+              {/* rehype-autolink appends a literal "#" link to every heading and
+    Astro's heading extraction carries it into `text` — strip it so
+    TOC entries don't end with a stray #. */}
+              <a href={`#${h.slug}`}>{h.text.replace(/#\s*$/, "")}</a>
             </li>
           ))}
         </ul>

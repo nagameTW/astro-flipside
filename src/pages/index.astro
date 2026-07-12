@@ -1,8 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import AboutPersonal from "@/components/AboutPersonal.astro";
-import AboutProfessional from "@/components/AboutProfessional.astro";
+import AboutFace from "@/components/AboutFace.astro";
 import SITE from "@/config";
+import { AVATAR, PERSONAL_SECTIONS } from "@/data/life";
+import {
+  AVATAR_WORK,
+  PROFILE,
+  PROFESSIONAL_SECTIONS,
+} from "@/data/about";
 import { t, fill } from "@/locales";
 // The ASCII art is a two-way easter egg: a real HTML comment at the top of
 // the page (view-source), and logged to the console below (F12). `set:html`
@@ -24,9 +29,34 @@ const SWITCH_LABELS = {
        professional face) overlays the hidden face on the visible one and
        drives the flip/fade transitions — no FOUC, works before JS. Each
        face carries its own FaceToggle copy in the identity card. -->
-  <div class="faces">
-    <AboutPersonal />
-    <AboutProfessional />
+  {/* data-pagefind-body: the about faces are searchable alongside blog
+      posts (once the attribute exists anywhere, ONLY tagged pages are
+      indexed — listing/tag/404 pages stay out). The meta pins the result
+      title to the nav's about label instead of a guessed heading. */}
+  <div
+    class="faces"
+    data-pagefind-body
+    data-pagefind-meta={`title:${t["nav.about"]}`}
+  >
+    {/* One AboutFace layout, two data sets. The personal face is the
+        default; the professional one ships hidden + inert so it never
+        flashes before JS runs. */}
+    <AboutFace
+      face="personal"
+      avatar={AVATAR}
+      name={SITE.title}
+      socials={SITE.socials}
+      sections={PERSONAL_SECTIONS}
+    />
+    <AboutFace
+      face="professional"
+      hidden
+      avatar={AVATAR_WORK}
+      name={PROFILE.name}
+      headline={PROFILE.headline}
+      socials={SITE.socialsWork}
+      sections={PROFESSIONAL_SECTIONS}
+    />
   </div>
 </Layout>
 

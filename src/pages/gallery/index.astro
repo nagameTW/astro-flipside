@@ -2,10 +2,10 @@
 import Layout from "@/layouts/Layout.astro";
 import { GALLERY } from "@/data/gallery";
 import { t, fill } from "@/locales";
-import { url } from "@/utils/url";
-
-// Same "public/ path or full URL" rule as BlogPost.astro's heroImage.
-const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
+import { resolveImg } from "@/utils/url";
+// The masonry carries data-pagefind-body: captions and alt text are unique
+// content, so the gallery joins the search index (see index.astro's note;
+// the lightbox copies below the masonry stay out of it).
 ---
 
 <Layout title={t["nav.gallery"]} description={t["gallery.description"]}>
@@ -19,14 +19,18 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
     GALLERY.length === 0 ? (
       <p class="ts-text is-secondary">{t["gallery.empty"]}</p>
     ) : (
-      <div class="gallery-masonry">
+      <div
+        class="gallery-masonry"
+        data-pagefind-body
+        data-pagefind-meta={`title:${t["nav.gallery"]}`}
+      >
         {GALLERY.map((photo, i) => (
           <button
             type="button"
             class="gallery-item"
             data-modal={`gallery-modal-${i}`}
           >
-            <img src={resolve(photo.src)} alt={photo.alt} loading="lazy" />
+            <img src={resolveImg(photo.src)} alt={photo.alt} loading="lazy" />
             {photo.caption && (
               <div class="gallery-caption ts-text is-tiny">
                 {photo.caption}
@@ -56,7 +60,7 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
           <span class="ts-icon is-angle-left-icon" />
         </button>
         <figure class="gallery-modal-figure">
-          <img src={resolve(photo.src)} alt="" loading="lazy" />
+          <img src={resolveImg(photo.src)} alt="" loading="lazy" />
           <figcaption class="ts-text is-secondary">
             {photo.caption ?? ""}
           </figcaption>
@@ -75,17 +79,10 @@ const resolve = (src: string) => (/^https?:\/\//.test(src) ? src : url(src));
 </Layout>
 
 <script>
-  // Open the matching <dialog>, close on backdrop click (Esc is native
-  // <dialog> behavior) — identical pattern to Cards.astro's trophy wall.
-  document
-    .querySelectorAll<HTMLElement>(".gallery-item[data-modal]")
-    .forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const modal =
-          btn.dataset.modal && document.getElementById(btn.dataset.modal);
-        if (modal instanceof HTMLDialogElement) modal.showModal();
-      });
-    });
+  import { wireModalOpeners } from "@/utils/dialogs";
+  // Opening is the shared wiring (same as Cards.astro's trophy wall);
+  // the stage-specific close and arrow-nav behavior stays below.
+  wireModalOpeners(".gallery-item[data-modal]");
   document.querySelectorAll<HTMLButtonElement>(".gallery-nav").forEach((nav) => {
     nav.addEventListener("click", () => {
       const target = nav.dataset.open && document.getElementById(nav.dataset.open);

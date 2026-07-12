@@ -1,4 +1,6 @@
-import SITE from "@/config";
+// Relative import on purpose: astro.config.mjs also imports this module
+// (footnote labels), and the config loader does not resolve the `@/` alias.
+import SITE from "../config";
 import en from "./en";
 import zhTW from "./zh-TW";
 

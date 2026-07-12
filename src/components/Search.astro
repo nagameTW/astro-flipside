@@ -1,26 +1,47 @@
 ---
-// Search.astro — Pagefind-powered site search. Reuses Tocas's own
-// dialog.ts-modal + .content pattern (see Cards.astro's trophy-modal) rather
-// than hand-rolling a bordered/dimmed dialog: `is-large` is Tocas's built-in
-// 580px modal-width preset, so `.search-dialog` below only styles content
-// padding and `.search-results` only styles the result rows.
+// Search.astro — Pagefind-powered site search, an Apple-style header
+// extension. Rendered inside .site-header (see Navbar.astro) and opened
+// NON-modally with dialog.show(): no top layer means the sticky header
+// stays crisp above the #search-veil dim layer (z 99 < header's 100),
+// while the panel hangs off the header's bottom edge like the header
+// growing taller. Esc/veil-click closing is wired up by hand below —
+// that is the price of skipping showModal's backdrop.
 import { t } from "@/locales";
 ---
 
-<dialog
-  id="search-dialog"
-  class="ts-modal is-large search-dialog"
-  aria-label={t["search.open"]}
->
-  <div class="content">
-    <input
-      id="search-input"
-      class="ts-input"
-      type="search"
-      autofocus
-      placeholder={t["search.placeholder"]}
-    />
-    <ol id="search-results" class="search-results"></ol>
+<dialog id="search-dialog" class="search-dialog" aria-label={t["search.open"]}>
+  <div class="ts-container">
+    <div class="search-inner">
+      {/* Borderless Apple-style query row: bare magnifier + naked input,
+          no box — the solid panel IS the field. The native WebKit cancel
+          X is hidden in global.css; the project-styled clear button
+          appears once there is text. */}
+      <div class="search-row">
+        <span class="ts-icon is-magnifying-glass-icon" aria-hidden="true"
+        ></span>
+        <input
+          id="search-input"
+          type="search"
+          placeholder={t["search.placeholder"]}
+        />
+        <button
+          id="search-clear"
+          class="search-clear"
+          type="button"
+          aria-label={t["search.clear"]}
+          hidden
+        >
+          <span class="ts-icon is-xmark-icon"></span>
+        </button>
+      </div>
+      <ol
+        id="search-results"
+        class="search-results"
+        aria-live="polite"
+        data-empty={t["search.noResults"]}
+      >
+      </ol>
+    </div>
   </div>
 </dialog>
 
@@ -59,6 +80,13 @@ import { t } from "@/locales";
   const dialog = document.getElementById("search-dialog") as HTMLDialogElement;
   const input = document.getElementById("search-input") as HTMLInputElement;
   const list = document.getElementById("search-results")!;
+  const clear = document.getElementById("search-clear") as HTMLButtonElement;
+  clear.addEventListener("click", () => {
+    input.value = "";
+    clear.hidden = true;
+    list.innerHTML = "";
+    input.focus();
+  });
   // Pagefind's runtime search API is a generated post-build asset, not an
   // npm module — it ships no types, so `any` is the honest type here.
   let pagefind: any;
@@ -73,34 +101,130 @@ import { t } from "@/locales";
   const importPagefind = new Function("path", "return import(path)") as (
     path: string,
   ) => Promise<any>;
-  document
-    .getElementById("search-open")
-    ?.addEventListener("click", async () => {
-      dialog.showModal();
-      // Dev note: the index only exists after `npm run build` (postbuild).
-      // `astro dev` has no dist/pagefind/, so this 404s, the catch below
-      // keeps search a silent no-op, and the input stays inert.
-      pagefind ??= await importPagefind(`${base}/pagefind/pagefind.js`).catch(
-        () => {
-          console.info("Pagefind index not found (run npm run build first).");
-          return null;
-        },
-      );
-    });
-  input.addEventListener("input", async () => {
-    if (!pagefind) return;
-    const { results } = await pagefind.search(input.value);
-    const top = await Promise.all(
-      results.slice(0, 8).map((r: any) => r.data()),
+  const veil = document.getElementById("search-veil")!;
+  const opener = document.getElementById("search-open");
+  const openPanel = async () => {
+    // Reopening mid-close: drop the closing state so the armed
+    // animationend/timeout (guarded on this class) becomes a no-op.
+    dialog.classList.remove("is-closing");
+    veil.classList.remove("is-closing");
+    // Set [open] directly instead of calling dialog.show(): show()'s
+    // focusing steps asynchronously scroll-focus the panel, and since it
+    // lives inside the sticky header at the top of the document, that
+    // yanks a scrolled page back to the top. The attribute alone renders
+    // the dialog; focus is placed by hand, scroll untouched.
+    dialog.setAttribute("open", "");
+    input.focus({ preventScroll: true });
+    veil.hidden = false;
+    // Dev note: the index only exists after `npm run build` (postbuild).
+    // `astro dev` has no dist/pagefind/, so this 404s, the catch below
+    // keeps search a silent no-op, and the input stays inert.
+    pagefind ??= await importPagefind(`${base}/pagefind/pagefind.js`).catch(
+      () => {
+        console.info("Pagefind index not found (run npm run build first).");
+        return null;
+      },
     );
-    list.innerHTML = top
-      .map(
-        (d: any) =>
-          `<li><a href="${esc(d.url)}"><strong>${esc(d.meta.title ?? d.url)}</strong><span>${excerptSafe(d.excerpt)}</span></a></li>`,
-      )
-      .join("");
+    // Keystrokes that landed while the runtime was still loading hit the
+    // `if (!pagefind) return` guard and rendered nothing — re-run the
+    // query they left behind now that search is ready.
+    if (pagefind && input.value) input.dispatchEvent(new Event("input"));
+  };
+  // Closing is two-phase so it can animate: closePanel() adds .is-closing
+  // (global.css plays the open animations in reverse) and only when that
+  // animation ends does finishClose() flip the real [open]/[hidden] state.
+  // finishClose is guarded by the class so a stray animationend (e.g. the
+  // OPENING drop's own end, or an interrupted close) can never close a
+  // panel that is not actually closing.
+  const finishClose = () => {
+    if (!dialog.classList.contains("is-closing")) return;
+    dialog.classList.remove("is-closing");
+    veil.classList.remove("is-closing");
+    dialog.close();
+    veil.hidden = true;
+    opener?.focus();
+  };
+  const closePanel = () => {
+    if (!dialog.open || dialog.classList.contains("is-closing")) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      dialog.classList.add("is-closing");
+      finishClose();
+      return;
+    }
+    dialog.classList.add("is-closing");
+    veil.classList.add("is-closing");
+    dialog.addEventListener("animationend", finishClose, { once: true });
+    // Fallback in case animationend never arrives; finishClose is
+    // idempotent thanks to the class guard.
+    window.setTimeout(finishClose, 250);
+  };
+  // The magnifier toggles the panel; Esc, clicking the veil (the dimmed
+  // page), and the pointer leaving the header all close it — non-modal
+  // dialogs get none of this for free.
+  opener?.addEventListener("click", () =>
+    dialog.open ? closePanel() : openPanel(),
+  );
+  veil.addEventListener("click", closePanel);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && dialog.open) closePanel();
   });
-  dialog.addEventListener("click", (e) => {
-    if (e.target === dialog) dialog.close();
+  // Auto-collapse when the mouse leaves the header+panel area, with a small
+  // grace window so grazing the boundary doesn't slam it shut. Mouse-only
+  // by nature (mouseleave) — keyboard and touch flows are unaffected.
+  const header = dialog.closest(".site-header")!;
+  let leaveTimer: number;
+  header.addEventListener("mouseleave", () => {
+    if (!dialog.open) return;
+    leaveTimer = window.setTimeout(closePanel, 200);
+  });
+  header.addEventListener("mouseenter", () => window.clearTimeout(leaveTimer));
+  // Pagefind's zh query segmenter mangles multi-character CJK queries —
+  // 關東煮 effectively searches 關 alone, and 手搖飲 highlights only 手
+  // and 飲. Spacing the characters out (關 東 煮) makes each one its own
+  // required term and gets every one highlighted; the indexed content
+  // itself is unaffected. Latin words in mixed queries pass through.
+  const cjkSpaced = (q: string) =>
+    q.replace(/(\p{Script=Han})(?=\p{Script=Han})/gu, "$1 ");
+  // Guards against out-of-order responses while typing fast: only the
+  // newest query may write to the list.
+  let seq = 0;
+  input.addEventListener("input", async () => {
+    clear.hidden = input.value === "";
+    if (!pagefind) return;
+    const mySeq = ++seq;
+    const raw = input.value.trim();
+    if (!raw) {
+      list.innerHTML = "";
+      return;
+    }
+    const { results } = await pagefind.search(cjkSpaced(raw));
+    const top = await Promise.all(
+      results.slice(0, 12).map((r: any) => r.data()),
+    );
+    if (mySeq !== seq) return;
+    // Pagefind also ranks pages that contain only SOME of the query's
+    // characters, which for CJK surfaces one-character junk matches.
+    // Require every contiguous Han run of the query verbatim in the page
+    // (title or body) — i.e. real phrase semantics for Chinese. Latin
+    // terms keep pagefind's own matching untouched.
+    const hanRuns = raw.match(/\p{Script=Han}+/gu) ?? [];
+    const kept = top
+      .filter((d: any) =>
+        hanRuns.every(
+          (run) =>
+            (d.content ?? "").includes(run) ||
+            (d.meta.title ?? "").includes(run),
+        ),
+      )
+      .slice(0, 8);
+    list.innerHTML =
+      kept.length === 0
+        ? `<li class="search-empty">${esc(list.dataset.empty ?? "")}</li>`
+        : kept
+            .map(
+              (d: any) =>
+                `<li><a href="${esc(d.url)}"><strong>${esc(d.meta.title ?? d.url)}</strong><span>${excerptSafe(d.excerpt)}</span></a></li>`,
+            )
+            .join("");
   });
 </script>

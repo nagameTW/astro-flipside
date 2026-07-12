@@ -1,3 +1,11 @@
+
+/* Anchor jumps (TOC, heading anchors) glide instead of teleporting —
+   skipped for users who prefer reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
 /* Site styles on top of Tocas UI. Tocas has no prose styling, so
    .md-content maps rendered Markdown onto its design tokens.
 
@@ -113,13 +121,22 @@
   gap: 0.5rem;
 }
 /* Tocas's tab items have no hover state; give them the same feedback as the
-   ghost icon button (theme toggle). The active tab keeps Tocas's filled
-   pill, so it's excluded here. */
+   ghost icon button (theme toggle). The active tab stays a filled pill but
+   must still read and act as a link: Tocas ships it cursor:default, and
+   without a hover response it feels dead even though the <a> works. */
 .site-header .ts-tab .item {
-  transition: background-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    filter 0.15s ease;
 }
 .site-header .ts-tab .item:not(.is-active):hover {
   background: var(--ts-gray-100);
+}
+.site-header .ts-tab .item.is-active {
+  cursor: pointer;
+}
+.site-header .ts-tab .item.is-active:hover {
+  filter: brightness(1.25);
 }
 
 /* A sticky header must stay shallow on phones. Tighten it so the nav items
@@ -132,13 +149,15 @@
   }
   .site-header nav {
     width: 100%;
-    justify-content: space-between;
-    gap: 0;
+    gap: 0.25rem;
   }
   .site-header nav > .ts-button {
     flex: 0 0 auto;
   }
+  /* Tabs keep the left edge and swallow the spare width, so the search and
+     theme buttons sit together on the right. */
   .site-header .ts-tab {
+    flex: 1 1 auto;
     flex-wrap: nowrap;
     min-width: 0;
     overflow-x: auto;
@@ -153,6 +172,35 @@
     font-size: 0.875rem;
   }
 }
+/* Template-content safety net: every slot that renders user-supplied text
+   wraps rather than escaping its container, even for a single unbreakable
+   token (long URL, path, identifier). This is a POLICY, not a bug patch —
+   the template's layouts must survive arbitrary future content. Verified
+   by an adversarial injection sweep at 390px and 1280px. */
+.site-header .ts-header,
+.ts-chip,
+.links-list a,
+.links-list .ts-text.is-secondary,
+.post-card .ts-header,
+.post-meta-author,
+.toc a,
+.post-title,
+.trophy-caption,
+.gallery-caption,
+.gear-label,
+.gear-body .ts-text.is-bold,
+.entry-note,
+.stat-grid,
+.search-results li a,
+.md-content {
+  overflow-wrap: anywhere;
+}
+.ts-chip {
+  max-width: 100%;
+  height: auto;
+  min-height: var(--height, auto);
+}
+
 .site-footer {
   text-align: center;
   padding: 3rem 0 4rem;
@@ -162,6 +210,9 @@
 /* 404 page banner spacing. */
 .hero {
   padding: 6rem 0 4rem;
+}
+.hero.not-found {
+  text-align: center;
 }
 .section-title {
   display: flex;
@@ -473,10 +524,14 @@
 }
 /* Cards are <button>s opening the lightbox — strip the UA chrome. Shared
    with .gallery-item (below): same "image + optional caption, click to
-   zoom" shape, just laid out in a masonry column instead of a grid cell. */
+   zoom" shape, just laid out in a masonry column instead of a grid cell.
+   Flex column, not block: browsers vertically CENTER a button's content,
+   so in a grid row stretched by a longer-captioned sibling the shorter
+   card's image sank below its neighbors'. */
 .trophy-item,
 .gallery-item {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   padding: 0;
   border: 0;
@@ -484,12 +539,13 @@
   font: inherit;
   color: inherit;
   text-align: inherit;
-  cursor: zoom-in;
+  /* Site-wide policy: every clickable image reads as a plain pointer
+     (owner call 2026-07-12) — no zoom-in cursors anywhere. */
+  cursor: pointer;
 }
 /* Cards.astro also renders this shape as a plain outbound link (a `url`
-   card) — same layout, but it navigates rather than zooms. */
+   card) — same layout, it just navigates instead of zooming. */
 .trophy-item.is-link {
-  cursor: pointer;
   text-decoration: none;
 }
 .trophy-grid img,
@@ -498,19 +554,40 @@
   width: 100%;
   border-radius: var(--ts-border-radius-element);
 }
+/* Cards-block media (trophies, discography) crops to one fixed ratio —
+   the same 16:9 the .trophy-empty placeholder uses — so every card in the
+   grid is the same size. The gallery keeps natural ratios; its masonry
+   depends on them. */
+.trophy-grid img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
 /* Lightbox sized to match the right content column (~812px), not full
-   screen. `dialog.trophy-modal` (0,1,1) must out-specify Tocas's
-   `dialog.ts-modal{--width:380px}`. */
-/* Any open modal locks the page behind it (native <dialog> doesn't). */
-body:has(dialog[open]) {
+   screen. `dialog.ts-modal.trophy-modal` (0,2,1) genuinely out-specifies
+   Tocas's `dialog.ts-modal{--width:380px}` (0,1,1) — the previous
+   single-class selector only tied and won by stylesheet load order. */
+/* Any open modal locks the page behind it (native <dialog> doesn't). The
+   lock sits on :root because this stylesheet makes <html> the scroll
+   container (`:root { overflow-y: scroll }` above) — overflow set on
+   <body> never reaches the viewport, so a body-level lock is a no-op. */
+:root:has(dialog[open]) {
+  /* Both axes: with only overflow-y hidden, overflow-x computes to auto
+     and any stray pixel of horizontal overflow paints a scrollbar. */
   overflow: hidden;
 }
-dialog.trophy-modal {
+dialog.ts-modal.trophy-modal {
   --width: min(52rem, 94vw);
 }
+/* Same viewport-fit policy as the gallery lightbox: media letterboxes to
+   the screen whatever its aspect ratio. width:100% alone let a portrait
+   image blow past the viewport bottom. */
 .trophy-modal .content img {
   display: block;
-  width: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 14rem);
+  margin-inline: auto;
 }
 /* Gallery lightbox: an X/FB-style viewer. The dialog IS the dark stage —
    full viewport, no border chrome — and the image letterboxes inside it,
@@ -605,9 +682,6 @@ dialog.gallery-modal::backdrop {
 .gallery-item {
   break-inside: avoid;
   margin-bottom: 1rem;
-  /* Unlike the trophy wall's zoom-in, a gallery tile reads as a clickable
-     card (Pinterest-style), so it gets the plain pointer. */
-  cursor: pointer;
   /* The hover overlay is clipped by the button so it inherits the image's
      rounded corners. */
   position: relative;
@@ -672,6 +746,11 @@ dialog.gallery-modal::backdrop {
   border-radius: var(--ts-border-radius-container);
   background: var(--ts-page-background-tertiary);
 }
+/* A row with href renders the whole card as the link (Kv.astro). */
+a.gear-card {
+  color: inherit;
+  text-decoration: none;
+}
 .gear-card > .ts-icon {
   font-size: 1.25rem;
   color: var(--ts-gray-600);
@@ -699,30 +778,32 @@ dialog.gallery-modal::backdrop {
   align-items: baseline;
   gap: 0.5rem;
 }
+/* Text links site-wide (Links block, prose) show no underline at rest;
+   it appears on hover / keyboard focus. */
 .links-list a {
   color: inherit;
   font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+.links-list a:hover,
+.links-list a:focus-visible {
+  text-decoration: underline;
 }
 
-/* Hover feedback shared across the Life cards: a small lift + soft shadow,
-   the same language as the social-icon buttons. (Gallery tiles opt out —
-   their hover response is the Pinterest scrim alone.) */
+/* Hover feedback shared across the Life cards — a slight forward scale,
+   nothing else: no shadow, no tint (site-wide flat style, owner call
+   2026-07-12). (Gallery tiles opt out — their hover response is the
+   Pinterest scrim alone.) */
 .trophy-item img,
 .gear-card {
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: transform 0.15s ease;
 }
 .trophy-item:hover img,
 .gear-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.25);
+  transform: scale(1.02);
 }
 @media (prefers-reduced-motion: reduce) {
-  .trophy-item img,
-  .gear-card {
-    transition: box-shadow 0.15s ease;
-  }
   .trophy-item:hover img,
   .gear-card:hover {
     transform: none;
@@ -740,28 +821,22 @@ dialog.gallery-modal::backdrop {
   grid-template-columns: repeat(auto-fill, minmax(min(384px, 100%), 1fr));
 }
 
-/* Cards as links (blog posts) — same hover lift as the Life cards,
-   site-wide. `.post-card` (PostCard.astro) is a div, not an <a>: it holds a
-   real tag-chip link inside it, and an <a> can't contain another <a>. */
+/* Cards as links (blog posts, prev/next nav) — same forward-scale hover
+   as the Life cards, site-wide. `.post-card` (PostCard.astro) is a div,
+   not an <a>: it holds a real tag-chip link inside it, and an <a> can't
+   contain another <a>. */
 a.ts-box,
 .post-card {
   display: block;
   color: inherit;
   text-decoration: none;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: transform 0.15s ease;
 }
 a.ts-box:hover,
 .post-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.25);
+  transform: scale(1.02);
 }
 @media (prefers-reduced-motion: reduce) {
-  a.ts-box,
-  .post-card {
-    transition: box-shadow 0.15s ease;
-  }
   a.ts-box:hover,
   .post-card:hover {
     transform: none;
@@ -792,10 +867,6 @@ a.ts-box:hover,
   position: absolute;
   inset: 0;
 }
-.post-card .ts-wrap {
-  position: relative;
-  z-index: 1;
-}
 /* Text content of a post card. Its own `gap` replaces the generic
    `.ts-box .ts-content > * + *` stacking margin (below) once .ts-content
    becomes a flex row for the has-cover layout — a plain block child would
@@ -803,11 +874,57 @@ a.ts-box:hover,
 .post-card-body {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  /* Title hugs the cover's top edge, date its bottom edge; the
+     description floats between. */
+  justify-content: space-between;
+  align-self: stretch;
+  gap: 0.5rem;
   /* Flex items default to min-width: auto, which refuses to shrink below
      the longest unbroken run of text — a long title would push the cover
      out of the row instead of wrapping. */
   min-width: 0;
+  /* The card is fixed-height (below); whatever doesn't fit is cut. */
+  overflow: hidden;
+}
+/* Fixed-layout cards: every card is the same height with the same slots,
+   no matter how long the text or how big the source image. Overlong text
+   truncates (title one line, description two, tags one row) instead of
+   growing the card. */
+.post-card {
+  height: calc(160px + 3rem);
+}
+.post-card .ts-content {
+  height: 100%;
+  align-items: stretch;
+}
+.post-card .ts-content .post-card-cover {
+  align-self: center;
+}
+.post-card .ts-header {
+  font-size: 1.3rem;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.post-card p.ts-text.is-secondary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+/* The fixed-height body clips whatever the clamps let through; keep the
+   title and date whole and let only the description give way, at line
+   granularity — otherwise a squeezed column slices glyphs in half. */
+.post-card .ts-header,
+.post-card .ts-text.is-description {
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .post-card p.ts-text.is-secondary {
+    -webkit-line-clamp: 1;
+  }
 }
 /* Cards with heroImage: cover on the right, text on the left. Cards
    without one render only .post-card-body, so .ts-content stays a plain
@@ -828,16 +945,19 @@ a.ts-box:hover,
 .post-card-cover {
   display: block;
   flex-shrink: 0;
-  width: 112px;
-  height: 112px;
+  width: 160px;
+  height: 160px;
   aspect-ratio: 1 / 1;
   border-radius: var(--ts-border-radius-element);
   object-fit: cover;
 }
 @media (max-width: 767px) {
   .post-card-cover {
-    width: 88px;
-    height: 88px;
+    width: 128px;
+    height: 128px;
+  }
+  .post-card {
+    height: calc(128px + 3rem);
   }
 }
 .ts-timeline {
@@ -863,23 +983,27 @@ a.ts-box:hover,
   border: 1px solid var(--ts-gray-300);
   color: var(--ts-gray-800);
   transition:
-    transform 0.12s ease,
     background-color 0.15s ease,
     color 0.15s ease,
-    box-shadow 0.15s ease;
+    transform 0.15s ease;
 }
 .social-icons > * .ts-icon {
   color: inherit;
 }
 .social-icons > *:hover {
   background: var(--ts-gray-200);
-  transform: translateY(-3px);
-  box-shadow: 0 5px 12px -3px rgba(0, 0, 0, 0.2);
+  /* Same forward-scale response as the cards; small circles need a
+     bigger factor to register. */
+  transform: scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .social-icons > *:hover {
+    transform: none;
+  }
 }
 .social-icons > *:active {
   background: var(--ts-gray-900);
   color: var(--ts-gray-50);
-  transform: translateY(-1px) scale(0.9);
 }
 .social-icons > *::after {
   content: attr(aria-label);
@@ -908,16 +1032,24 @@ a.ts-box:hover,
    `visibility` keeps the hidden button out of the keyboard tab order. */
 #back-to-top {
   position: fixed;
-  right: 1.5rem;
-  bottom: 1.5rem;
+  right: 2.25rem;
+  bottom: 2.25rem;
   z-index: 100;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
     opacity 0.2s ease,
-    visibility 0.2s;
+    visibility 0.2s,
+    transform 0.15s ease;
+}
+#back-to-top:hover {
+  transform: scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  #back-to-top:hover {
+    transform: none;
+  }
 }
 #back-to-top.is-shown {
   opacity: 1;
@@ -931,6 +1063,10 @@ a.ts-box:hover,
 }
 .post-hero {
   width: 100%;
+  /* Banner treatment: a fixed wide ratio, source image center-cropped —
+     any picture reads as a header strip instead of dictating page height. */
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
   border-radius: var(--ts-border-radius-element);
   margin-bottom: 2rem;
 }
@@ -941,6 +1077,10 @@ a.ts-box:hover,
 .post-body {
   display: grid;
   gap: 2rem;
+  /* minmax(0, …): grid items default to min-width auto, so one unbreakable
+     token in the prose (a long inline-code path) would set the column's
+     minimum past a phone viewport and shove every line off-screen. */
+  grid-template-columns: minmax(0, 1fr);
 }
 /* Source order is (content, then rail). order: -1 moves the rail first at
    every width: below 1024px that stacks the collapsed ToC above the
@@ -1021,6 +1161,10 @@ a.ts-box:hover,
 }
 .md-content h2 {
   font-size: 1.5em;
+  /* Section accent: a vertical bar in front of every h2, monochrome like
+     the rest of the site. */
+  border-inline-start: 0.25rem solid var(--ts-gray-800);
+  padding-inline-start: 0.6rem;
 }
 .md-content h3 {
   font-size: 1.25em;
@@ -1028,22 +1172,22 @@ a.ts-box:hover,
 .md-content h4 {
   font-size: 1.1em;
 }
-/* rehype-autolink-headings appends this `#` link to every heading (id from
-   rehype-slug). Hidden until the heading is hovered or the link itself is
-   keyboard-focused, so it doesn't clutter the read. */
-.md-content .heading-anchor {
-  margin-inline-start: 0.35em;
-  opacity: 0;
-  text-decoration: none;
+/* Post prose reads as justified blocks, same as the about faces'
+   .about-main p rule — even left and right edges. */
+.md-content p,
+.md-content li {
+  text-align: justify;
 }
-.md-content :is(h1, h2, h3, h4):hover .heading-anchor,
-.md-content .heading-anchor:focus-visible {
-  opacity: 0.6;
-}
+/* Prose links match the site-wide text-link rule: underline only on
+   hover / keyboard focus. */
 .md-content a {
   color: inherit;
-  text-decoration: underline;
+  text-decoration: none;
   text-underline-offset: 3px;
+}
+.md-content a:hover,
+.md-content a:focus-visible {
+  text-decoration: underline;
 }
 .md-content ul,
 .md-content ol {
@@ -1057,8 +1201,37 @@ a.ts-box:hover,
   padding-inline-start: 1em;
   color: var(--ts-gray-600);
 }
+/* GFM appends a ↩ back-reference link to every footnote; hidden — the
+   jump-back affordance is noise at this post length (owner call). */
+.md-content .data-footnote-backref {
+  display: none;
+}
+/* Content images open in the shared lightbox (ImageLightbox.astro);
+   linked images keep their link behavior. Pointer, not zoom-in — same
+   cursor policy as every other clickable image. */
+.md-content img:not(a img),
+.post-hero {
+  cursor: pointer;
+}
+/* Neither Tocas nor this sheet defined .sr-only, so markup relying on it
+   (GFM's footnote-section heading) rendered VISIBLY — a duplicate 註腳
+   heading under the authored one. Standard visually-hidden recipe: gone
+   from the screen, still announced by assistive tech. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 /* Inline code only — fenced blocks render as expressive-code frames (their
-   own <pre><code>), which style themselves and must stay untouched here. */
+   own <pre><code>), which style themselves and must stay untouched here.
+   (overflow-wrap comes from the .md-content safety-net rule above and
+   inherits into inline code.) */
 .md-content :not(pre) > code {
   background: var(--ts-gray-100);
   border-radius: var(--ts-border-radius-secondary);
@@ -1105,32 +1278,187 @@ a.ts-box:hover,
   margin-top: 3rem;
 }
 
-/* Search dialog (Pagefind): dialog.ts-modal already supplies the bordered
-   box and dimmed ::backdrop (see Cards.astro's trophy-modal), so only the
-   content padding and the result rows are site-specific here. */
-.search-dialog .content {
-  padding: 1.25rem;
+/* Search panel (Pagefind): an Apple-style header extension. The <dialog>
+   sits INSIDE the sticky header (Navbar.astro) and opens non-modally; the
+   header trades its glass for solid page background while open (rule
+   below) and the panel is the same solid, so the two read as ONE opaque
+   slab — the header simply looks taller. No radius, no shadow: the frosted
+   veil below is the only separation, like apple.com's search. #search-veil
+   also click-guards the page at z 99, one notch under .site-header's 100. */
+.search-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  /* Dim-only first: the pale frosted wash needs color-mix; browsers
+     without it land on the plain dim. */
+  background: rgb(0 0 0 / 0.35);
+  background: color-mix(
+    in srgb,
+    var(--ts-page-background-default) 30%,
+    transparent
+  );
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .search-veil {
+    /* Without blur the pale wash would read as a rendering glitch. */
+    background: rgb(0 0 0 / 0.35);
+  }
+}
+.search-veil[hidden] {
+  display: none;
+}
+/* One slab: while the panel is open the header drops its translucency so
+   no seam shows where the panel begins. */
+:root:has(dialog.search-dialog[open]) .site-header {
+  background: var(--ts-page-background-default);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+dialog.search-dialog {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  padding: 0.75rem 0 2.5rem;
+  background: var(--ts-page-background-default);
+}
+.search-inner {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  dialog.search-dialog[open] {
+    animation: search-drop 0.18s ease-out;
+  }
+  .search-veil:not([hidden]) {
+    animation: veil-fade 0.18s ease-out;
+  }
+  /* Closing gets its own keyframes ending at opacity 0 (reversing the
+     open ones would stop at their 0.4 starting opacity and leave a ghost
+     of the query text until animationend); the [open]/[hidden] attributes
+     only flip after animationend (see Search.astro). */
+  dialog.search-dialog[open].is-closing {
+    animation: search-close 0.16s ease-in forwards;
+  }
+  .search-veil:not([hidden]).is-closing {
+    animation: veil-hide 0.16s ease-in forwards;
+  }
+  @keyframes search-drop {
+    from {
+      transform: translateY(-0.5rem);
+      opacity: 0.4;
+    }
+  }
+  @keyframes veil-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes search-close {
+    to {
+      transform: translateY(-0.5rem);
+      opacity: 0;
+    }
+  }
+  @keyframes veil-hide {
+    to {
+      opacity: 0;
+    }
+  }
+}
+/* Borderless Apple-style query row: the solid panel IS the field, so the
+   input carries no box of its own. */
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.search-row > .ts-icon {
+  font-size: 1.3rem;
+  color: var(--ts-gray-500);
+}
+.search-row input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: inherit;
+  outline: none;
+}
+.search-row input::placeholder {
+  color: var(--ts-gray-500);
+}
+/* The native WebKit search-cancel X ignores the site's icon font — hide it
+   in favor of the project-styled clear button. */
+.search-dialog input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+.search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ts-gray-500);
+  cursor: pointer;
+  font-size: 1rem;
+}
+.search-clear:hover {
+  background: var(--ts-page-background-tertiary);
+  color: var(--ts-gray-800);
+}
+.search-clear[hidden] {
+  display: none;
 }
 .search-results {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  max-height: 60vh;
+  /* The panel starts below the header, so leave it headroom. */
+  max-height: 55vh;
   overflow-y: auto;
+  /* An <ol> for semantics only — no 1./2./3. markers. The start padding
+     lines the row text (1.85rem + the row's own 0.5rem) up with the query
+     text above (the magnifier glyph renders ~1.55rem wide + 0.8rem gap),
+     like apple.com. Measured, not derived — adjust if the icon changes. */
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.85rem;
+  /* Belt for stray row overflow inside this scroll container: on
+     Windows-style classic scrollbars it would paint a permanent
+     horizontal bar. */
+  overflow-x: hidden;
 }
 .search-results li a {
   display: block;
   padding: 0.5rem;
-  margin-inline: -0.5rem;
   border-radius: var(--ts-border-radius-container);
   color: inherit;
   text-decoration: none;
 }
 .search-results li a:hover {
   background: var(--ts-page-background-tertiary);
+}
+.search-results li.search-empty {
+  color: var(--ts-gray-500);
+  padding: 0.25rem 0.5rem;
 }
 .search-results li strong {
   display: block;
@@ -1144,6 +1472,22 @@ a.ts-box:hover,
 /* ---- Medium-referenced reading experience (post pages) ---------------- */
 /* A big, tight title; an author meta row under it; larger body type in a
    ~660px measure (the 220px left rail + gap already sets the column). */
+/* Quiet way back to the list, above the title. */
+.post-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  color: var(--ts-gray-600);
+  font-size: var(--ts-font-size-14px);
+  text-decoration: none;
+}
+.post-back:hover,
+.post-back:focus-visible {
+  color: var(--ts-gray-800);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .post-title {
   font-size: 2.5rem;
   line-height: 1.2;

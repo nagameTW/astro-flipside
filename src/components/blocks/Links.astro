@@ -1,40 +1,27 @@
 ---
 // A plain list of links with an optional trailing note — e.g. a talk or
-// publication. No section currently uses this (added for later content);
-// external http(s) links open in a new tab.
+// publication. External http(s) links open in a new tab. Shell, heading,
+// and empty-guard live in Section.astro.
 interface Props {
-  title?: string;
   links: { label: string; url: string; note?: string }[];
 }
-const { title, links } = Astro.props;
+const { links } = Astro.props;
 const isExternal = (u: string) => u.startsWith("http");
 ---
 
-{
-  links.length > 0 && (
-    <section class="ts-box">
-      <div class="ts-content">
-        {title && (
-          <h2 class="ts-header is-large is-heavy">
-            {title}
-            <span class="ts-divider" />
-          </h2>
-        )}
-        <ul class="links-list">
-          {links.map((l) => (
-            <li>
-              <a
-                href={l.url}
-                target={isExternal(l.url) ? "_blank" : undefined}
-                rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
-              >
-                {l.label}
-              </a>
-              {l.note && <span class="ts-text is-secondary">{l.note}</span>}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  )
-}
+<ul class="links-list">
+  {
+    links.map((l) => (
+      <li>
+        <a
+          href={l.url}
+          target={isExternal(l.url) ? "_blank" : undefined}
+          rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
+        >
+          {l.label}
+        </a>
+        {l.note && <span class="ts-text is-secondary">{l.note}</span>}
+      </li>
+    ))
+  }
+</ul>

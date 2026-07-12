@@ -31,11 +31,20 @@ export type Highlight = {
   note?: string;
 };
 
+// Photo: Baruk Granda, https://unsplash.com/photos/OHLRskxOpjI (Unsplash
+// License — free to use, modify, and redistribute; see
+// https://unsplash.com/license). On-stage silhouette, no visible face —
+// the musician identity, so it also fronts blog posts (BlogPost.astro).
+/** Work-face avatar (the Life face keeps data/life.ts's AVATAR). */
+export const AVATAR_WORK = "/avatar.jpg";
+
 /** A released work — repurposed from a certification-style card. */
 export type Discography = {
   name: string;
   issuer: string;
   year: string;
+  /** Cover art (public/ path or full URL); omit for a placeholder card. */
+  img?: string;
 };
 
 // Dates read `YYYY.MM`, kept short: the timeline renders them in a
@@ -119,10 +128,30 @@ export const HIGHLIGHTS: Highlight[] = [
   },
 ];
 
+// Cover credits (Unsplash License — free to use and modify; no third-party
+// brand or face visible):
+// - tide.jpg:  Mamun Srizon, https://unsplash.com/photos/pSPoLYF_AAA
+// - night.jpg: Tsuyoshi Kozu, https://unsplash.com/photos/luAFESue6Ws
+// - dawn.jpg:  Alan Jones, https://unsplash.com/photos/OQsxdghBKrU
 export const DISCOGRAPHY: Discography[] = [
-  { name: "《潮汐圖》", issuer: "浪聲唱片", year: "2025" },
-  { name: "《夜行動物園》", issuer: "浪聲唱片", year: "2023" },
-  { name: "《拂曉前》EP", issuer: "拂曉音樂工作室", year: "2020" },
+  {
+    name: "《潮汐圖》",
+    issuer: "浪聲唱片",
+    year: "2025",
+    img: "/discography/tide.jpg",
+  },
+  {
+    name: "《夜行動物園》",
+    issuer: "浪聲唱片",
+    year: "2023",
+    img: "/discography/night.jpg",
+  },
+  {
+    name: "《拂曉前》EP",
+    issuer: "拂曉音樂工作室",
+    year: "2020",
+    img: "/discography/dawn.jpg",
+  },
 ];
 
 // --- Section-block wiring for AboutProfessional -----------------------
@@ -162,7 +191,7 @@ const HIGHLIGHTS_ENTRIES: HighlightEntry[] = HIGHLIGHTS.map((h) => ({
 const DISCOGRAPHY_CARDS: CardEntry[] = DISCOGRAPHY.map((d) => ({
   title: d.name,
   subtitle: `${d.issuer} · ${d.year}`,
-  img: "",
+  img: d.img ?? "",
 }));
 
 // Quick-facts strip; playful values are deliberate (this is placeholder data).
@@ -176,7 +205,7 @@ const STATS_TILES: { value: string; label: string }[] = [
 const LINKS: { label: string; url: string; note?: string }[] = [
   {
     label: "浪聲唱片｜藝人頁面",
-    url: "https://example.com/labels/wave-sound/lu-zhiyao",
+    url: "https://example.com/labels/wave-sound/pai-an",
     note: "官方資料",
   },
   {

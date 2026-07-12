@@ -1,8 +1,12 @@
 import type { Section, CardEntry } from "@/data/sections";
 import { TROPHIES } from "@/data/trophies";
 
-/** Shared by both faces. */
-export const AVATAR = "/avatar.svg";
+// Photo: Nikolett Emmert, https://unsplash.com/photos/PR7J4fH6EGU (Unsplash
+// License — free to use, modify, and redistribute; see
+// https://unsplash.com/license). A cat, matching the persona's interests —
+// the no-visible-face rule only binds HUMAN faces.
+/** Life-face avatar (the Work face has its own, see data/about.ts). */
+export const AVATAR = "/avatar-life.jpg";
 
 // Casual self-intro — obviously-fake demo persona.
 const INTRO = [
@@ -13,7 +17,7 @@ const INTRO = [
 
 // Interests as tags (like the Work face's Skills).
 const INTERESTS = [
-  "手搖茶",
+  "手搖飲",
   "魔術",
   "籃球",
   "老電影",
@@ -24,16 +28,20 @@ const INTERESTS = [
 ];
 
 // Placeholder gear cards, mic first then monitoring and instrument.
-const GEAR: { label: string; item: string; icon: string }[] = [
+// `href` is optional — with it the whole card links out (e.g. to a store
+// page); without it the card is a plain tile.
+const GEAR: { label: string; item: string; icon: string; href?: string }[] = [
   {
     label: "麥克風",
     item: "聲學 AT-01 麥克風",
     icon: "is-microphone-icon",
+    href: "https://example.com/shop/at-01",
   },
   {
     label: "監聽耳機",
     item: "聲學 IH-02 監聽耳機",
     icon: "is-headphones-icon",
+    href: "https://example.com/shop/ih-02",
   },
   {
     label: "主奏吉他",
@@ -62,8 +70,13 @@ export const PERSONAL_SECTIONS: Section[] = [
   { type: "cards", title: "人生成就", cards: TROPHY_CARDS },
   {
     type: "kv",
-    title: "裝備",
-    rows: GEAR.map((g) => ({ label: g.label, value: g.item, icon: g.icon })),
+    title: "器材",
+    rows: GEAR.map((g) => ({
+      label: g.label,
+      value: g.item,
+      icon: g.icon,
+      href: g.href,
+    })),
   },
   { type: "markdown", title: "其他", body: MISC_BODY },
 ];
