@@ -27,8 +27,8 @@ const INTERESTS = [
 ];
 
 // Placeholder gear cards, mic first then monitoring and instrument.
-// `href` is optional — with it the item name links out (e.g. to a store
-// page); without it the name renders as plain text.
+// `href` is optional — with it the whole card links out (e.g. to a store
+// page); without it the card is a plain tile.
 const GEAR: { label: string; item: string; icon: string; href?: string }[] = [
   {
     label: "麥克風",

@@ -694,6 +694,11 @@ dialog.gallery-modal::backdrop {
   border-radius: var(--ts-border-radius-container);
   background: var(--ts-page-background-tertiary);
 }
+/* A row with href renders the whole card as the link (Kv.astro). */
+a.gear-card {
+  color: inherit;
+  text-decoration: none;
+}
 .gear-card > .ts-icon {
   font-size: 1.25rem;
   color: var(--ts-gray-600);
