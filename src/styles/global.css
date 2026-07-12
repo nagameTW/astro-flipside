@@ -535,12 +535,13 @@
   font: inherit;
   color: inherit;
   text-align: inherit;
-  cursor: zoom-in;
+  /* Site-wide policy: every clickable image reads as a plain pointer
+     (owner call 2026-07-12) — no zoom-in cursors anywhere. */
+  cursor: pointer;
 }
 /* Cards.astro also renders this shape as a plain outbound link (a `url`
-   card) — same layout, but it navigates rather than zooms. */
+   card) — same layout, it just navigates instead of zooming. */
 .trophy-item.is-link {
-  cursor: pointer;
   text-decoration: none;
 }
 .trophy-grid img,
@@ -676,9 +677,6 @@ dialog.gallery-modal::backdrop {
 .gallery-item {
   break-inside: avoid;
   margin-bottom: 1rem;
-  /* Unlike the trophy wall's zoom-in, a gallery tile reads as a clickable
-     card (Pinterest-style), so it gets the plain pointer. */
-  cursor: pointer;
   /* The hover overlay is clipped by the button so it inherits the image's
      rounded corners. */
   position: relative;
@@ -1204,10 +1202,11 @@ a.ts-box:hover,
   display: none;
 }
 /* Content images open in the shared lightbox (ImageLightbox.astro);
-   linked images keep their link behavior and skip the zoom cursor. */
+   linked images keep their link behavior. Pointer, not zoom-in — same
+   cursor policy as every other clickable image. */
 .md-content img:not(a img),
 .post-hero {
-  cursor: zoom-in;
+  cursor: pointer;
 }
 /* Neither Tocas nor this sheet defined .sr-only, so markup relying on it
    (GFM's footnote-section heading) rendered VISIBLY — a duplicate 註腳
