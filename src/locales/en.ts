@@ -30,6 +30,7 @@ const en = {
   "pagination.next": "Next page",
   "search.open": "Search",
   "search.placeholder": "Search posts…",
+  "search.clear": "Clear search",
   "notFound.message": "This page does not exist.",
   "notFound.home": "Back to home",
   "life.copied": "Copied!",

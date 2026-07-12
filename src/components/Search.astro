@@ -1,26 +1,45 @@
 ---
-// Search.astro — Pagefind-powered site search. Reuses Tocas's own
-// dialog.ts-modal + .content pattern (see Cards.astro's trophy-modal) rather
-// than hand-rolling a bordered/dimmed dialog: `is-big` is Tocas's built-in
-// 780px modal-width preset, so `.search-dialog` below only styles content
-// padding, the pill-shaped input, and the result rows.
+// Search.astro — Pagefind-powered site search, styled as an Apple-style
+// header extension: the visible part is a full-width frosted strip pinned
+// to the top edge (matching .site-header's glass recipe) with the query
+// field and results in a centered column. It stays a native <dialog> with
+// Tocas's ts-modal class because the invisible dialog element still covers
+// the whole viewport — that is what makes Esc and the click-outside handler
+// below work without any custom focus/inert bookkeeping.
 import { t } from "@/locales";
 ---
 
 <dialog
   id="search-dialog"
-  class="ts-modal is-big search-dialog"
+  class="ts-modal search-dialog"
   aria-label={t["search.open"]}
 >
   <div class="content">
-    <input
-      id="search-input"
-      class="ts-input"
-      type="search"
-      autofocus
-      placeholder={t["search.placeholder"]}
-    />
-    <ol id="search-results" class="search-results"></ol>
+    <div class="ts-container">
+      <div class="search-inner">
+        {/* Wrapper form so Tocas's is-large height/font presets apply; it
+            is also the positioning context for the project-styled clear
+            button (the native WebKit cancel X is hidden in global.css). */}
+        <div class="ts-input is-large search-field">
+          <input
+            id="search-input"
+            type="search"
+            autofocus
+            placeholder={t["search.placeholder"]}
+          />
+          <button
+            id="search-clear"
+            class="search-clear"
+            type="button"
+            aria-label={t["search.clear"]}
+            hidden
+          >
+            <span class="ts-icon is-xmark-icon"></span>
+          </button>
+        </div>
+        <ol id="search-results" class="search-results"></ol>
+      </div>
+    </div>
   </div>
 </dialog>
 
@@ -59,6 +78,13 @@ import { t } from "@/locales";
   const dialog = document.getElementById("search-dialog") as HTMLDialogElement;
   const input = document.getElementById("search-input") as HTMLInputElement;
   const list = document.getElementById("search-results")!;
+  const clear = document.getElementById("search-clear") as HTMLButtonElement;
+  clear.addEventListener("click", () => {
+    input.value = "";
+    clear.hidden = true;
+    list.innerHTML = "";
+    input.focus();
+  });
   // Pagefind's runtime search API is a generated post-build asset, not an
   // npm module — it ships no types, so `any` is the honest type here.
   let pagefind: any;
@@ -88,6 +114,7 @@ import { t } from "@/locales";
       );
     });
   input.addEventListener("input", async () => {
+    clear.hidden = input.value === "";
     if (!pagefind) return;
     const { results } = await pagefind.search(input.value);
     const top = await Promise.all(

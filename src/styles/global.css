@@ -1150,24 +1150,94 @@ a.ts-box:hover,
   margin-top: 3rem;
 }
 
-/* Search dialog (Pagefind): dialog.ts-modal already supplies the bordered
-   box and dimmed ::backdrop (see Cards.astro's trophy-modal), so only the
-   content padding and the result rows are site-specific here. */
-.search-dialog .content {
-  padding: 1.25rem;
+/* Search panel (Pagefind): an Apple-style header extension. The dialog
+   (ts-modal) still covers the whole viewport — that is what keeps Esc and
+   the click-outside close working — but the visible part is a full-width
+   strip pinned to the top edge, sharing .site-header's glass recipe so it
+   reads as the header extending downward over the dimmed page. */
+dialog.search-dialog {
+  align-items: flex-start;
+  padding: 0;
+}
+dialog.search-dialog > .content {
+  width: 100%;
+  margin: 0;
+  border-radius: 0 0 var(--ts-border-radius-container)
+    var(--ts-border-radius-container);
+  padding-block: 1.1rem 1.25rem;
+  background: var(--ts-page-background-default);
+  background: color-mix(
+    in srgb,
+    var(--ts-page-background-default) 70%,
+    transparent
+  );
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+}
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  dialog.search-dialog > .content {
+    background: var(--ts-page-background-default);
+  }
+}
+.search-inner {
+  width: min(44rem, 100%);
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
-/* Pill-shaped query field: Tocas inputs read their corner rounding from
-   --border-radius, but cover the bare element too since the class sits
-   directly on the <input>. Extra inline padding keeps the text off the
-   rounded ends. */
-.search-dialog .ts-input,
-.search-dialog .ts-input :where(input) {
+@media (prefers-reduced-motion: no-preference) {
+  dialog.search-dialog[open] > .content {
+    animation: search-drop 0.18s ease-out;
+  }
+  @keyframes search-drop {
+    from {
+      transform: translateY(-0.5rem);
+      opacity: 0.4;
+    }
+  }
+}
+/* Pill-shaped query field: the wrapper publishes --border-radius for
+   Tocas's own input rules; extra end padding clears the floating clear
+   button. */
+.search-dialog .ts-input {
   --border-radius: 9999px;
+}
+.search-dialog .ts-input :where(input) {
   border-radius: 9999px;
-  padding-inline: 1.1rem;
+  padding-inline: 1.1rem 2.6rem;
+}
+/* The native WebKit search-cancel X ignores the site's icon font — hide it
+   in favor of the project-styled clear button. */
+.search-dialog input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+.search-clear {
+  position: absolute;
+  inset-inline-end: 0.45rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ts-gray-500);
+  cursor: pointer;
+}
+.search-clear:hover {
+  background: var(--ts-page-background-tertiary);
+  color: var(--ts-gray-800);
+}
+.search-clear[hidden] {
+  display: none;
 }
 .search-results {
   display: flex;
