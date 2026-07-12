@@ -5,9 +5,12 @@ import { resolveImg, url } from "@/utils/url";
 
 interface Props {
   post: CollectionEntry<"blog">;
+  /** First card above the fold: its cover is the list page's LCP, so it
+   *  must not lazy-load. */
+  eager?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, eager = false } = Astro.props;
 ---
 
 {
@@ -42,7 +45,8 @@ const { post } = Astro.props;
           class="post-card-cover"
           src={resolveImg(post.data.heroImage)}
           alt=""
-          loading="lazy"
+          loading={eager ? "eager" : "lazy"}
+          fetchpriority={eager ? "high" : undefined}
         />
       )
     }

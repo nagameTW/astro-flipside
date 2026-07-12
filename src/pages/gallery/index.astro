@@ -3,6 +3,18 @@ import Layout from "@/layouts/Layout.astro";
 import { GALLERY } from "@/data/gallery";
 import { t, fill } from "@/locales";
 import { resolveImg } from "@/utils/url";
+import sharp from "sharp";
+
+// Width/height attributes keep the masonry from reflowing as photos load
+// (this page measured CLS 0.188 without them). Local files are measured
+// once at build; remote URLs are skipped and keep their natural flow.
+const dims = new Map<string, { width: number; height: number }>();
+for (const photo of GALLERY) {
+  if (/^https?:\/\//.test(photo.src)) continue;
+  const meta = await sharp(`public${photo.src}`).metadata();
+  if (meta.width && meta.height)
+    dims.set(photo.src, { width: meta.width, height: meta.height });
+}
 // The masonry carries data-pagefind-body: captions and alt text are unique
 // content, so the gallery joins the search index (see index.astro's note;
 // the lightbox copies below the masonry stay out of it).
@@ -30,7 +42,13 @@ import { resolveImg } from "@/utils/url";
             class="gallery-item"
             data-modal={`gallery-modal-${i}`}
           >
-            <img src={resolveImg(photo.src)} alt={photo.alt} loading="lazy" />
+            <img
+              src={resolveImg(photo.src)}
+              alt={photo.alt}
+              loading={i < 2 ? "eager" : "lazy"}
+              width={dims.get(photo.src)?.width}
+              height={dims.get(photo.src)?.height}
+            />
             {photo.caption && (
               <div class="gallery-caption ts-text is-tiny">
                 {photo.caption}

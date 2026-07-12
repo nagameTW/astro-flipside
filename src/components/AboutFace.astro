@@ -13,6 +13,9 @@ interface Props {
   /** Ship the face hidden + inert (statically, so the non-default face
    *  never flashes before JS runs). */
   hidden?: boolean;
+  /** The default (visible) face's avatar is above the fold — fetch it at
+   *  high priority; the hidden face's can wait. */
+  priority?: boolean;
   avatar: string;
   name: string;
   /** Subtitle line. Omitted → an invisible placeholder keeps both cards'
@@ -22,8 +25,16 @@ interface Props {
   socials: { name: string; icon: string; url?: string; copy?: string }[];
   sections: SectionData[];
 }
-const { face, hidden = false, avatar, name, headline, socials, sections } =
-  Astro.props;
+const {
+  face,
+  hidden = false,
+  priority = false,
+  avatar,
+  name,
+  headline,
+  socials,
+  sections,
+} = Astro.props;
 const isExternal = (href?: string) => !!href && href.startsWith("http");
 ---
 
@@ -34,7 +45,14 @@ const isExternal = (href?: string) => !!href && href.startsWith("http");
 >
   <aside class="about-aside ts-box about-card">
     <div class="ts-content">
-      <img class="about-avatar" src={url(avatar)} width="136" height="136" alt="" />
+      <img
+        class="about-avatar"
+        src={url(avatar)}
+        width="136"
+        height="136"
+        alt=""
+        fetchpriority={priority ? "high" : undefined}
+      />
       <div class="ts-header is-large is-heavy has-top-spaced">{name}</div>
       {
         headline ? (

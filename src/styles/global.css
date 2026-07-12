@@ -413,7 +413,10 @@
 /* The whole button switches; the labels only signal state — active dark,
    idle faint. */
 .face-toggle .face-option {
-  color: var(--ts-gray-400);
+  /* gray-600, not 400: the inactive label is still text and sits on the
+     card's #f2f2f2, where gray-500 only reaches 4.05:1 — gray-600 clears
+     the 4.5:1 floor (measured 6.2:1). */
+  color: var(--ts-gray-600);
   transition: color 0.15s ease;
 }
 .face-toggle .face-option.is-active {
@@ -552,6 +555,9 @@
 .gallery-item img {
   display: block;
   width: 100%;
+  /* Paired with the width/height attributes the markup carries, height
+     auto keeps the reserved box at the photo's real ratio (no CLS). */
+  height: auto;
   border-radius: var(--ts-border-radius-element);
 }
 /* Cards-block media (trophies, discography) crops to one fixed ratio —
@@ -761,6 +767,12 @@ a.gear-card {
 }
 .gear-label {
   font-size: var(--ts-font-size-tiny);
+}
+/* is-secondary's gray-500 lands at 4.05:1 on the card's tertiary
+   background; one step darker clears the 4.5:1 floor. Three classes to
+   genuinely out-specify Tocas's .ts-text.is-secondary (0,2,0). */
+.gear-label.ts-text.is-secondary {
+  color: var(--ts-gray-600);
 }
 
 /* Links block: a plain row list, no bullets — label link + optional note. */
