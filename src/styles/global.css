@@ -676,15 +676,49 @@ a.ts-box:hover,
   position: relative;
   z-index: 1;
 }
-/* Cover image: optional, only when a post sets heroImage. Sits above
-   .ts-content as a sibling, still inside .ts-box (position: relative,
-   overflow: hidden), so .post-card-link::after's stretched-link overlay
-   and the box's own corner radius both keep covering/clipping it. */
+/* Text content of a post card. Its own `gap` replaces the generic
+   `.ts-box .ts-content > * + *` stacking margin (below) once .ts-content
+   becomes a flex row for the has-cover layout — a plain block child would
+   have inherited a stray `margin-top` from that generic rule instead. */
+.post-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  /* Flex items default to min-width: auto, which refuses to shrink below
+     the longest unbroken run of text — a long title would push the cover
+     out of the row instead of wrapping. */
+  min-width: 0;
+}
+/* Cards with heroImage: cover on the right, text on the left. Cards
+   without one render only .post-card-body, so .ts-content stays a plain
+   block and needs no override. */
+.post-card.has-cover .ts-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+/* .ts-content now lays its two children out with `gap`; cancel the
+   generic margin-top so it doesn't also nudge the cover down. */
+.post-card.has-cover .ts-content > * + * {
+  margin-top: 0;
+}
+/* Cover image: optional, only when a post sets heroImage. A fixed-size
+   square thumbnail, not the old edge-to-edge banner — see .has-cover
+   above for the row layout it sits in. */
 .post-card-cover {
   display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  width: 112px;
+  height: 112px;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.4rem;
   object-fit: cover;
+}
+@media (max-width: 767px) {
+  .post-card-cover {
+    width: 88px;
+    height: 88px;
+  }
 }
 .ts-timeline {
   --ts-timeline-content-distance: 1.5rem;
