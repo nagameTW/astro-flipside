@@ -6,34 +6,34 @@ export const AVATAR = "/avatar.svg";
 
 // Casual self-intro — obviously-fake demo persona.
 const INTRO = [
-  "The person behind the keyboard once Acme Corp clocks out for the day.",
-  "Into games, music, and cooking experiments that don't always work out.",
-  "Still looking for a hobby that sticks for more than a month.",
+  "範例科技下班之後，鍵盤後面的那個人。",
+  "喜歡玩遊戲、聽音樂，還有偶爾不太成功的下廚實驗。",
+  "還在尋找一個能撐過一個月的興趣。",
 ];
 
 // Interests as tags (like the Work face's Skills).
 const INTERESTS = [
-  "Gaming",
-  "Music",
-  "Cooking",
-  "Photography",
-  "Board Games",
-  "Hiking",
-  "Anime",
-  "Reading",
+  "遊戲",
+  "音樂",
+  "烹飪",
+  "攝影",
+  "桌遊",
+  "健行",
+  "動漫",
+  "閱讀",
 ];
 
 // Placeholder gear cards, machine first then peripherals.
 const GEAR: { label: string; item: string; icon: string }[] = [
   {
-    label: "Processor",
-    item: "Generic 8-core CPU",
+    label: "處理器",
+    item: "通用 8 核心 CPU",
     icon: "is-microchip-icon",
   },
-  { label: "Memory", item: "32 GB RAM", icon: "is-memory-icon" },
+  { label: "記憶體", item: "32 GB RAM", icon: "is-memory-icon" },
   {
-    label: "Keyboard",
-    item: "Mechanical, tactile switches",
+    label: "鍵盤",
+    item: "機械軸體，觸感軸",
     icon: "is-keyboard-icon",
   },
 ];
@@ -44,22 +44,22 @@ const TROPHY_CARDS: CardEntry[] = TROPHIES.map((trophy) => ({
 }));
 
 // Freeform catch-all — demonstrates the markdown block (list + bold text).
-const MISC_BODY = `Sometimes there's no clean block for what I want to say — that's what this one is for.
+const MISC_BODY = `有些話沒有適合的區塊可以放，這一區就是留給那些內容的。
 
-**Currently tinkering with:**
+**最近在玩的東西：**
 
-- A weekend robotics side-quest
-- Learning to bake sourdough (badly)
-- Rewatching a favorite show for the third time`;
+- 週末的機器人小專案
+- 學做酸種麵包（做得不太好）
+- 第三次重看同一部喜歡的影集`;
 
 export const PERSONAL_SECTIONS: Section[] = [
-  { type: "text", title: "About", paragraphs: INTRO },
-  { type: "chips", title: "Interests", items: INTERESTS },
-  { type: "cards", title: "Highlights", cards: TROPHY_CARDS },
+  { type: "text", title: "關於", paragraphs: INTRO },
+  { type: "chips", title: "興趣", items: INTERESTS },
+  { type: "cards", title: "戰績", cards: TROPHY_CARDS },
   {
     type: "kv",
-    title: "Gear",
+    title: "裝備",
     rows: GEAR.map((g) => ({ label: g.label, value: g.item, icon: g.icon })),
   },
-  { type: "markdown", title: "Anything Else", body: MISC_BODY },
+  { type: "markdown", title: "其他", body: MISC_BODY },
 ];
