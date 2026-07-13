@@ -595,14 +595,23 @@ html.lenis body {
   /* Paired with the width/height attributes the markup carries, height
      auto keeps the reserved box at the photo's real ratio (no CLS). */
   height: auto;
+}
+.gallery-item img {
   border-radius: var(--ts-border-radius-element);
 }
-/* Cards-block media (trophies, discography) crops to one fixed ratio —
-   the same 16:9 the .trophy-empty placeholder uses — so every card in the
-   grid is the same size. The gallery keeps natural ratios; its masonry
-   depends on them. */
-.trophy-grid img {
+/* Cards-block media (trophies, discography) sits in a fixed 16:9 frame that
+   CLIPS: the frame owns the ratio + rounded corners, and the image fills it,
+   so the shared hover-zoom above stays inside the frame — the same
+   zoom-within-frame the blog/project covers use, rather than the whole
+   rounded image scaling up. Same 16:9 the .trophy-empty placeholder uses, so
+   every card in the grid is one size; the gallery keeps natural ratios. */
+.trophy-media {
+  overflow: hidden;
+  border-radius: var(--ts-border-radius-element);
   aspect-ratio: 16 / 9;
+}
+.trophy-grid img {
+  height: 100%;
   object-fit: cover;
 }
 /* Any open modal locks the page behind it (native <dialog> doesn't). The
@@ -713,8 +722,8 @@ dialog.gallery-modal::backdrop {
 }
 /* Placeholder card while the owner's screenshots are pending. */
 .trophy-empty {
-  aspect-ratio: 16 / 9;
-  border-radius: var(--ts-border-radius-element);
+  width: 100%;
+  height: 100%;
   background: var(--ts-gray-100);
 }
 
@@ -844,20 +853,17 @@ a.gear-card {
   text-decoration: underline;
 }
 
-/* Hover feedback shared across the Life cards — a slight forward scale,
-   nothing else: no shadow, no tint (site-wide flat style, owner call
-   2026-07-12). (Gallery tiles opt out — their hover response is the
-   Pinterest scrim alone.) */
-.trophy-item img,
+/* Life gear cards (label/value tiles, no image) keep their own slight
+   forward scale — flat, no shadow or tint. The card IMAGES (.trophy-item
+   img) instead share the site-wide 1.06 image hover-zoom above, so every
+   image lifts the same amount. */
 .gear-card {
   transition: transform 0.15s ease;
 }
-.trophy-item:hover img,
 .gear-card:hover {
   transform: scale(1.02);
 }
 @media (prefers-reduced-motion: reduce) {
-  .trophy-item:hover img,
   .gear-card:hover {
     transform: none;
   }
@@ -978,30 +984,45 @@ a.gear-card {
   overflow: hidden;
   border-radius: var(--ts-border-radius-element);
 }
-/* Cover fill + hover-zoom, shared by blog rows and project blocks — both
-   are whole-block links with an overflow-hidden cover wrap; only the wrap
-   sizes differ (.post-row-cover-wrap vs .project-item-cover). The
-   underline half of this hover language is shared separately via .u-line. */
+/* Cover fill for the fixed-size blog/project wraps. */
 .post-row-cover,
 .project-item-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+/* One image hover-zoom, site-wide: blog + project covers, the homepage
+   gallery strip, and the about-page card images all lift the same 1.06 on
+   hover. Each sits in an overflow-hidden wrap so the zoom clips. The gallery
+   PAGE opts out — its hover response is the Pinterest scrim alone (one effect
+   per image; stacking a zoom on the scrim reads as noise). The title
+   underline half of the blog/project hover is shared separately via .u-line. */
+.post-row-cover,
+.project-item-cover img,
+.landing-photo img,
+.trophy-item img {
   transition: transform 0.35s ease;
 }
 .post-row-main:hover .post-row-cover,
 .post-row-main:focus-visible .post-row-cover,
 .project-item:hover .project-item-cover img,
-.project-item:focus-visible .project-item-cover img {
+.project-item:focus-visible .project-item-cover img,
+.landing-photo:hover img,
+.trophy-item:hover img,
+.trophy-item:focus-visible img {
   transform: scale(1.06);
 }
 @media (prefers-reduced-motion: reduce) {
   .post-row-cover,
-  .project-item-cover img {
+  .project-item-cover img,
+  .landing-photo img,
+  .trophy-item img {
     transition: none;
   }
   .post-row-main:hover .post-row-cover,
-  .project-item:hover .project-item-cover img {
+  .project-item:hover .project-item-cover img,
+  .landing-photo:hover img,
+  .trophy-item:hover img {
     transform: none;
   }
 }

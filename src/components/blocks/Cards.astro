@@ -27,16 +27,20 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
 <div class="trophy-grid">
   {
     cards.map((c, i) => {
-      const media = c.img ? (
-        <SmartImage
-          src={c.img}
-          alt=""
-          loading="lazy"
-          widths={[400, 800]}
-          sizes="(max-width: 767px) 94vw, 400px"
-        />
-      ) : (
-        <div class="trophy-empty" />
+      const media = (
+        <div class="trophy-media">
+          {c.img ? (
+            <SmartImage
+              src={c.img}
+              alt=""
+              loading="lazy"
+              widths={[400, 800]}
+              sizes="(max-width: 767px) 94vw, 400px"
+            />
+          ) : (
+            <div class="trophy-empty" />
+          )}
+        </div>
       );
       const caption = (
         <>
