@@ -1560,8 +1560,11 @@ dialog.search-dialog {
 .landing-hero {
   position: relative;
   overflow: hidden;
-  border-radius: var(--ts-border-radius-container);
-  min-height: 24rem;
+  /* Full-bleed: pull out of the centered container to span the viewport.
+     The scrollbar-width overshoot of 100vw is swallowed by body's
+     overflow-x: clip (see the body rule up top). */
+  margin-inline: calc(50% - 50vw);
+  min-height: 56vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1618,7 +1621,7 @@ dialog.search-dialog {
 }
 @media (max-width: 767px) {
   .landing-hero {
-    min-height: 18rem;
+    min-height: 46vh;
   }
   .landing-hero-text {
     padding: 2.5rem 1rem;
