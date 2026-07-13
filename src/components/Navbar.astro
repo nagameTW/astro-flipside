@@ -17,7 +17,7 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="site-header" transition:persist>
+<header class="site-header">
   <div class="ts-container">
     <div class="inner">
       <a class="ts-header is-heavy" href={url("/")}>{SITE.title}</a>
@@ -57,43 +57,11 @@ const isActive = (href: string) => {
       downward, at the header's z-level. */}
   <Search />
 </header>
-{/* Click-catching dim layer for the search panel. Lives OUTSIDE the header
-    because .site-header's backdrop-filter would trap a position:fixed child;
-    z 99 keeps it one notch under the header, so header + panel stay crisp
-    while the page dims. */}
-<div
-  id="search-veil"
-  class="search-veil"
-  aria-hidden="true"
-  hidden
-  transition:persist
->
-</div>
-
-<script>
-  // The header persists across ClientRouter navigations (transition:persist),
-  // so its server-rendered active tab would stay stuck on the first page's
-  // route. Recompute it on every navigation. Mirrors isActive() above: the
-  // home link matches the site root exactly (trailing-slash tolerant), the
-  // rest match by path prefix.
-  const norm = (p: string) => p.replace(/\/+$/, "") || "/";
-  const root = norm(import.meta.env.BASE_URL);
-  const syncActive = () => {
-    const here = norm(location.pathname);
-    document
-      .querySelectorAll<HTMLAnchorElement>(".site-header .ts-tab .item")
-      .forEach((a) => {
-        const target = norm(new URL(a.href).pathname);
-        a.classList.toggle(
-          "is-active",
-          target === root
-            ? here === target
-            : here === target || here.startsWith(target + "/"),
-        );
-      });
-  };
-  document.addEventListener("astro:page-load", syncActive);
-</script>
+{/* Click-catching dim layer for the search panel. A sibling of the header so
+    it can cover the whole viewport (position:fixed) at its own z-index — z 99
+    keeps it one notch under the header, so header + panel stay crisp while the
+    page dims. */}
+<div id="search-veil" class="search-veil" aria-hidden="true" hidden></div>
 
 <script is:inline>
   // Delegated so it survives ClientRouter swaps (the button is a fresh

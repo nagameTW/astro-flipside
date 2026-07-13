@@ -103,13 +103,6 @@ import Icon from "@/components/Icon.astro";
   });
   const init = () => {
   const dialog = document.getElementById("search-dialog") as HTMLDialogElement;
-  // The header now persists across ClientRouter navigations (transition:persist
-  // in Navbar), so every element wired below is the SAME element on the next
-  // page — re-running these bindings would stack duplicate listeners. Bind
-  // once; the flag rides along on the persisted dialog. (The veil persists too,
-  // see Layout.astro, so it is safe to treat as permanent here.)
-  if (!dialog || dialog.dataset.wired) return;
-  dialog.dataset.wired = "1";
   const input = document.getElementById("search-input") as HTMLInputElement;
   const list = document.getElementById("search-results")!;
   const clear = document.getElementById("search-clear") as HTMLButtonElement;
@@ -259,21 +252,4 @@ import Icon from "@/components/Icon.astro";
   });
   };
   document.addEventListener("astro:page-load", init);
-  // The dialog + veil persist across navigations now, so a panel left open
-  // (e.g. after clicking a result, or a nav tab, while search is up) would
-  // carry into the next page. Shut it instantly before each swap.
-  document.addEventListener("astro:before-swap", () => {
-    const d = document.getElementById(
-      "search-dialog",
-    ) as HTMLDialogElement | null;
-    const v = document.getElementById("search-veil");
-    if (d?.open) {
-      d.classList.remove("is-closing");
-      d.close();
-    }
-    if (v) {
-      v.classList.remove("is-closing");
-      v.hidden = true;
-    }
-  });
 </script>
