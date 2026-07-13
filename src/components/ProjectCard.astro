@@ -1,7 +1,7 @@
 ---
 // One project on /projects/ — a borderless content block (the Medium
-// look, per owner): name, description, tech chips, and a GitHub text
-// link with the site's arrow interaction. No card chrome.
+// look, per owner). The WHOLE block is the link, same as a blog row:
+// hover underlines the title, zooms the cover, and turns the arrow.
 import type { Project } from "@/data/projects";
 import SmartImage from "@/components/SmartImage.astro";
 
@@ -12,7 +12,12 @@ interface Props {
 const { project } = Astro.props;
 ---
 
-<div class="project-item">
+<a
+  class="project-item"
+  href={project.url}
+  target="_blank"
+  rel="noopener noreferrer"
+>
   {
     project.img && (
       <div class="project-item-cover">
@@ -35,12 +40,5 @@ const { project } = Astro.props;
       ))
     }
   </div>
-  <a
-    class="landing-side-link"
-    href={project.url}
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    GitHub <span aria-hidden="true">↗</span>
-  </a>
-</div>
+  <span class="project-item-link">GitHub <span aria-hidden="true">↗</span></span>
+</a>
