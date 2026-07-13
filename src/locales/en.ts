@@ -8,9 +8,9 @@ const en = {
   "landing.tagline": "Flip it over,\nmeet the other you.",
   "landing.latest": "Latest posts",
   "landing.allPosts": "All posts",
-  "landing.aboutLabel": "Who I am",
+  "landing.aboutLabel": "About this site",
   "landing.aboutBlurb":
-    "Profession on the front, passion on the back. Both sides are the real me — flip the About page and pick the one you want to meet.",
+    "This is where I keep things. The resume and the works, the everyday posts, the photos along the way, they all live here. To meet the person behind them, flip through the About page.",
   "landing.hello": "Find me here",
   "projects.description": "Selected works and side projects",
   "projects.empty": "Nothing here yet.",
