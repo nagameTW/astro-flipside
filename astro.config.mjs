@@ -188,11 +188,23 @@ const pagefindDev = () => ({
   },
 });
 
+// Deploy-target-aware base + site. On Vercel (which sets VERCEL=1 during the
+// build) the site is served at the domain root, so base is "" and the
+// canonical origin is Vercel's production URL; a GitHub project page keeps
+// config.ts's "/repo" base and site. This is the ONLY switch needed — url()
+// reads import.meta.env.BASE_URL and BaseHead reads Astro.site, both of which
+// come from the values resolved here. Set config.ts's site/base for the
+// GitHub Pages path; Vercel fills its own in automatically.
+const onVercel = !!process.env.VERCEL;
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const resolvedSite = onVercel && vercelUrl ? `https://${vercelUrl}` : SITE.site;
+const resolvedBase = onVercel ? undefined : SITE.base || undefined;
+
 // https://astro.build/config
 export default defineConfig({
   output: "static",
-  site: SITE.site,
-  base: SITE.base || undefined,
+  site: resolvedSite,
+  base: resolvedBase,
   markdown: {
     // GFM footnotes ship an English sr-only "Footnotes" heading — localize
     // it. The ↩ back-reference link is hidden entirely in global.css
