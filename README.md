@@ -76,7 +76,7 @@
 gh repo create my-site --template nagameTW/astro-flipside --public --clone
 ```
 
-**2. 本機跑起來**
+**2. 本機執行**
 
 ```bash
 cd my-site
@@ -107,9 +107,9 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 
 之後 push 到 `main`，自動重新部署。
 
-樣式或圖片全不見了？回第 3 步，檢查 `base`。內容怎麼加，看[新增內容](#-新增內容)的三個範例。`src/config.ts` 每個欄位都有註解。範例讀完就刪。
+樣式或圖片全不見了？回第 3 步，檢查 `base`。內容怎麼加，看[新增內容](#-新增內容)的三個範例。
 
-Netlify、Vercel、Cloudflare Pages 也行。純靜態，匯入 repo 就跑；根目錄部署時 `base` 留 `""`。做法見 [Astro 部署指南](https://docs.astro.build/en/guides/deploy/)。
+Netlify、Vercel、Cloudflare Pages 也行。做法見 [Astro 部署指南](https://docs.astro.build/en/guides/deploy/)。
 
 ## ✍️ 新增內容
 

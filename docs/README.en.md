@@ -85,7 +85,7 @@ Click **Use this template** at the top, or use the GitHub CLI:
 gh repo create my-site --template nagameTW/astro-flipside --public --clone
 ```
 
-**2. Run it locally**
+**2. Run locally**
 
 ```bash
 cd my-site
@@ -119,11 +119,8 @@ Every push to `main` redeploys, automatically.
 
 Site comes up unstyled or imageless? Back to step 3, check `base`. To add
 content, copy the three examples under [Adding content](#-adding-content).
-Every field in `src/config.ts` carries a comment. Delete the demo content
-once you've read it.
 
-Netlify, Vercel, Cloudflare Pages work too. It's fully static, so importing
-the repo is enough; for a root deploy, set `base` to `""`. See the
+Netlify, Vercel, Cloudflare Pages work too. See the
 [Astro deployment guide](https://docs.astro.build/en/guides/deploy/).
 
 ## ✍️ Adding content
