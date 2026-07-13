@@ -109,7 +109,7 @@ html.lenis body {
   flex: 1 0 auto;
 }
 
-/* Header / footer shell */
+/* Header shell */
 .site-header {
   position: sticky;
   top: 0;
@@ -231,11 +231,6 @@ html.lenis body {
   max-width: 100%;
   height: auto;
   min-height: var(--height, auto);
-}
-
-.site-footer {
-  text-align: center;
-  padding: 3rem 0 4rem;
 }
 
 /* Page building blocks */
@@ -1663,19 +1658,16 @@ dialog.search-dialog {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
-.landing-side-link span,
-.landing-row-top span:last-child {
+.landing-side-link span {
   display: inline-block;
   transition: transform 0.2s ease;
 }
 .landing-side-link:hover span,
-.landing-side-link:focus-visible span,
-.landing-row:hover .landing-row-top span:last-child {
+.landing-side-link:focus-visible span {
   transform: rotate(45deg);
 }
 @media (prefers-reduced-motion: reduce) {
-  .landing-side-link span,
-  .landing-row-top span:last-child {
+  .landing-side-link span {
     transition: none;
   }
 }
@@ -1734,38 +1726,36 @@ dialog.search-dialog {
   justify-self: end;
 }
 
-/* Closing band: brand-dark, full-bleed, white text in both themes. */
-.landing-cta {
+/* Site-wide footer: the brand-dark band, white text in both themes.
+   Sits outside <main>, so it's naturally full width. */
+.footer-band {
   margin-top: 6rem;
-  margin-inline: calc(50% - 50vw);
-  padding-inline: calc(50vw - 50%);
   padding-block: 4rem;
   background: #1f2430;
   color: #eceff4;
 }
-.landing-cta .landing-side-en {
+.footer-band .landing-side-en {
   color: #fff;
 }
-.landing-cta-line {
+.footer-band-line {
   margin: 0.5rem 0 1.5rem;
   color: rgb(236 239 244 / 0.75);
 }
-.landing-cta-links {
+.footer-band-links {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
 }
-.landing-cta-links .ts-button {
+.footer-band-links .ts-button {
   background: rgb(255 255 255 / 0.1);
   border: 1px solid rgb(255 255 255 / 0.2);
   color: #fff;
 }
-.landing-cta-links .ts-button:hover {
+.footer-band-links .ts-button:hover {
   background: rgb(255 255 255 / 0.22);
 }
-/* The dark band doubles as the landing's footer. */
-.landing-cta-copyright {
+.footer-band-copyright {
   margin: 3rem 0 0;
   font-size: var(--ts-font-size-small);
   color: rgb(236 239 244 / 0.5);
@@ -1794,7 +1784,7 @@ dialog.search-dialog {
   .landing-more {
     grid-column: 1;
   }
-  .landing-cta {
+  .footer-band {
     padding-block: 2.5rem;
     margin-top: 4rem;
   }

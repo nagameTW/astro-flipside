@@ -9,7 +9,6 @@
 // machinery in Layout.
 import Layout from "@/layouts/Layout.astro";
 import SmartImage from "@/components/SmartImage.astro";
-import Icon from "@/components/Icon.astro";
 import SITE from "@/config";
 import { PROJECTS } from "@/data/projects";
 import { GALLERY } from "@/data/gallery";
@@ -23,10 +22,9 @@ import heroPhoto from "../../docs/hero.jpg";
 const latest = (await getPosts()).slice(0, 3);
 const photos = GALLERY.slice(0, 4);
 const projects = PROJECTS.slice(0, 4);
-const isExternal = (u: string) => u.startsWith("http");
 ---
 
-<Layout description={SITE.description} hideFooter hideBackToTop>
+<Layout description={SITE.description} hideBackToTop>
   <section class="landing-hero">
     <h1 class="landing-title reveal">{t["landing.tagline"]}</h1>
   </section>
@@ -71,7 +69,6 @@ const isExternal = (u: string) => u.startsWith("http");
             >
               <div class="landing-row-top ts-text is-secondary">
                 <span>{String(i + 1).padStart(2, "0")}</span>
-                <span aria-hidden="true">↗</span>
               </div>
               <div class="ts-header is-large is-heavy">{post.data.title}</div>
               {post.data.description && (
@@ -136,7 +133,6 @@ const isExternal = (u: string) => u.startsWith("http");
             >
               <div class="landing-row-top ts-text is-secondary">
                 <span>{String(i + 1).padStart(2, "0")}</span>
-                <span aria-hidden="true">↗</span>
               </div>
               <div class="ts-header is-large is-heavy">{project.name}</div>
               <p class="ts-text is-secondary">{project.description}</p>
@@ -151,27 +147,4 @@ const isExternal = (u: string) => u.startsWith("http");
       </section>
     )
   }
-
-  <section class="landing-cta reveal">
-    <h2 class="landing-side-en">Say hello</h2>
-    <p class="landing-cta-line">{t["landing.hello"]}</p>
-    <div class="landing-cta-links">
-      {
-        SITE.socials.map((l) =>
-          l.url ? (
-            <a
-              class="ts-button is-icon is-circular"
-              href={l.url}
-              aria-label={l.name}
-              target={isExternal(l.url) ? "_blank" : undefined}
-              rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
-            >
-              <Icon name={l.icon} />
-            </a>
-          ) : null
-        )
-      }
-    </div>
-    <p class="landing-cta-copyright">© {new Date().getFullYear()} {SITE.title}</p>
-  </section>
 </Layout>

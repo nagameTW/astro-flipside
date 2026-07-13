@@ -11,16 +11,12 @@ interface Props {
   description?: string;
   /** Keep this page out of search engines. */
   noindex?: boolean;
-  /** The landing page's dark closing band carries the copyright line
-   *  itself, so it drops the shared footer. */
-  hideFooter?: boolean;
   /** Pages that provide their own ending (the landing) skip the
    *  floating back-to-top button. */
   hideBackToTop?: boolean;
 }
 
-const { title, description, noindex, hideFooter, hideBackToTop } =
-  Astro.props;
+const { title, description, noindex, hideBackToTop } = Astro.props;
 ---
 
 <!-- `is-large` roots the page at 16px rather than Tocas's default 15px. That is
@@ -49,7 +45,7 @@ const { title, description, noindex, hideFooter, hideBackToTop } =
     <main class="ts-container">
       <slot />
     </main>
-    {!hideFooter && <Footer />}
+    <Footer />
     <ImageLightbox />
     {
       !hideBackToTop && (
