@@ -261,8 +261,6 @@ MIT. See [LICENSE](../LICENSE).
 
 Author: [nagameTW](https://github.com/nagameTW)
 
-Project link: <https://github.com/nagameTW/astro-flipside>
-
 ## 🙏 Acknowledgments
 
 Built on [Tocas UI](https://tocas-ui.com/). The blog scaffolding follows

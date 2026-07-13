@@ -234,7 +234,7 @@ MIT。詳見 [LICENSE](LICENSE)。
 
 ## 📫 聯絡
 
-作者是 [nagameTW](https://github.com/nagameTW)，專案住在 <https://github.com/nagameTW/astro-flipside>。
+作者：[nagameTW](https://github.com/nagameTW)
 
 ## 🙏 致謝
 
