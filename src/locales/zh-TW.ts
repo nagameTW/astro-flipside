@@ -10,9 +10,9 @@ const zhTW: UIStrings = {
   "landing.tagline": "翻個面，\n認識另一個你。",
   "landing.latest": "最新文章",
   "landing.allPosts": "查看全部",
-  "landing.aboutLabel": "關於我",
+  "landing.aboutLabel": "關於本站",
   "landing.aboutBlurb":
-    "正面是專業，反面是熱愛。兩面都是真實的自己，到關於頁翻個面，挑你想認識的那一面。",
+    "這裡是我放東西的地方。工作的履歷與作品、平日寫下的文章、隨手拍的照片，都收在這個網站裡。想認識這些東西背後的人，到關於頁翻個面。",
   "landing.hello": "在這些地方找到我",
   "projects.description": "作品與側專案",
   "projects.empty": "還沒有內容。",
