@@ -78,8 +78,6 @@ profession and keeps what makes them who they are.
 
 ## 🚀 Getting started
 
-Zero to live, in five steps.
-
 **1. Create your repo**
 
 Click **Use this template** at the top, or use the GitHub CLI:
@@ -87,10 +85,6 @@ Click **Use this template** at the top, or use the GitHub CLI:
 ```bash
 gh repo create my-site --template nagameTW/astro-flipside --public --clone
 ```
-
-The repo name decides your URL: name it `<user>.github.io` and the site
-lives at `https://<user>.github.io/`; any other name (say `my-site`) puts
-it at `https://<user>.github.io/my-site/`.
 
 **2. Run it locally**
 

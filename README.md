@@ -69,8 +69,6 @@
 
 ## 🚀 快速開始
 
-從零到上線,五步。
-
 **1. 建立你的 repo**
 
 點上方 **Use this template**，或用 GitHub CLI：
@@ -78,8 +76,6 @@
 ```bash
 gh repo create my-site --template nagameTW/astro-flipside --public --clone
 ```
-
-repo 名字決定網址。叫 `<帳號>.github.io`，網站在 `https://<帳號>.github.io/`；叫別的（例如 `my-site`），就在 `https://<帳號>.github.io/my-site/`。
 
 **2. 本機跑起來**
 
