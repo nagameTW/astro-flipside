@@ -1,9 +1,8 @@
 ---
-// Currently unused by any page (the portfolio /projects/ route is retired
-// until there's real content to show — see src/data/projects.ts); kept as
-// a worked example consumers can re-enable.
+// One project on /projects/ — a borderless content block (the Medium
+// look, per owner): name, description, tech chips, and a GitHub text
+// link with the site's arrow interaction. No card chrome.
 import type { Project } from "@/data/projects";
-import Icon from "@/components/Icon.astro";
 
 interface Props {
   project: Project;
@@ -12,24 +11,22 @@ interface Props {
 const { project } = Astro.props;
 ---
 
-<div class="ts-box project-card">
-  <div class="ts-content">
-    <div class="ts-header is-heavy">{project.name}</div>
-    <p class="ts-text is-secondary">{project.description}</p>
-    <div class="ts-wrap">
-      {
-        project.tech.map((t) => (
-          <div class="ts-chip is-circular is-outlined">{t}</div>
-        ))
-      }
-    </div>
-    <a
-      class="ts-button is-outlined is-start-icon"
-      href={project.url}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <Icon name="github" /> GitHub
-    </a>
+<div class="project-item">
+  <div class="ts-header is-heavy">{project.name}</div>
+  <p class="ts-text is-secondary">{project.description}</p>
+  <div class="ts-wrap">
+    {
+      project.tech.map((t) => (
+        <div class="ts-chip is-circular is-outlined">{t}</div>
+      ))
+    }
   </div>
+  <a
+    class="landing-side-link"
+    href={project.url}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    GitHub <span aria-hidden="true">↗</span>
+  </a>
 </div>

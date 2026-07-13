@@ -219,7 +219,7 @@ html.lenis body {
 .ts-chip,
 .links-list a,
 .links-list .ts-text.is-secondary,
-.post-card .ts-header,
+.post-row-text,
 .post-meta-author,
 .toc a,
 .post-title,
@@ -863,152 +863,138 @@ a.gear-card {
   grid-template-columns: repeat(auto-fill, minmax(min(384px, 100%), 1fr));
 }
 
-/* Cards as links (blog posts, prev/next nav) — same forward-scale hover
-   as the Life cards, site-wide. `.post-card` (PostCard.astro) is a div,
-   not an <a>: it holds a real tag-chip link inside it, and an <a> can't
-   contain another <a>. */
-a.ts-box,
-.post-card {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  transition: transform 0.15s ease;
+/* Blog list: Medium-style rows inside a filter shell. */
+.blog-shell {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 1rem 4rem;
 }
-a.ts-box:hover,
-.post-card:hover {
-  transform: scale(1.02);
+.blog-filter {
+  position: sticky;
+  top: 8rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  /* Aligns the first group with the list's title baseline area. */
+  margin-top: 5rem;
+}
+.blog-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.blog-filter-label {
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.06em;
+}
+.blog-filter-link {
+  color: var(--ts-gray-600);
+  text-decoration: none;
+  width: fit-content;
+}
+.blog-filter-link:hover,
+.blog-filter-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.blog-filter-link.is-active {
+  color: var(--ts-gray-800);
+  font-weight: 700;
+}
+.post-rows > * + * .post-row,
+.post-rows > * + * {
+  border-top: 1px solid var(--ts-gray-300);
+}
+.post-row-main {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 2rem 0;
+  text-decoration: none;
+  color: inherit;
+}
+.post-row-text {
+  flex: 1;
+  min-width: 0;
+}
+.post-row-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.post-row-main:hover .post-row-title,
+.post-row-main:focus-visible .post-row-title {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.post-row-text p {
+  margin: 0 0 0.75rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.post-row-cover-wrap {
+  flex-shrink: 0;
+  width: 176px;
+  height: 117px;
+  overflow: hidden;
+  border-radius: var(--ts-border-radius-element);
+}
+.post-row-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+.post-row-main:hover .post-row-cover,
+.post-row-main:focus-visible .post-row-cover {
+  transform: scale(1.06);
 }
 @media (prefers-reduced-motion: reduce) {
-  a.ts-box:hover,
-  .post-card:hover {
+  .post-row-cover {
+    transition: none;
+  }
+  .post-row-main:hover .post-row-cover {
     transform: none;
   }
 }
-/* Cards breathe: 24px inside, 16px between their rows, 24px between
-   timeline entries. */
-.ts-box .ts-content {
-  padding: 1.5rem;
-}
-.ts-box .ts-content > * + * {
-  margin-top: 1rem;
-}
-/* PostCard stretched-link: .post-card-link (the title) covers the whole
-   card via ::after, so "click anywhere on the card" still works. .ts-wrap
-   (tag chips) gets a higher stacking order so its real links stay on top
-   and independently clickable, instead of being covered by the overlay.
-   ponytail: standard stretched-link tradeoff — the .ts-wrap row is a dead
-   zone around the chips (no card-link there), and description/date text
-   isn't selectable through the overlay. Matches Bootstrap's
-   .stretched-link; not worth a JS hit-test to reclaim those slivers. */
-.post-card-link {
-  color: inherit;
-  text-decoration: none;
-}
-.post-card-link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-/* Text content of a post card. Its own `gap` replaces the generic
-   `.ts-box .ts-content > * + *` stacking margin (below) once .ts-content
-   becomes a flex row for the has-cover layout — a plain block child would
-   have inherited a stray `margin-top` from that generic rule instead. */
-.post-card-body {
-  display: flex;
-  flex-direction: column;
-  /* Title hugs the cover's top edge, date its bottom edge; the
-     description floats between. */
-  justify-content: space-between;
-  align-self: stretch;
-  gap: 0.5rem;
-  /* Flex items default to min-width: auto, which refuses to shrink below
-     the longest unbroken run of text — a long title would push the cover
-     out of the row instead of wrapping. */
-  min-width: 0;
-  /* The card is fixed-height (below); whatever doesn't fit is cut. */
-  overflow: hidden;
-}
-/* Fixed-layout cards: every card is the same height with the same slots,
-   no matter how long the text or how big the source image. Overlong text
-   truncates (title one line, description two, tags one row) instead of
-   growing the card. */
-.post-card {
-  height: calc(160px + 3rem);
-}
-.post-card .ts-content {
-  height: 100%;
-  align-items: stretch;
-}
-.post-card .ts-content .post-card-cover {
-  align-self: center;
-}
-.post-card .ts-header {
-  font-size: 1.3rem;
-  line-height: 1.35;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-.post-card p.ts-text.is-secondary {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-/* The fixed-height body clips whatever the clamps let through; keep the
-   title and date whole and let only the description give way, at line
-   granularity — otherwise a squeezed column slices glyphs in half. */
-.post-card .ts-header,
-.post-card .ts-text.is-description {
-  flex-shrink: 0;
-}
-@media (max-width: 480px) {
-  .post-card p.ts-text.is-secondary {
-    -webkit-line-clamp: 1;
-  }
-}
-/* Cards with heroImage: cover on the right, text on the left. Cards
-   without one render only .post-card-body, so .ts-content stays a plain
-   block and needs no override. */
-.post-card.has-cover .ts-content {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-/* The body soaks up all width the cover doesn't take, pinning the cover
-   to the card's right edge — without it the cover floats mid-card as
-   soon as the card is wider than its text (the landing's full-width
-   list showed it; narrow grid columns masked it). */
-.post-card.has-cover .post-card-body {
-  flex: 1;
-}
-/* .ts-content now lays its two children out with `gap`; cancel the
-   generic margin-top so it doesn't also nudge the cover down. */
-.post-card.has-cover .ts-content > * + * {
-  margin-top: 0;
-}
-/* Cover image: optional, only when a post sets heroImage. A fixed-size
-   square thumbnail, not the old edge-to-edge banner — see .has-cover
-   above for the row layout it sits in. */
-.post-card-cover {
-  display: block;
-  flex-shrink: 0;
-  width: 160px;
-  height: 160px;
-  aspect-ratio: 1 / 1;
-  border-radius: var(--ts-border-radius-element);
-  object-fit: cover;
-}
 @media (max-width: 767px) {
-  .post-card-cover {
-    width: 128px;
-    height: 128px;
+  .blog-shell {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
-  .post-card {
-    height: calc(128px + 3rem);
+  .blog-filter {
+    position: static;
+    margin-top: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .blog-filter-group {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .blog-filter-label {
+    margin-bottom: 0;
+  }
+  .post-row-main {
+    gap: 1rem;
+    padding: 1.5rem 0;
+  }
+  .post-row-cover-wrap {
+    width: 96px;
+    height: 96px;
+  }
+  .post-row-title {
+    font-size: 1.15rem;
   }
 }
+
 .ts-timeline {
   --ts-timeline-content-distance: 1.5rem;
 }
@@ -1823,36 +1809,31 @@ dialog.search-dialog {
   }
 }
 
-/* Projects grid: auto-fill card columns, same rhythm as .cards-grid.
-   Grid stretch keeps every card in a row the same height; the card's
-   internal column layout below pins the button row to the bottom no
-   matter how long the description runs. */
+/* Projects: a 3-up grid of borderless blocks (the Medium look) — name,
+   description soaking up spare height, chips, and the arrow link pinned
+   to one baseline across the row. */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-  gap: 1.5rem;
+  gap: 3rem 3rem;
   align-items: stretch;
 }
-.project-card {
-  height: 100%;
+/* The reveal wrapper is the actual grid child — make it a flex parent
+   so the item can stretch to the row height and pin its link line. */
+.projects-grid > .reveal {
   display: flex;
 }
-.project-card .ts-content {
+.project-item {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.75rem;
 }
-/* gap owns the rhythm — cancel the generic row-spacing rule. */
-.project-card .ts-content > * + * {
-  margin-top: 0;
+.project-item .ts-header {
+  font-size: 1.2rem;
 }
-.project-card p {
-  /* The description soaks up the leftover height, pushing chips and
-     the button to a consistent bottom line across the row. */
+.project-item p {
   flex: 1;
   margin: 0;
-}
-.project-card .ts-header {
-  font-size: 1.2rem;
 }

@@ -1,37 +1,97 @@
 ---
-// The post-list scaffold shared by the blog index and every tag page:
-// heading + count row, the responsive card grid, an empty state, and
-// pagination. One layout, two routes.
+// The blog-list shell shared by the blog index, tag pages, and year
+// pages: a sticky filter rail (years + tags) on the left, the row list
+// with an optional pagination on the right. Pass a paginator `page`
+// (index and tag routes) or a plain `posts` array (year pages).
 import type { Page } from "astro";
 import type { CollectionEntry } from "astro:content";
-import PostCard from "@/components/PostCard.astro";
+import PostRow from "@/components/PostRow.astro";
 import Pagination from "@/components/Pagination.astro";
+import { getPosts } from "@/utils/posts";
 import { t, fill } from "@/locales";
+import { url } from "@/utils/url";
 
 interface Props {
-  page: Page<CollectionEntry<"blog">>;
+  page?: Page<CollectionEntry<"blog">>;
+  posts?: CollectionEntry<"blog">[];
   title: string;
+  activeYear?: number;
+  activeTag?: string;
 }
-const { page, title } = Astro.props;
+const { page, posts, title, activeYear, activeTag } = Astro.props;
+const items = page ? page.data : (posts ?? []);
+const total = page ? page.total : items.length;
+
+// The filter rail always reflects the whole collection, whatever subset
+// this route shows.
+const all = await getPosts();
+const years = [...new Set(all.map((p) => p.data.pubDate.getFullYear()))].sort(
+  (a, b) => b - a,
+);
+const tags = [...new Set(all.flatMap((p) => p.data.tags ?? []))].sort();
+const isAll = activeYear === undefined && activeTag === undefined;
 ---
 
-<div class="section-title reveal">
-  <h1 class="ts-header is-big is-heavy">{title}</h1>
-  <span class="ts-text is-description"
-    >{fill(t["blog.count"], { n: page.total })}</span
-  >
-</div>
-{
-  page.total === 0 ? (
-    <p class="ts-text is-secondary">{t["blog.empty"]}</p>
-  ) : (
-    <div class="cards-grid is-wide">
-      {page.data.map((post, i) => (
-        <div class="reveal" style={`--ri: ${i % 4}`}>
-          <PostCard post={post} eager={i === 0} />
-        </div>
-      ))}
+<div class="blog-shell">
+  <aside class="blog-filter reveal">
+    <div class="blog-filter-group">
+      <div class="blog-filter-label ts-text is-description">
+        {t["blog.filterYears"]}
+      </div>
+      <a class:list={["blog-filter-link", { "is-active": isAll }]} href={url("/blog/")}>
+        {t["blog.filterAll"]}
+      </a>
+      {
+        years.map((y) => (
+          <a
+            class:list={["blog-filter-link", { "is-active": y === activeYear }]}
+            href={url(`/blog/year/${y}/`)}
+          >
+            {y}
+          </a>
+        ))
+      }
     </div>
-  )
-}
-<Pagination page={page} />
+    {
+      tags.length > 0 && (
+        <div class="blog-filter-group">
+          <div class="blog-filter-label ts-text is-description">
+            {t["blog.filterTags"]}
+          </div>
+          {tags.map((tag) => (
+            <a
+              class:list={[
+                "blog-filter-link",
+                { "is-active": tag === activeTag },
+              ]}
+              href={url(`/blog/tags/${tag}/`)}
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </aside>
+
+  <div class="blog-list">
+    <div class="section-title reveal">
+      <h1 class="ts-header is-big is-heavy">{title}</h1>
+      <span class="ts-text is-description">{fill(t["blog.count"], { n: total })}</span>
+    </div>
+    {
+      total === 0 ? (
+        <p class="ts-text is-secondary">{t["blog.empty"]}</p>
+      ) : (
+        <div class="post-rows">
+          {items.map((post, i) => (
+            <div class="reveal" style={`--ri: ${i % 4}`}>
+              <PostRow post={post} eager={i === 0} />
+            </div>
+          ))}
+        </div>
+      )
+    }
+    {page && <Pagination page={page} />}
+  </div>
+</div>
