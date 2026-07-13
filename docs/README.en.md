@@ -131,8 +131,6 @@ Netlify, Vercel, and Cloudflare Pages work too: the template is fully
 static, so importing the repo is enough (set `base` to `""`). See the
 [Astro deployment guide](https://docs.astro.build/en/guides/deploy/).
 
-The sections below are technical reference. Come back when you build.
-
 ## ✨ Features
 
 **Dual-face about**
@@ -233,6 +231,8 @@ by copying `en.ts`'s keys.
 
 ## 🗺️ Roadmap
 
+- [ ] Home page. The site currently opens straight into the About page;
+      a dedicated landing page is planned
 - [ ] `/projects/` portfolio page (the `src/data/projects.ts` +
       `ProjectCard.astro` scaffold is ready; it gets a route once there is
       real content to show)
