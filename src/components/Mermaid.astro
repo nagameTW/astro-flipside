@@ -39,9 +39,11 @@
     // first render; restore the original source before re-running so a
     // theme change re-renders from source instead of re-processing markup.
     nodes.forEach((n) => {
-      if (n.dataset.mermaidSource === undefined)
-        n.dataset.mermaidSource = n.textContent ?? "";
-      n.textContent = n.dataset.mermaidSource;
+      // get/setAttribute, not .dataset: querySelectorAll types these as
+      // Element (no dataset), and this plain-JS script can't cast.
+      if (n.getAttribute("data-mermaid-source") === null)
+        n.setAttribute("data-mermaid-source", n.textContent ?? "");
+      n.textContent = n.getAttribute("data-mermaid-source");
       n.removeAttribute("data-processed");
     });
     mermaid.initialize({
