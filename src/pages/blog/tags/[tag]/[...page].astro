@@ -5,6 +5,7 @@ import Layout from "@/layouts/Layout.astro";
 import PostList from "@/components/PostList.astro";
 import { getPosts } from "@/utils/posts";
 import { t, fill } from "@/locales";
+import SITE from "@/config";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getPosts();
@@ -12,7 +13,7 @@ export const getStaticPaths = (async ({ paginate }) => {
   return [...tags].flatMap((tag) =>
     paginate(
       posts.filter((post) => post.data.tags.includes(tag)),
-      { params: { tag }, pageSize: 6 },
+      { params: { tag }, pageSize: SITE.pageSize.blog },
     ),
   );
 }) satisfies GetStaticPaths;

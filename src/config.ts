@@ -56,6 +56,13 @@ const SITE = {
       url: "https://example.com/soundcloud/your-name",
     },
   ] as { name: string; icon: string; url?: string; copy?: string }[],
+  /** Items per page on list pages — bump these to taste. */
+  pageSize: {
+    /** Blog list + tag pages (vertical rows since 2026-07). */
+    blog: 10,
+    /** Projects grid — multiples of 3 keep the 3-up rows full. */
+    projects: 9,
+  },
   features: {
     /** KaTeX math ($…$ / $$…$$) in posts. */
     math: false,
