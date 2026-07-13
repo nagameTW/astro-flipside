@@ -936,12 +936,30 @@ a.gear-card {
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
-.post-row-cover {
+.post-row-cover-wrap {
   flex-shrink: 0;
   width: 176px;
   height: 117px;
-  object-fit: cover;
+  overflow: hidden;
   border-radius: var(--ts-border-radius-element);
+}
+.post-row-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+.post-row-main:hover .post-row-cover,
+.post-row-main:focus-visible .post-row-cover {
+  transform: scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .post-row-cover {
+    transition: none;
+  }
+  .post-row-main:hover .post-row-cover {
+    transform: none;
+  }
 }
 @media (max-width: 767px) {
   .blog-shell {
@@ -968,7 +986,7 @@ a.gear-card {
     gap: 1rem;
     padding: 1.5rem 0;
   }
-  .post-row-cover {
+  .post-row-cover-wrap {
     width: 96px;
     height: 96px;
   }
@@ -1791,36 +1809,31 @@ dialog.search-dialog {
   }
 }
 
-/* Projects grid: auto-fill card columns, same rhythm as .cards-grid.
-   Grid stretch keeps every card in a row the same height; the card's
-   internal column layout below pins the button row to the bottom no
-   matter how long the description runs. */
+/* Projects: a 3-up grid of borderless blocks (the Medium look) — name,
+   description soaking up spare height, chips, and the arrow link pinned
+   to one baseline across the row. */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-  gap: 1.5rem;
+  gap: 3rem 3rem;
   align-items: stretch;
 }
-.project-card {
-  height: 100%;
+/* The reveal wrapper is the actual grid child — make it a flex parent
+   so the item can stretch to the row height and pin its link line. */
+.projects-grid > .reveal {
   display: flex;
 }
-.project-card .ts-content {
+.project-item {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.75rem;
 }
-/* gap owns the rhythm — cancel the generic row-spacing rule. */
-.project-card .ts-content > * + * {
-  margin-top: 0;
+.project-item .ts-header {
+  font-size: 1.2rem;
 }
-.project-card p {
-  /* The description soaks up the leftover height, pushing chips and
-     the button to a consistent bottom line across the row. */
+.project-item p {
   flex: 1;
   margin: 0;
-}
-.project-card .ts-header {
-  font-size: 1.2rem;
 }

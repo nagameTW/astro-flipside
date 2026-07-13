@@ -30,15 +30,17 @@ const { post, eager = false } = Astro.props;
     </div>
     {
       post.data.heroImage && (
-        <SmartImage
-          class="post-row-cover"
-          src={post.data.heroImage}
-          alt=""
-          loading={eager ? "eager" : "lazy"}
-          fetchpriority={eager ? "high" : undefined}
-          widths={[320, 640]}
-          sizes="(max-width: 640px) 96px, 176px"
-        />
+        <div class="post-row-cover-wrap">
+          <SmartImage
+            class="post-row-cover"
+            src={post.data.heroImage}
+            alt=""
+            loading={eager ? "eager" : "lazy"}
+            fetchpriority={eager ? "high" : undefined}
+            widths={[320, 640]}
+            sizes="(max-width: 640px) 96px, 176px"
+          />
+        </div>
       )
     }
   </a>
