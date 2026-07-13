@@ -37,7 +37,10 @@ const g = SITE.features.giscus;
     </section>
   )
 }
-<script is:inline define:vars={{ g }}>
+{/* data-astro-rerun: each ClientRouter navigation swaps in a fresh empty
+    #giscus mount, so the embed must re-inject per visit — without the
+    attribute an inline script runs only once per session. */}
+<script is:inline data-astro-rerun define:vars={{ g }}>
   if (!g) return;
   const dark = () =>
     document.documentElement.classList.contains("is-dark") ||
@@ -57,12 +60,17 @@ const g = SITE.features.giscus;
   s.crossOrigin = "anonymous";
   s.async = true;
   document.getElementById("giscus").appendChild(s);
-  window.addEventListener("themechange", () => {
-    document
-      .querySelector("iframe.giscus-frame")
-      ?.contentWindow?.postMessage(
-        { giscus: { setConfig: { theme: dark() ? "dark" : "light" } } },
-        "https://giscus.app",
-      );
-  });
+  // The script re-runs per navigation now — register the theme bridge
+  // once; it looks the current iframe up at event time.
+  if (!window.__giscusThemeBound) {
+    window.__giscusThemeBound = true;
+    window.addEventListener("themechange", () => {
+      document
+        .querySelector("iframe.giscus-frame")
+        ?.contentWindow?.postMessage(
+          { giscus: { setConfig: { theme: dark() ? "dark" : "light" } } },
+          "https://giscus.app",
+        );
+    });
+  }
 </script>
