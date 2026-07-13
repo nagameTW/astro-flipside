@@ -141,18 +141,6 @@ html.lenis body {
     background: var(--ts-page-background-default);
   }
 }
-/* The header is its own view-transition group (transition:name in Navbar),
-   which lifts this sticky, backdrop-blurred bar out of ClientRouter's
-   whole-page cross-fade snapshot — captured in that root snapshot it
-   flickered on mobile (sticky position + a live backdrop-filter don't
-   survive the capture cleanly). Also cancel its OWN group animation: the bar
-   should hold still while the content under it transitions, not cross-fade
-   (fading a translucent bar reads as a flicker of its own). */
-::view-transition-group(site-header),
-::view-transition-old(site-header),
-::view-transition-new(site-header) {
-  animation: none;
-}
 /* Brand wordmark, larger than the default header size. */
 .site-header a.ts-header {
   font-size: 1.45rem;
