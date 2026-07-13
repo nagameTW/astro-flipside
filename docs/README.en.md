@@ -270,8 +270,7 @@ Issues and PRs, both welcome. Bug reports and feature ideas go through the
 PR; for anything bigger, open an issue first so we can agree on the shape.
 
 [CONTRIBUTING.md](../CONTRIBUTING.md) covers the dev setup, repo map, and
-conventions. CI runs the same three checks you run locally:
-`npm run check && npm run build && npm test`.
+conventions.
 
 ## 📄 License
 
