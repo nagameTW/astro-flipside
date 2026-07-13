@@ -150,6 +150,9 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 - KaTeX 數學公式、Mermaid 圖表和 giscus 留言是選用的功能旗標，預設關閉，關閉時不佔任何 bundle 大小
 - 支援 GitHub project page 的 base 路徑
 - 完全靜態輸出，零密鑰、零伺服器
+- 行動版 Lighthouse 首頁四項全部 100 分
+
+<img src="docs/screenshots/lighthouse.webp" alt="Lighthouse 報告，效能、無障礙、最佳實踐與 SEO 皆 100 分">
 
 <img src="docs/screenshots/dark.webp" alt="暗色模式下的關於頁">
 

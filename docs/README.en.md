@@ -178,6 +178,9 @@ static, so importing the repo is enough (set `base` to `""`). See the
       comments, each at zero bundle cost when off
 - [x] Base-path support for GitHub project pages
 - [x] Fully static output: zero secrets, zero server
+- [x] Mobile Lighthouse on the home page: 100 in all four categories
+
+<img src="screenshots/lighthouse.webp" alt="Lighthouse report: 100 for performance, accessibility, best practices, and SEO">
 
 <img src="screenshots/dark.webp" alt="The About page in dark mode">
 
