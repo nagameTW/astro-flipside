@@ -75,6 +75,14 @@ import Icon from "@/components/Icon.astro";
       .replace(/&lt;mark&gt;/g, "<mark>")
       .replace(/&lt;\/mark&gt;/g, "</mark>");
 
+  // Defense in depth on the result href. Pagefind's `url` comes from Astro's
+  // own route output today (always a site-relative path), so this can't fire
+  // now, but guard the scheme anyway: a future data-pagefind-url override
+  // driven by frontmatter could otherwise smuggle a javascript:/data: href
+  // past the entity-escaping into a live link. Allow only http(s) and
+  // site-relative paths; anything else falls back to "#".
+  const safeHref = (u: string) => (/^(https?:\/\/|\/)/i.test(u) ? u : "#");
+
   // Only pagefind.js's own import path needs the base prefixed by hand: the
   // pagefind runtime auto-detects the site base from wherever pagefind.js
   // itself was loaded and joins every result's `d.url` onto it already, so
@@ -238,7 +246,7 @@ import Icon from "@/components/Icon.astro";
         : kept
             .map(
               (d: any) =>
-                `<li><a href="${esc(d.url)}"><strong>${esc(d.meta.title ?? d.url)}</strong><span>${excerptSafe(d.excerpt)}</span></a></li>`,
+                `<li><a href="${esc(safeHref(d.url))}"><strong>${esc(d.meta.title ?? d.url)}</strong><span>${excerptSafe(d.excerpt)}</span></a></li>`,
             )
             .join("");
   });

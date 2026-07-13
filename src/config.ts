@@ -7,8 +7,10 @@ import type { IconName } from "@/components/icons";
  * must edit. Keys marked (locale) take a key defined in src/locales/*.
  */
 const SITE = {
-  /** Deployment origin, no trailing slash. */
-  site: "https://example.github.io",
+  /** Deployment origin, no trailing slash — drives canonical/OG/sitemap URLs.
+   *  This is the GitHub Pages origin (paired with `base` below); on Vercel it
+   *  is overridden automatically with your Vercel URL (see astro.config.mjs). */
+  site: "https://nagametw.github.io",
   /** Sub-path when deployed as a GitHub project page, e.g. "/astro-flipside". "" for root. */
   base: "/astro-flipside",
   title: "Flipside",
