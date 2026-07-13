@@ -27,7 +27,16 @@ const { page } = Astro.props as { page: Page<Project> };
     page.data.length === 0 ? (
       <p class="ts-text is-secondary">{t["projects.empty"]}</p>
     ) : (
-      <div class="projects-grid">
+      // data-pagefind-body: index project names/descriptions into site
+      // search alongside blog, gallery, and about (each paginated page
+      // indexes its own projects). Without it, Pagefind — which indexes
+      // only [data-pagefind-body] once any page declares it — skipped
+      // projects entirely, so search wasn't whole-site.
+      <div
+        class="projects-grid"
+        data-pagefind-body
+        data-pagefind-meta={`title:${t["nav.projects"]}`}
+      >
         {page.data.map((project, i) => (
           <div class="reveal" style={`--ri: ${i % 3}`}>
             <ProjectCard project={project} />
