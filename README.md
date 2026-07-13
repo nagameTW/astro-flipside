@@ -29,20 +29,20 @@
 <details>
   <summary>目錄</summary>
   <ol>
-    <li><a href="#-關於-flipside">關於 Flipside</a></li>
-    <li><a href="#-快速開始">快速開始</a></li>
-    <li><a href="#-指令">指令</a></li>
-    <li><a href="#-專案結構">專案結構</a></li>
-    <li><a href="#-部署">部署</a></li>
-    <li><a href="#-語言">語言</a></li>
-    <li><a href="#-參與貢獻">參與貢獻</a></li>
-    <li><a href="#-授權">授權</a></li>
-    <li><a href="#-聯絡">聯絡</a></li>
-    <li><a href="#-致謝">致謝</a></li>
+    <li><a href="#關於-flipside">關於 Flipside</a></li>
+    <li><a href="#快速開始">快速開始</a></li>
+    <li><a href="#指令">指令</a></li>
+    <li><a href="#專案結構">專案結構</a></li>
+    <li><a href="#部署">部署</a></li>
+    <li><a href="#語言">語言</a></li>
+    <li><a href="#參與貢獻">參與貢獻</a></li>
+    <li><a href="#授權">授權</a></li>
+    <li><a href="#聯絡">聯絡</a></li>
+    <li><a href="#致謝">致謝</a></li>
   </ol>
 </details>
 
-## 🪙 關於 Flipside
+## 關於 Flipside
 
 白天，你穿梭在信件與會議中，用名片上的職稱介紹自己，夜晚，你練琴、打球，或者換上一個只有同好才知道的 ID 上線。
 
@@ -58,14 +58,14 @@
 
 <img src="docs/hero.jpg" alt="Flipside 頁面總覽，包含 Work 與 Life 兩面、相簿、文章列表、程式碼區塊與暗色主題">
 
-### 🛠️ 使用技術
+### 使用技術
 
 - [Astro](https://astro.build/) — 靜態輸出的網站框架
 - [Tocas UI](https://tocas-ui.com/) — 為中文設計的 UI 框架
 - [Expressive Code](https://expressive-code.com/) — 程式碼區塊
 - [Pagefind](https://pagefind.app/) — 純靜態全文搜尋
 
-## 🚀 快速開始
+## 快速開始
 
 **1. 建立你的 repo**
 
@@ -106,11 +106,11 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 
 之後 push 到 `main`，自動重新部署。
 
-樣式或圖片全不見了？回第 3 步，檢查 `base`。內容怎麼加，看[新增內容](#-新增內容)的三個範例。
+樣式或圖片全不見了？回第 3 步，檢查 `base`。內容怎麼加，看[新增內容](#新增內容)的三個範例。
 
 Netlify、Vercel、Cloudflare Pages 也行。做法見 [Astro 部署指南](https://docs.astro.build/en/guides/deploy/)。
 
-## ✍️ 新增內容
+## 新增內容
 
 - 文章 → `src/content/blog/`
 - 專案 → `src/data/projects.ts`
@@ -167,7 +167,7 @@ webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是
 
 陣列順序就是顯示順序。
 
-## 🧰 指令
+## 指令
 
 在專案根目錄執行：
 
@@ -180,7 +180,7 @@ webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是
 | `npm test`        | 執行 `plugins/*.test.mjs` 的單元測試             |
 | `npm run fmt`     | 用 Prettier 格式化程式碼                         |
 
-## 🗂️ 專案結構
+## 專案結構
 
 ```
 src/
@@ -197,7 +197,7 @@ src/
 
 箭頭標示的地方是架設新站時真正要編輯的內容。
 
-## 🚢 部署
+## 部署
 
 `.github/workflows/deploy.yml`：每次 push 到 `main`，跑 `npm run check && npm run build`，再用 GitHub Pages 原生的 Actions 發布。設定一次就好：**Settings → Pages → Build and deployment → Source: GitHub Actions**。
 
@@ -216,26 +216,26 @@ src/
 
 之後每次 push 到 `main` 自動重新部署，開 PR 會附一個預覽網址。純靜態輸出，免費的 Hobby 方案就夠，不需要任何 adapter。
 
-## 🌐 語言
+## 語言
 
 預設 `"zh-TW"`。想改英文的話，把 `src/config.ts` 的 `locale` 設成 `"en"` 即可。
 
 字典在 `src/locales/`。要加新語言，複製 `en.ts` 的 key，照著填就行。
 
-## 🤝 參與貢獻
+## 參與貢獻
 
 歡迎 issue 和 PR。回報問題、許願功能請走 [issue 表單](../../issues/new/choose)。小修正直接開 PR；大改動則先開 issue 聊聊方向。
 
 開發環境與慣例，見 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-## 📄 授權
+## 授權
 
 MIT。詳見 [LICENSE](LICENSE)。
 
-## 📫 聯絡
+## 聯絡
 
 作者：[nagameTW](https://github.com/nagameTW)
 
-## 🙏 致謝
+## 致謝
 
 底層是 [Tocas UI](https://tocas-ui.com/)。部落格骨架依循 Astro 官方 blog starter。
