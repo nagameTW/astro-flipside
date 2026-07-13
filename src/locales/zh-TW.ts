@@ -14,6 +14,12 @@ const zhTW: UIStrings = {
   "landing.aboutBlurb":
     "這裡是我放東西的地方。工作的履歷與作品、平日寫下的文章、隨手拍的照片，都收在這個網站裡。想認識這些東西背後的人，到關於頁翻個面。",
   "landing.hello": "在這些地方找到我",
+  // Section eyebrows — deliberately English, like face.work above.
+  "landing.enAbout": "About",
+  "landing.enBlog": "Blog",
+  "landing.enGallery": "Gallery",
+  "landing.enProjects": "Projects",
+  "landing.enHello": "Say hello",
   "projects.description": "作品與側專案",
   "projects.empty": "還沒有內容。",
   "layout.backToTop": "回到頂部",

@@ -12,6 +12,14 @@ const en = {
   "landing.aboutBlurb":
     "This is where I keep things. The resume and the works, the everyday posts, the photos along the way, they all live here. To meet the person behind them, flip through the About page.",
   "landing.hello": "Find me here",
+  // Landing section eyebrows: the big English word above each section's
+  // localized descriptor. English in both locales by design (like
+  // face.work) — change per-locale for a non-bilingual site.
+  "landing.enAbout": "About",
+  "landing.enBlog": "Blog",
+  "landing.enGallery": "Gallery",
+  "landing.enProjects": "Projects",
+  "landing.enHello": "Say hello",
   "projects.description": "Selected works and side projects",
   "projects.empty": "Nothing here yet.",
   "layout.backToTop": "Back to top",

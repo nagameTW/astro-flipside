@@ -56,12 +56,16 @@ const SITE = {
       url: "https://example.com/soundcloud/your-name",
     },
   ] as { name: string; icon: string; url?: string; copy?: string }[],
-  /** Items per page on list pages — bump these to taste. */
+  /** How many items each list surface shows — bump these to taste. */
   pageSize: {
     /** Blog list + tag pages (vertical rows since 2026-07). */
     blog: 10,
     /** Projects grid — multiples of 3 keep the 3-up rows full. */
     projects: 9,
+    /** Recent items each homepage section previews (blog, projects,
+     *  gallery) before its "view all" link. The gallery is a 4-up strip,
+     *  so a multiple of 4 keeps its edge clean. */
+    home: 4,
   },
   features: {
     /** KaTeX math ($…$ / $$…$$) in posts. */
