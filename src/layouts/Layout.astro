@@ -28,6 +28,9 @@ const { title, description, noindex } = Astro.props;
         if (saved === "dark") document.documentElement.classList.add("is-dark");
         if (saved === "light")
           document.documentElement.classList.add("is-light");
+        // Arms the .reveal entrance styles before first paint; without JS
+        // the class never lands and everything is simply visible.
+        document.documentElement.classList.add("js");
       })();
     </script>
   </head>
@@ -66,6 +69,21 @@ const { title, description, noindex } = Astro.props;
       backToTop.addEventListener("click", () =>
         scrollTo({ top: 0, behavior: "smooth" }),
       );
+
+      // Site-wide scroll entrances: reveal each .reveal once, the first
+      // time 15% of it enters the viewport. Above-the-fold elements fire
+      // right away, so page tops play as an opening sequence.
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-in");
+              io.unobserve(e.target);
+            }
+          }),
+        { threshold: 0.15 },
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
     </script>
   </body>
 </html>

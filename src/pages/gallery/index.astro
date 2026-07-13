@@ -10,7 +10,7 @@ import Icon from "@/components/Icon.astro";
 ---
 
 <Layout title={t["nav.gallery"]} description={t["gallery.description"]}>
-  <div class="section-title">
+  <div class="section-title reveal">
     <h1 class="ts-header is-big is-heavy">{t["nav.gallery"]}</h1>
     <span class="ts-text is-description"
       >{fill(t["gallery.count"], { n: GALLERY.length })}</span
@@ -28,7 +28,8 @@ import Icon from "@/components/Icon.astro";
         {GALLERY.map((photo, i) => (
           <button
             type="button"
-            class="gallery-item"
+            class="gallery-item reveal"
+            style={`--ri: ${i % 5}`}
             data-modal={`gallery-modal-${i}`}
           >
             <SmartImage

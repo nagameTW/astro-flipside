@@ -9,7 +9,7 @@ import { t } from "@/locales";
 ---
 
 <Layout title={t["nav.projects"]} description={t["projects.description"]}>
-  <div class="section-title">
+  <div class="section-title reveal">
     <h1 class="ts-header is-big is-heavy">{t["nav.projects"]}</h1>
   </div>
   {
@@ -17,8 +17,10 @@ import { t } from "@/locales";
       <p class="ts-text is-secondary">{t["projects.empty"]}</p>
     ) : (
       <div class="projects-grid">
-        {PROJECTS.map((project) => (
-          <ProjectCard project={project} />
+        {PROJECTS.map((project, i) => (
+          <div class="reveal" style={`--ri: ${i % 3}`}>
+            <ProjectCard project={project} />
+          </div>
         ))}
       </div>
     )

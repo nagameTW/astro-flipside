@@ -1599,35 +1599,6 @@ dialog.search-dialog {
   font-size: var(--ts-font-size-large);
   color: rgb(255 255 255 / 0.88);
 }
-.landing-faces {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-.landing-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 2.5rem 1.5rem;
-  border: 1px solid var(--ts-gray-300);
-  border-radius: var(--ts-border-radius-container);
-  text-decoration: none;
-  color: inherit;
-  transition:
-    transform 0.15s ease,
-    background-color 0.15s ease;
-}
-.landing-card:hover {
-  transform: scale(1.02);
-  background: var(--ts-page-background-tertiary);
-}
-.landing-card-face {
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
 /* Gallery preview: a 4-up strip of square crops, one link to /gallery/. */
 .landing-gallery {
   display: grid;
@@ -1651,10 +1622,6 @@ dialog.search-dialog {
   }
   .landing-hero-text {
     padding: 2.5rem 1rem;
-  }
-  .landing-faces {
-    grid-template-columns: 1fr;
-    gap: 1rem;
   }
   .landing-gallery {
     grid-template-columns: repeat(2, 1fr);

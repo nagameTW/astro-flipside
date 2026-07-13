@@ -10,7 +10,6 @@ import PostCard from "@/components/PostCard.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import SmartImage from "@/components/SmartImage.astro";
 import SITE from "@/config";
-import { PROFILE } from "@/data/about";
 import { PROJECTS } from "@/data/projects";
 import { GALLERY } from "@/data/gallery";
 import { getPosts } from "@/utils/posts";
@@ -23,14 +22,6 @@ const latest = (await getPosts()).slice(0, 3);
 const photos = GALLERY.slice(0, 4);
 const projects = PROJECTS.slice(0, 3);
 ---
-
-{/* Inline and first thing on the page: the reveal styles only arm when
-    <html> carries .js, so a no-JS visitor sees everything immediately —
-    and because this runs during parse, elements are hidden BEFORE first
-    paint (a module script would flash them visible first). */}
-<script is:inline>
-  document.documentElement.classList.add("js");
-</script>
 
 <Layout description={SITE.description}>
   <section class="landing-hero reveal">
@@ -49,19 +40,6 @@ const projects = PROJECTS.slice(0, 3);
       <p class="landing-tagline">{t["landing.tagline"]}</p>
     </div>
   </section>
-
-  <div class="landing-faces">
-    <a class="landing-card reveal from-left" href={url("/about/?face=work")}>
-      <span class="landing-card-face">{t["face.work"]}</span>
-      <span class="landing-card-sub ts-text is-secondary">
-        {PROFILE.name}{PROFILE.headline && ` · ${PROFILE.headline}`}
-      </span>
-    </a>
-    <a class="landing-card reveal from-right" href={url("/about/")}>
-      <span class="landing-card-face">{t["face.life"]}</span>
-      <span class="landing-card-sub ts-text is-secondary">{SITE.title}</span>
-    </a>
-  </div>
 
   {
     latest.length > 0 && (
@@ -130,19 +108,3 @@ const projects = PROJECTS.slice(0, 3);
   }
 </Layout>
 
-<script>
-  // Scroll-driven entrances: reveal each .reveal once, the first time 15%
-  // of it enters the viewport. Above-the-fold elements fire immediately on
-  // load, so the hero and face cards play as an opening sequence.
-  const io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("is-in");
-          io.unobserve(e.target);
-        }
-      }),
-    { threshold: 0.15 },
-  );
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-</script>
