@@ -35,7 +35,6 @@
     <li><a href="#-project-structure">Project structure</a></li>
     <li><a href="#-deploy">Deploy</a></li>
     <li><a href="#-locale">Locale</a></li>
-    <li><a href="#-roadmap">Roadmap</a></li>
     <li><a href="#-contributing">Contributing</a></li>
     <li><a href="#-license">License</a></li>
     <li><a href="#-contact">Contact</a></li>
@@ -254,14 +253,6 @@ One locale at a time. It defaults to `"zh-TW"`. Want English? Set
 
 Both dictionaries live in `src/locales/`. Add a language by copying
 `en.ts`'s keys.
-
-## 🗺️ Roadmap
-
-Done: the home landing, the `/projects/` page, whole-site search, and 100
-across all four Lighthouse categories on every page.
-
-What's next, and any known issues, live in the
-[open issues](../../../issues). Suggestions welcome.
 
 ## 🤝 Contributing
 
