@@ -112,13 +112,11 @@ Netlify、Vercel、Cloudflare Pages 也行。做法見 [Astro 部署指南](http
 
 ## ✍️ 新增內容
 
-三種內容，三個地方。
-
 - 文章 → `src/content/blog/`
 - 專案 → `src/data/projects.ts`
 - 相簿 → `src/data/gallery.ts`
 
-存檔，`npm run dev` 立刻更新。
+存檔後，`npm run dev` 立刻更新。
 
 **寫一篇文章**
 
