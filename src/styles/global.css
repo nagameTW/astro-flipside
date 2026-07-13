@@ -1851,9 +1851,7 @@ dialog.search-dialog {
 }
 /* Whole-block link: the same hover language as a blog row. */
 .project-item:hover .ts-header,
-.project-item:focus-visible .ts-header,
-.project-item:hover .project-item-link,
-.project-item:focus-visible .project-item-link {
+.project-item:focus-visible .ts-header {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -1861,17 +1859,8 @@ dialog.search-dialog {
 .project-item:focus-visible .project-item-cover img {
   transform: scale(1.06);
 }
-.project-item-link span {
-  display: inline-block;
-  transition: transform 0.2s ease;
-}
-.project-item:hover .project-item-link span,
-.project-item:focus-visible .project-item-link span {
-  transform: rotate(45deg);
-}
 @media (prefers-reduced-motion: reduce) {
-  .project-item-cover img,
-  .project-item-link span {
+  .project-item-cover img {
     transition: none;
   }
   .project-item:hover .project-item-cover img {
