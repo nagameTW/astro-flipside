@@ -1635,33 +1635,26 @@ dialog.search-dialog {
    focus only), and their arrow turns from up-right to right as a little
    "this way" nudge — the nagi micro-interaction. Same for the project
    rows' corner arrows and the dark band's about link. */
-.landing-side-link,
-.landing-cta-about {
+.landing-side-link {
   text-decoration: none;
 }
 .landing-side-link:hover,
-.landing-side-link:focus-visible,
-.landing-cta-about:hover,
-.landing-cta-about:focus-visible {
+.landing-side-link:focus-visible {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 .landing-side-link span,
-.landing-cta-about span,
 .landing-project-top span:last-child {
   display: inline-block;
   transition: transform 0.2s ease;
 }
 .landing-side-link:hover span,
 .landing-side-link:focus-visible span,
-.landing-cta-about:hover span,
-.landing-cta-about:focus-visible span,
 .landing-project:hover .landing-project-top span:last-child {
   transform: rotate(45deg);
 }
 @media (prefers-reduced-motion: reduce) {
   .landing-side-link span,
-  .landing-cta-about span,
   .landing-project-top span:last-child {
     transition: none;
   }
@@ -1749,10 +1742,6 @@ dialog.search-dialog {
 }
 .landing-cta-links .ts-button:hover {
   background: rgb(255 255 255 / 0.22);
-}
-.landing-cta-about {
-  margin-left: 0.5rem;
-  color: #fff;
 }
 /* The dark band doubles as the landing's footer. */
 .landing-cta-copyright {
