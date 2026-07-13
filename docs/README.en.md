@@ -133,6 +133,12 @@ static, so importing the repo is enough (set `base` to `""`). See the
 
 ## ✨ Features
 
+**Home**
+
+- [x] Big-tagline landing with the site collage and previews of the
+      about, blog, gallery, and projects sections, closed by a dark band
+- [x] Alternating section tints and scroll-entrance animations
+
 **Dual-face about**
 
 - [x] Work/Life toggle with a 3D avatar flip
@@ -172,6 +178,8 @@ static, so importing the repo is enough (set `base` to `""`). See the
 
 **Everywhere**
 
+- [x] Page navigations swap in place — no full-page reload flash
+- [x] Momentum smooth scrolling; reduced-motion visitors get native behavior
 - [x] Dark mode: follows OS preference, or an explicit toggle that persists
 - [x] Built-in en / zh-TW UI strings, switched with one config flag
 - [x] Optional, flag-gated KaTeX math, Mermaid diagrams, and giscus
@@ -206,7 +214,7 @@ src/
 ├── data/          # ← About/Life copy, gallery, projects, trophies
 ├── layouts/       # Layout.astro, BlogPost.astro
 ├── locales/       # en.ts / zh-TW.ts UI string dictionaries
-├── pages/         # Routes: home, blog, tags, gallery, RSS, sitemap
+├── pages/         # Routes: home, about, blog, tags, gallery, projects, RSS, sitemap
 ├── styles/        # global.css
 ├── utils/         # Reading time, timeline, URL helpers
 └── config.ts      # ← single source of site configuration
@@ -242,11 +250,9 @@ by copying `en.ts`'s keys.
 
 ## 🗺️ Roadmap
 
-- [ ] Home page. The site currently opens straight into the About page;
-      a dedicated landing page is planned
-- [ ] `/projects/` portfolio page (the `src/data/projects.ts` +
-      `ProjectCard.astro` scaffold is ready; it gets a route once there is
-      real content to show)
+- [x] Home page: a landing with a big tagline, the site collage, and
+      previews of every section
+- [x] `/projects/` portfolio page
 
 Planned work and known issues live in the
 [open issues](../../../issues).
