@@ -1555,3 +1555,74 @@ dialog.search-dialog {
 .post-tags {
   margin-top: 3rem;
 }
+
+/* Landing page (prototype): the coin on its edge — pick a face. */
+.landing-hero {
+  text-align: center;
+  padding: 3rem 0 0.5rem;
+}
+.landing-tagline {
+  font-size: var(--ts-font-size-large);
+}
+.landing-faces {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 52rem;
+  margin: 2rem auto 0;
+}
+.landing-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem;
+  border: 1px solid var(--ts-gray-300);
+  border-radius: var(--ts-border-radius-container);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease;
+}
+.landing-card:hover {
+  transform: scale(1.02);
+  background: var(--ts-page-background-tertiary);
+}
+.landing-card img {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.landing-card-name {
+  margin-top: 0.5rem;
+}
+.landing-card-face {
+  margin-top: 0.5rem;
+  color: var(--ts-gray-500);
+  letter-spacing: 0.08em;
+}
+.landing-latest .section-title {
+  margin-top: 4rem;
+}
+@media (max-width: 767px) {
+  .landing-hero {
+    padding-top: 1.5rem;
+  }
+  .landing-faces {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Projects grid: auto-fill card columns, same rhythm as .cards-grid. */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1.5rem;
+}
+/* ts-header is a flex row, so text-align alone can't center it. */
+.landing-hero .ts-header {
+  justify-content: center;
+}

@@ -1,10 +1,17 @@
 import type { UIStrings } from "./en";
 
 const zhTW: UIStrings = {
+  "nav.home": "首頁",
   "nav.about": "關於",
   "nav.blog": "文章",
   "nav.gallery": "相簿",
+  "nav.projects": "專案",
   "nav.themeToggle": "切換深淺色主題",
+  "landing.tagline": "翻個面，認識另一個你。",
+  "landing.latest": "最新文章",
+  "landing.allPosts": "查看全部",
+  "projects.description": "作品與側專案",
+  "projects.empty": "還沒有內容。",
   "layout.backToTop": "回到頂部",
   "face.switchTo": "切換到 {name}",
   "face.work": "Work", // deliberately English — origin design, not a translation gap
