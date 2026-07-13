@@ -15,7 +15,7 @@
   Flip it over, meet the other you.
   <br />
   <br />
-  <a href="https://nagametw.github.io/astro-flipside/">Live demo</a>
+  <a href="https://astro-flipside.vercel.app/">Live demo</a>
   ·
   <a href="../../../issues/new/choose">Report a bug</a>
   ·
@@ -292,8 +292,8 @@ published:
 | Project page           | anything           | `"https://<user>.github.io"` | `"/<repo-name>"` | `https://<user>.github.io/<repo-name>/` |
 | User/organization page | `<user>.github.io` | `"https://<user>.github.io"` | `""`             | `https://<user>.github.io/`             |
 
-This repo deploys itself as a project page; the live demo is at
-<https://nagametw.github.io/astro-flipside/>.
+The live demo is deployed on Vercel: <https://astro-flipside.vercel.app/>. This repo also
+keeps the GitHub Pages Actions deploy, so clones can use either target.
 
 ### Deploy to Vercel
 
