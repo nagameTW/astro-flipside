@@ -10,7 +10,14 @@ import { t } from "@/locales";
 import Icon from "@/components/Icon.astro";
 ---
 
-<dialog id="search-dialog" class="search-dialog" aria-label={t["search.open"]}>
+{/* data-lenis-prevent: the results list scrolls on its own; without the
+    marker Lenis would swallow wheel events over it for the page. */}
+<dialog
+  id="search-dialog"
+  class="search-dialog"
+  aria-label={t["search.open"]}
+  data-lenis-prevent
+>
   <div class="ts-container">
     <div class="search-inner">
       {/* Borderless Apple-style query row: bare magnifier + naked input,

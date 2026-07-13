@@ -52,6 +52,8 @@ const { title, description, noindex } = Astro.props;
       <Icon name="arrow-up" />
     </button>
     <script>
+      import Lenis from "lenis";
+
       // Measured page-scrollbar width for the modal scroll-lock: while a
       // dialog is open, :root goes overflow:hidden and loses its scrollbar
       // gutter, so global.css pads the root by this amount to keep the page
@@ -60,6 +62,46 @@ const { title, description, noindex } = Astro.props;
         "--scrollbar-w",
         `${window.innerWidth - document.documentElement.clientWidth}px`,
       );
+
+      // Momentum smooth scrolling (the nagi reference): wheel input eases
+      // toward its target instead of jumping a notch. Touch stays native
+      // (Lenis's default — platform inertia beats simulation on phones)
+      // and reduced-motion visitors keep fully native scrolling.
+      let lenis: Lenis | undefined;
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        lenis = new Lenis({
+          autoRaf: true,
+          // Any open dialog freezes the page behind it. The CSS
+          // overflow:hidden lock alone can't stop Lenis: its virtual
+          // scroll writes scrollTop directly, and hidden scroll
+          // containers still scroll programmatically.
+          prevent: () => !!document.querySelector("dialog[open]"),
+        });
+        // Anchor glides. Hand-rolled instead of Lenis's anchors option:
+        // that one doesn't preventDefault, so the native instant jump
+        // races the glide. No offset here — Lenis reads the page's
+        // scroll-padding-top itself.
+        document.addEventListener("click", (e) => {
+          const a = (e.target as Element).closest?.('a[href^="#"]');
+          if (!(a instanceof HTMLAnchorElement)) return;
+          const el = document.getElementById(
+            decodeURIComponent(a.hash.slice(1)),
+          );
+          if (!el) return;
+          e.preventDefault();
+          history.pushState(null, "", a.hash);
+          // Remeasure first: Lenis snapshots the scroll limit at init,
+          // before lazy images finish, and clamps glides to that stale
+          // ceiling on cold loads.
+          lenis!.resize();
+          lenis!.scrollTo(el, {
+            // Lazy media loading mid-glide can shift the target; one
+            // instant correction on arrival (a no-op when nothing moved).
+            onComplete: () => lenis!.scrollTo(el, { immediate: true }),
+          });
+        });
+      }
+
       const backToTop = document.getElementById("back-to-top")!;
       addEventListener(
         "scroll",
@@ -67,7 +109,9 @@ const { title, description, noindex } = Astro.props;
         { passive: true },
       );
       backToTop.addEventListener("click", () =>
-        scrollTo({ top: 0, behavior: "smooth" }),
+        lenis
+          ? lenis.scrollTo(0)
+          : scrollTo({ top: 0, behavior: "smooth" }),
       );
 
       // Site-wide scroll entrances: reveal each .reveal once, the first

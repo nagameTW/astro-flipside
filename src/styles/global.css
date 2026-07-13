@@ -1,10 +1,20 @@
 
-/* Anchor jumps (TOC, heading anchors) glide instead of teleporting —
-   skipped for users who prefer reduced motion. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+/* Momentum smooth scrolling is Lenis's (see Layout.astro), including
+   anchor glides — so NO scroll-behavior: smooth here: it would fight the
+   per-frame scrollTop writes. Reduced-motion visitors get no Lenis and
+   plain instant scrolling. These are Lenis's own hook styles: */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 /* Site styles on top of Tocas UI. Tocas has no prose styling, so
    .md-content maps rendered Markdown onto its design tokens.
