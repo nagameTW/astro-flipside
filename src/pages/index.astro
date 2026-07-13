@@ -8,7 +8,6 @@
 // the social links. Scroll entrances come from the site-wide .reveal
 // machinery in Layout.
 import Layout from "@/layouts/Layout.astro";
-import PostCard from "@/components/PostCard.astro";
 import SmartImage from "@/components/SmartImage.astro";
 import Icon from "@/components/Icon.astro";
 import SITE from "@/config";
@@ -49,12 +48,15 @@ const isExternal = (u: string) => u.startsWith("http");
     <div class="landing-side reveal">
       <h2 class="landing-side-en">About</h2>
       <div class="ts-text is-secondary">{t["landing.aboutLabel"]}</div>
-      <a class="landing-side-link" href={url("/about/")}
-        >{t["landing.allPosts"]} <span aria-hidden="true">↗</span></a
-      >
+
     </div>
     <div class="landing-body">
       <p class="landing-blurb reveal">{t["landing.aboutBlurb"]}</p>
+    </div>
+    <div class="landing-more reveal">
+      <a class="landing-side-link" href={url("/about/")}>
+        {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
+      </a>
     </div>
   </section>
 
@@ -64,16 +66,29 @@ const isExternal = (u: string) => u.startsWith("http");
         <div class="landing-side reveal">
           <h2 class="landing-side-en">Blog</h2>
           <div class="ts-text is-secondary">{t["landing.latest"]}</div>
+        </div>
+        <div class="landing-body landing-rows">
+          {latest.map((post, i) => (
+            <a
+              class="landing-row reveal"
+              style={`--ri: ${i % 2}`}
+              href={url(`/blog/${post.id}/`)}
+            >
+              <div class="landing-row-top ts-text is-secondary">
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                <span aria-hidden="true">↗</span>
+              </div>
+              <div class="ts-header is-large is-heavy">{post.data.title}</div>
+              {post.data.description && (
+                <p class="ts-text is-secondary">{post.data.description}</p>
+              )}
+            </a>
+          ))}
+        </div>
+        <div class="landing-more reveal">
           <a class="landing-side-link" href={url("/blog/")}>
             {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
           </a>
-        </div>
-        <div class="landing-body landing-posts">
-          {latest.map((post, i) => (
-            <div class="reveal" style={`--ri: ${i}`}>
-              <PostCard post={post} />
-            </div>
-          ))}
         </div>
       </section>
     )
@@ -85,9 +100,6 @@ const isExternal = (u: string) => u.startsWith("http");
         <div class="landing-side reveal">
           <h2 class="landing-side-en">Gallery</h2>
           <div class="ts-text is-secondary">{t["nav.gallery"]}</div>
-          <a class="landing-side-link" href={url("/gallery/")}>
-            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
-          </a>
         </div>
         <a class="landing-body landing-gallery" href={url("/gallery/")}>
           {photos.map((photo, i) => (
@@ -102,6 +114,11 @@ const isExternal = (u: string) => u.startsWith("http");
             </div>
           ))}
         </a>
+        <div class="landing-more reveal">
+          <a class="landing-side-link" href={url("/gallery/")}>
+            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </section>
     )
   }
@@ -112,20 +129,17 @@ const isExternal = (u: string) => u.startsWith("http");
         <div class="landing-side reveal">
           <h2 class="landing-side-en">Projects</h2>
           <div class="ts-text is-secondary">{t["nav.projects"]}</div>
-          <a class="landing-side-link" href={url("/projects/")}>
-            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
-          </a>
         </div>
-        <div class="landing-body landing-projects">
+        <div class="landing-body landing-rows">
           {projects.map((project, i) => (
             <a
-              class="landing-project reveal"
+              class="landing-row reveal"
               style={`--ri: ${i % 2}`}
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <div class="landing-project-top ts-text is-secondary">
+              <div class="landing-row-top ts-text is-secondary">
                 <span>{String(i + 1).padStart(2, "0")}</span>
                 <span aria-hidden="true">↗</span>
               </div>
@@ -133,6 +147,11 @@ const isExternal = (u: string) => u.startsWith("http");
               <p class="ts-text is-secondary">{project.description}</p>
             </a>
           ))}
+        </div>
+        <div class="landing-more reveal">
+          <a class="landing-side-link" href={url("/projects/")}>
+            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </section>
     )

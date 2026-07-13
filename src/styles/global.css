@@ -1644,18 +1644,18 @@ dialog.search-dialog {
   text-underline-offset: 0.2em;
 }
 .landing-side-link span,
-.landing-project-top span:last-child {
+.landing-row-top span:last-child {
   display: inline-block;
   transition: transform 0.2s ease;
 }
 .landing-side-link:hover span,
 .landing-side-link:focus-visible span,
-.landing-project:hover .landing-project-top span:last-child {
+.landing-row:hover .landing-row-top span:last-child {
   transform: rotate(45deg);
 }
 @media (prefers-reduced-motion: reduce) {
   .landing-side-link span,
-  .landing-project-top span:last-child {
+  .landing-row-top span:last-child {
     transition: none;
   }
 }
@@ -1665,11 +1665,6 @@ dialog.search-dialog {
   max-width: 38rem;
   margin: 0;
 }
-.landing-posts {
-  display: grid;
-  gap: 1.5rem;
-}
-
 /* Gallery preview: a 4-up strip of square crops, one link to /gallery/. */
 .landing-gallery {
   display: grid;
@@ -1688,29 +1683,35 @@ dialog.search-dialog {
   object-fit: cover;
 }
 
-/* Projects: numbered rows with a top rule and an arrow, nagi's services. */
-.landing-projects {
+/* Numbered rows with a top rule and a corner arrow (nagi's services):
+   used by both the blog and the projects previews. */
+.landing-rows {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem 3rem;
 }
-.landing-project {
+.landing-row {
   border-top: 1px solid var(--ts-gray-300);
   padding-top: 1rem;
   text-decoration: none;
   color: inherit;
 }
-.landing-project-top {
+.landing-row-top {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
 }
-.landing-project:hover .ts-header {
+.landing-row:hover .ts-header {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
-.landing-project p {
+.landing-row p {
   margin: 0.5rem 0 0;
+}
+/* Each section's view-all link sits at its bottom right. */
+.landing-more {
+  grid-column: 2;
+  justify-self: end;
 }
 
 /* Closing band: brand-dark, full-bleed, white text in both themes. */
@@ -1770,8 +1771,11 @@ dialog.search-dialog {
   .landing-gallery {
     grid-template-columns: repeat(2, 1fr);
   }
-  .landing-projects {
+  .landing-rows {
     grid-template-columns: 1fr;
+  }
+  .landing-more {
+    grid-column: 1;
   }
   .landing-cta {
     padding-block: 2.5rem;
