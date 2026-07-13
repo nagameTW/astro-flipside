@@ -1592,7 +1592,7 @@ dialog.search-dialog {
   font-size: var(--ts-font-size-large);
 }
 .landing-photo-hero {
-  border-radius: var(--ts-border-radius-container);
+  border-radius: 1.5rem;
   overflow: hidden;
   /* Matches docs/hero.jpg's native ratio — no crop. */
   aspect-ratio: 16 / 9;
