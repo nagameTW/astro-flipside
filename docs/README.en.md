@@ -124,8 +124,6 @@ Netlify, Vercel, Cloudflare Pages work too. See the
 
 ## ✍️ Adding content
 
-Three kinds of content. Three places.
-
 - Posts → `src/content/blog/`
 - Projects → `src/data/projects.ts`
 - Photos → `src/data/gallery.ts`
@@ -213,7 +211,7 @@ src/
 └── config.ts      # ← single source of site configuration
 ```
 
-The three arrows are what you edit. Everything else is internals.
+The arrows mark what you actually edit for a new site.
 
 ## 🚢 Deploy
 
@@ -230,33 +228,25 @@ published:
 | Project page           | anything           | `"https://<user>.github.io"` | `"/<repo-name>"` | `https://<user>.github.io/<repo-name>/` |
 | User/organization page | `<user>.github.io` | `"https://<user>.github.io"` | `""`             | `https://<user>.github.io/`             |
 
-The live demo runs on Vercel: <https://astro-flipside.vercel.app/>. The repo
-keeps the GitHub Pages Actions deploy too. Either target works for clones.
-
 ### Deploy to Vercel
 
 No config change. Importing the repo is enough.
 
 At [vercel.com](https://vercel.com), sign in with GitHub, **Add New →
-Project**, import the repo, **Deploy**. Vercel detects Astro and runs
-`astro build`; via the build-time `VERCEL` env (see `astro.config.mjs`) it
-sets `base` to the domain root and derives the canonical `site` from your
-Vercel URL. The `src/config.ts` values stay for the GitHub Pages path.
+Project**, import the repo, **Deploy**.
 
-Push to `main`, it redeploys. Open a PR, you get a preview URL. Fully
-static, so the free Hobby plan covers it. No adapter.
+Every push to `main` redeploys, and PRs get a preview URL. Fully static output, so the free Hobby plan covers it. No adapter needed.
 
 ## 🌐 Locale
 
-One locale at a time. It defaults to `"zh-TW"`. Want English? Set
-`locale: "en"` in `src/config.ts`. Everything switches.
+Defaults to `"zh-TW"`. For English, set `locale: "en"` in `src/config.ts`.
 
 Both dictionaries live in `src/locales/`. Add a language by copying
 `en.ts`'s keys.
 
 ## 🤝 Contributing
 
-Issues and PRs, both welcome. Bug reports and feature ideas go through the
+Issues and PRs welcome. Bug reports and feature ideas go through the
 [issue forms](../../../issues/new/choose). Small fixes can go straight to a
 PR; for anything bigger, open an issue first so we can agree on the shape.
 
