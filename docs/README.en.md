@@ -295,6 +295,17 @@ published:
 This repo deploys itself as a project page; the live demo is at
 <https://nagametw.github.io/astro-flipside/>.
 
+### Deploy to Vercel
+
+No config change needed — importing the repo is enough. At
+[vercel.com](https://vercel.com), sign in with GitHub, **Add New → Project**,
+import this repo, and **Deploy**. Vercel detects Astro, runs `astro build`,
+and (via the build-time `VERCEL` env — see `astro.config.mjs`) sets `base` to
+the domain root and derives the canonical `site` from your Vercel URL; the
+`src/config.ts` values stay for the GitHub Pages path. Every push to `main`
+redeploys, and PRs get preview URLs. Output is fully static, so the free
+Hobby plan covers it and no adapter is required.
+
 ## 🌐 Locale
 
 The UI reads one locale, and it defaults to `"zh-TW"`. Set

@@ -253,6 +253,10 @@ src/
 
 這個 repo 本身就是以 project page 的方式部署，線上示範在 <https://nagametw.github.io/astro-flipside/>。
 
+### 部署到 Vercel
+
+匯入 repo 就好，設定不用動。到 [vercel.com](https://vercel.com) 用 GitHub 登入，**Add New → Project**，匯入這個 repo，按 **Deploy**。Vercel 會自動認出是 Astro、跑 `astro build`；`base` 會自動切成根目錄、`site` 會用 Vercel 給的網址（靠建置時的 `VERCEL` 環境變數判斷，見 `astro.config.mjs`，`src/config.ts` 的值留給 GitHub Pages 用即可）。之後每次 push 到 `main` 自動重新部署，開 PR 會附一個預覽網址。純靜態輸出，免費的 Hobby 方案就夠，不需要任何 adapter。
+
 ## 🌐 語言
 
 介面只認一種語言，預設是 `"zh-TW"`。想改成英文的話，把 `src/config.ts` 的 `locale` 設成 `"en"` 即可，內建字串會整批切換。兩份字典都在 `src/locales/`。要加新語言，複製 `en.ts` 的 key 照著填就行。
