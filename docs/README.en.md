@@ -146,8 +146,8 @@ next to the file, and reference them with relative paths:
 ---
 title: "Post title"
 description: "Blurb for the list and search results" # optional
-pubDate: 2026-07-13
-updatedDate: 2026-07-20 # optional
+pubDate: "2026-07-13"
+updatedDate: "2026-07-20" # optional
 heroImage: "./cover.jpg" # optional; post hero + list thumbnail
 tags: ["life", "music"] # optional
 draft: true # drafts render in dev only

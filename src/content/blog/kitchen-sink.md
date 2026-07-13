@@ -1,7 +1,7 @@
 ---
 title: "Kitchen sink"
 description: "Every Markdown feature this template supports, in one post."
-pubDate: 2026-01-02
+pubDate: "2026-01-02"
 tags: ["demo", "markdown"]
 heroImage: "./hero-desk.jpg"
 # heroImage credit: Karola G (Pexels), https://www.pexels.com/photo/wooden-table-with-coffee-and-notebook-with-pen-4195334/

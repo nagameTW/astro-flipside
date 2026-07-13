@@ -124,8 +124,8 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 ---
 title: "文章標題"
 description: "列表與搜尋結果顯示的摘要" # 可省略
-pubDate: 2026-07-13
-updatedDate: 2026-07-20 # 可省略
+pubDate: "2026-07-13"
+updatedDate: "2026-07-20" # 可省略
 heroImage: "./cover.jpg" # 可省略；文章頁大圖，兼列表縮圖
 tags: ["life", "music"] # 可省略
 draft: true # 草稿只在 dev 顯示，建置自動排除

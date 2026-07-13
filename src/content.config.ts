@@ -1,12 +1,17 @@
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
-// A real calendar date. YAML parses an unquoted `2026-07-13` straight to a
-// Date; a quoted string is accepted too — but `new Date("2026-02-30")`
-// silently rolls over to Mar 2 (wrong post order, no build error), so a
-// string input is round-trip checked against its own Y-M-D and rejected if
-// they disagree. A Date input (the common case) passes straight through.
-const calendarDate = z.union([z.date(), z.string()]).transform((v, ctx) => {
+// A calendar date. QUOTE dates in frontmatter (pubDate: "2026-07-13", as the
+// demo posts do): a quoted value reaches this schema as a string and is
+// round-trip checked, so a rolled-over date like "2026-02-30" (which
+// new Date() shifts to Mar 2) or a garbage string fails the build instead of
+// silently reordering the blog. An UNQUOTED yaml date is parsed to a Date by
+// Astro's loader before Zod runs — js-yaml has already rolled an impossible
+// one over by then and the original text is gone, so a Date input can only be
+// accepted as-is (Astro can't override the "expected string" message on a
+// string-only schema, so rejecting Date inputs would just confuse the common
+// case). Net: quoting your dates buys validation; unquoted still works.
+const calendarDate = z.union([z.string(), z.date()]).transform((v, ctx) => {
   const d = v instanceof Date ? v : new Date(v);
   if (Number.isNaN(d.getTime())) {
     ctx.addIssue({
@@ -15,12 +20,14 @@ const calendarDate = z.union([z.date(), z.string()]).transform((v, ctx) => {
     });
     return z.NEVER;
   }
-  const iso = typeof v === "string" && /^(\d{4})-(\d{2})-(\d{2})/.exec(v);
+  // A bare YYYY-MM-DD must name a real day. Anchored, so a full datetime with
+  // an offset (which can legitimately land on a different UTC day) skips this.
+  const ymd = typeof v === "string" && /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
   if (
-    iso &&
-    (d.getUTCFullYear() !== +iso[1] ||
-      d.getUTCMonth() + 1 !== +iso[2] ||
-      d.getUTCDate() !== +iso[3])
+    ymd &&
+    (d.getUTCFullYear() !== +ymd[1] ||
+      d.getUTCMonth() + 1 !== +ymd[2] ||
+      d.getUTCDate() !== +ymd[3])
   ) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
@@ -35,7 +42,7 @@ const blog = defineCollection({
   loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
   schema: ({ image }) =>
     z.object({
-      title: z.string().min(1, "title cannot be empty"),
+      title: z.string().trim().min(1, "title cannot be empty"),
       // Optional: a post can omit it to drop the list-card blurb; the page's
       // meta description then falls back to SITE.description.
       description: z.string().optional(),
