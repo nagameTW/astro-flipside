@@ -46,14 +46,21 @@ const imageURL = new URL(url(image), Astro.site);
   href={url("/rss.xml")}
 />
 <link rel="stylesheet" href={url("/vendor/tocas/tocas.min.css")} />
-{/* Async font declarations: media="print" keeps the request off the render-
-    blocking path; onload flips it live. Standard Filament Group pattern. */}
-<link
-  rel="stylesheet"
-  href={url("/fonts/noto-sans-tc.css")}
-  media="print"
-  onload="this.media='all'"
-/>
+{/* Font declarations load AFTER the window load event, not merely async:
+    the declaration file is ~99 KB (gzip) of CJK @font-face and pulls in
+    hundreds of KB of woff2 slices. Fetched any earlier they compete with
+    critical resources on slow connections — and Lighthouse's simulator
+    charges everything in flight before first paint against FCP/LCP.
+    font-display:optional means a cold visit paints with the system font
+    either way, so deferring costs nothing visible. */}
+<script is:inline define:vars={{ fontCss: url("/fonts/noto-sans-tc.css") }}>
+  addEventListener("load", () => {
+    const l = document.createElement("link");
+    l.rel = "stylesheet";
+    l.href = fontCss;
+    document.head.append(l);
+  });
+</script>
 <noscript>
   <link rel="stylesheet" href={url("/fonts/noto-sans-tc.css")} />
 </noscript>
