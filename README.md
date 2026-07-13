@@ -15,7 +15,7 @@
   翻個面，認識另一個你。
   <br />
   <br />
-  <a href="https://nagametw.github.io/astro-flipside/">線上示範</a>
+  <a href="https://astro-flipside.vercel.app/">線上示範</a>
   ·
   <a href="../../issues/new/choose">回報問題</a>
   ·
@@ -251,7 +251,7 @@ src/
 | Project page     | 任意               | `"https://<user>.github.io"` | `"/<repo-name>"` | `https://<user>.github.io/<repo-name>/` |
 | 使用者／組織首頁 | `<user>.github.io` | `"https://<user>.github.io"` | `""`             | `https://<user>.github.io/`             |
 
-這個 repo 本身就是以 project page 的方式部署，線上示範在 <https://nagametw.github.io/astro-flipside/>。
+線上示範部署在 Vercel：<https://astro-flipside.vercel.app/>。這個 repo 也保留了 GitHub Pages 的 Actions 部署，讓 clone 的人兩種都能用。
 
 ### 部署到 Vercel
 
