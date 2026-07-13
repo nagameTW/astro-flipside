@@ -121,6 +121,8 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 - Work 面資料在 `src/data/about.ts`，Life 面資料在 `src/data/life.ts`
 - `src/data/projects.ts` 和 `ProjectCard.astro` 是為未來 `/projects/` 頁面準備的骨架，目前還沒接上任何路由
 
+<img src="docs/screenshots/about.webp" alt="關於頁的 Life 面">
+
 **部落格**
 
 - Expressive Code 程式碼區塊，有檔名標籤、行號和 diff 標記高亮
@@ -131,11 +133,15 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 - 在 frontmatter 設 `draft: true` 的草稿只會在 `astro dev` 顯示，正式建置與 RSS 都會自動排除
 - frontmatter 的 `heroImage` 一魚兩吃，同一張圖也會當作部落格列表中該篇文章卡片的方形縮圖
 
+<img src="docs/screenshots/post.webp" alt="文章頁，左側目錄與程式碼區塊">
+
 **相簿**
 
 - Pinterest 風格的 masonry 版面，用 CSS 多欄排版，照片保留原本的長寬比
 - 資料驅動，檔案放 `src/assets/gallery/`，在 `src/data/gallery.ts` import 後列出，自動轉 webp 與產生響應式尺寸
 - 點圖片會用燈箱放大顯示
+
+<img src="docs/screenshots/gallery.webp" alt="相簿的瀑布流版面">
 
 **全站共用**
 
@@ -144,6 +150,8 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 - KaTeX 數學公式、Mermaid 圖表和 giscus 留言是選用的功能旗標，預設關閉，關閉時不佔任何 bundle 大小
 - 支援 GitHub project page 的 base 路徑
 - 完全靜態輸出，零密鑰、零伺服器
+
+<img src="docs/screenshots/dark.webp" alt="暗色模式下的關於頁">
 
 ## 🧰 指令
 

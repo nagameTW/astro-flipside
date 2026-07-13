@@ -143,6 +143,8 @@ static, so importing the repo is enough (set `base` to `""`). See the
 - [x] `src/data/projects.ts` and `ProjectCard.astro` ship as a scaffold for a
       future `/projects/` page, not wired into a route yet
 
+<img src="screenshots/about.webp" alt="The About page, Life face">
+
 **Blog**
 
 - [x] Expressive Code fenced blocks: filenames, line numbers, diff
@@ -157,12 +159,16 @@ static, so importing the repo is enough (set `base` to `""`). See the
 - [x] `heroImage` in frontmatter doubles as the post's cover image on the
       blog index
 
+<img src="screenshots/post.webp" alt="A post page with the ToC rail and code frames">
+
 **Gallery**
 
 - [x] Pinterest-style masonry layout: CSS multi-column, so photos keep their
       own aspect ratio instead of being cropped into a fixed grid
 - [x] Data-driven: drop the files in `src/assets/gallery/`, import and list them in `src/data/gallery.ts` (auto webp + responsive sizes)
 - [x] Click a photo to open it full-size in a lightbox
+
+<img src="screenshots/gallery.webp" alt="The masonry gallery">
 
 **Everywhere**
 
@@ -172,6 +178,8 @@ static, so importing the repo is enough (set `base` to `""`). See the
       comments, each at zero bundle cost when off
 - [x] Base-path support for GitHub project pages
 - [x] Fully static output: zero secrets, zero server
+
+<img src="screenshots/dark.webp" alt="The About page in dark mode">
 
 ## 🧰 Commands
 
