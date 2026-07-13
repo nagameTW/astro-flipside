@@ -112,8 +112,6 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 
 想部署到 Netlify、Vercel 或 Cloudflare Pages 也可以。模板是純靜態輸出，匯入 repo 就能用，`base` 留 `""`，做法見 [Astro 部署指南](https://docs.astro.build/en/guides/deploy/)。
 
-以下各節是技術參考。架站時再回來查就好。
-
 ## ✨ 功能總覽
 
 **會翻面的關於頁**
@@ -196,6 +194,7 @@ src/
 
 ## 🗺️ 路線圖
 
+- [ ] 首頁。目前進站直接是關於頁，規劃一個獨立的入口首頁
 - [ ] `/projects/` 作品集頁。`src/data/projects.ts` 與 `ProjectCard.astro` 的骨架已就緒，等有實際內容再接上路由
 
 規劃中的項目與已知問題都在 [open issues](../../issues)。
