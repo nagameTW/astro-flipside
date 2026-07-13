@@ -78,6 +78,8 @@ profession and keeps what makes them who they are.
 
 ## 🚀 Getting started
 
+Zero to live, in five steps.
+
 **1. Create your repo**
 
 Click **Use this template** at the top, or use the GitHub CLI:
@@ -120,22 +122,26 @@ git commit -m "first deploy"
 git push        # Actions builds and deploys; live in about a minute
 ```
 
-Every later push to `main` redeploys automatically. If the site comes up
-unstyled or without images, go back to step 3 and check `base`. For adding
-content, copy the three examples under
-[Adding content](#-adding-content); every other field in
-`src/config.ts` carries its own comment. Delete the demo content once
-you've read it.
+Every push to `main` redeploys, automatically.
 
-Netlify, Vercel, and Cloudflare Pages work too: the template is fully
-static, so importing the repo is enough (set `base` to `""`). See the
+Site comes up unstyled or imageless? Back to step 3, check `base`. To add
+content, copy the three examples under [Adding content](#-adding-content).
+Every field in `src/config.ts` carries a comment. Delete the demo content
+once you've read it.
+
+Netlify, Vercel, Cloudflare Pages work too. It's fully static, so importing
+the repo is enough; for a root deploy, set `base` to `""`. See the
 [Astro deployment guide](https://docs.astro.build/en/guides/deploy/).
 
 ## ✍️ Adding content
 
-Each kind of content has one place: posts in `src/content/blog/`,
-projects in `src/data/projects.ts`, photos in `src/data/gallery.ts`.
-Save, and `npm run dev` picks the change up immediately.
+Three kinds of content. Three places.
+
+- Posts → `src/content/blog/`
+- Projects → `src/data/projects.ts`
+- Photos → `src/data/gallery.ts`
+
+Save, and `npm run dev` picks it up.
 
 **Write a post**
 
@@ -158,8 +164,8 @@ ship as responsive webp automatically; code frames, tables, the table
 of contents, and tags are all built in.
 ```
 
-The "Kitchen sink" demo post (`src/content/blog/kitchen-sink.md`) shows
-every supported construct; copying it is the fastest start.
+Want the full range? The "Kitchen sink" demo post
+(`src/content/blog/kitchen-sink.md`) shows every construct. Copy it.
 
 **Add a project**
 
@@ -194,61 +200,50 @@ Array order is display order.
 
 **Home**
 
-- [x] Big-tagline landing with the site collage and previews of the
-      about, blog, gallery, and projects sections, closed by a dark band
-- [x] Alternating section tints and scroll-entrance animations
+- Big-tagline landing. The site collage. Previews of about, blog, gallery, projects. A dark band to close.
+- Section tints alternate. Content reveals as you scroll, a section at a time.
 
 **Dual-face about**
 
-- [x] Work/Life toggle with a 3D avatar flip
-- [x] Both faces render from the same 9 generic content blocks: text, chips,
-      key-value, timeline, highlights, cards, stats, links, freeform markdown
-- [x] Work face data in `src/data/about.ts`, Life face data in
-      `src/data/life.ts`
+- One toggle. A 3D avatar flip.
+- Both faces, the same 9 content blocks: text, chips, key-value, timeline, highlights, cards, stats, links, markdown.
+- Work face in `src/data/about.ts`. Life face in `src/data/life.ts`.
 
 **Blog**
 
-- [x] Expressive Code fenced blocks: filenames, line numbers, diff
-      highlighting
-- [x] Table of contents with scroll-spy, heading anchors, and CJK-aware
-      reading time
-- [x] Pagefind full-text search, static, no server involved
-- [x] Tags with a tag index, pagination, and prev/next navigation
-- [x] RSS feed
-- [x] Drafts (`draft: true`) show only in `astro dev`; production builds and
-      the RSS feed exclude them automatically
-- [x] `heroImage` in frontmatter doubles as the post's cover image on the
-      blog index
+- Expressive Code frames: filenames, line numbers, diff highlighting.
+- A table of contents that follows the scroll. Heading anchors. CJK-aware reading time.
+- Full-text search (Pagefind). Static. No server.
+- Tags, a tag index, pagination, prev/next.
+- RSS.
+- `draft: true` shows in dev only. Builds and RSS skip it.
+- `heroImage` does double duty: the post hero, and its thumbnail in the list.
 
 **Gallery**
 
-- [x] Pinterest-style masonry layout: CSS multi-column, so photos keep their
-      own aspect ratio instead of being cropped into a fixed grid
-- [x] Data-driven: drop the files in `src/assets/gallery/`, import and list them in `src/data/gallery.ts` (auto webp + responsive sizes)
-- [x] Click a photo to open it full-size in a lightbox
+- Masonry, in CSS multi-column. Photos keep their own ratio.
+- Drop files in `src/assets/gallery/`, import, list. Webp and responsive sizes, automatic.
+- Click a photo. It opens in a lightbox.
 
 **Projects**
 
-- [x] Portfolio page — name, description, tech tags, link, and cover image,
-      all from `src/data/projects.ts`
-- [x] 3-up grid of fully clickable blocks, paginated every 9 entries; the
-      page size lives in `src/config.ts` under `pageSize`
+- A portfolio: name, description, tech tags, link, cover. All from `src/data/projects.ts`.
+- 3-up, whole block clickable, nine per page. The count lives in `src/config.ts` under `pageSize`.
 
 **Everywhere**
 
-- [x] Page navigations swap in place — no full-page reload flash
-- [x] Momentum smooth scrolling; reduced-motion visitors get native behavior
-- [x] Dark mode: follows OS preference, or an explicit toggle that persists
-- [x] Built-in en / zh-TW UI strings, switched with one config flag
-- [x] Optional, flag-gated KaTeX math, Mermaid diagrams, and giscus
-      comments, each at zero bundle cost when off
-- [x] Base-path support for GitHub project pages
-- [x] Fully static output: zero secrets, zero server
-- [x] Every page scores 100 on mobile Lighthouse: performance, accessibility, best practices, and SEO
+- Navigations swap in place. No reload flash.
+- Momentum scrolling. Reduced-motion visitors get the native kind.
+- Dark mode follows the OS, or a toggle that remembers.
+- en and zh-TW. One flag switches everything.
+- KaTeX, Mermaid, giscus: optional flags, off by default. Off, they cost next to nothing.
+- Base-path support for GitHub project pages.
+- Fully static. Zero secrets, zero server.
+- 100 on mobile Lighthouse, every page: performance, accessibility, best practices, SEO.
 
 ## 🧰 Commands
 
-All commands run from the project root, in a terminal:
+From the project root:
 
 | Command           | Action                                                               |
 | :---------------- | :------------------------------------------------------------------- |
@@ -274,14 +269,13 @@ src/
 └── config.ts      # ← single source of site configuration
 ```
 
-The three arrows are what you edit for a new site. Everything else is
-template internals.
+The three arrows are what you edit. Everything else is internals.
 
 ## 🚢 Deploy
 
-`.github/workflows/deploy.yml` builds with `npm run check && npm run build`
-and publishes through GitHub Pages' native Actions deployment
-(`actions/deploy-pages`) on every push to `main`. Enable it once:
+`.github/workflows/deploy.yml`: on every push to `main`, it runs
+`npm run check && npm run build`, then publishes through GitHub Pages'
+native Actions deploy (`actions/deploy-pages`). Enable it once:
 **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
 `site` and `base` in `src/config.ts` must match how the repo is
@@ -292,44 +286,46 @@ published:
 | Project page           | anything           | `"https://<user>.github.io"` | `"/<repo-name>"` | `https://<user>.github.io/<repo-name>/` |
 | User/organization page | `<user>.github.io` | `"https://<user>.github.io"` | `""`             | `https://<user>.github.io/`             |
 
-The live demo is deployed on Vercel: <https://astro-flipside.vercel.app/>. This repo also
-keeps the GitHub Pages Actions deploy, so clones can use either target.
+The live demo runs on Vercel: <https://astro-flipside.vercel.app/>. The repo
+keeps the GitHub Pages Actions deploy too. Either target works for clones.
 
 ### Deploy to Vercel
 
-No config change needed — importing the repo is enough. At
-[vercel.com](https://vercel.com), sign in with GitHub, **Add New → Project**,
-import this repo, and **Deploy**. Vercel detects Astro, runs `astro build`,
-and (via the build-time `VERCEL` env — see `astro.config.mjs`) sets `base` to
-the domain root and derives the canonical `site` from your Vercel URL; the
-`src/config.ts` values stay for the GitHub Pages path. Every push to `main`
-redeploys, and PRs get preview URLs. Output is fully static, so the free
-Hobby plan covers it and no adapter is required.
+No config change. Importing the repo is enough.
+
+At [vercel.com](https://vercel.com), sign in with GitHub, **Add New →
+Project**, import the repo, **Deploy**. Vercel detects Astro and runs
+`astro build`; via the build-time `VERCEL` env (see `astro.config.mjs`) it
+sets `base` to the domain root and derives the canonical `site` from your
+Vercel URL. The `src/config.ts` values stay for the GitHub Pages path.
+
+Push to `main`, it redeploys. Open a PR, you get a preview URL. Fully
+static, so the free Hobby plan covers it. No adapter.
 
 ## 🌐 Locale
 
-The UI reads one locale, and it defaults to `"zh-TW"`. Set
-`locale: "en"` in `src/config.ts` to switch to the English strings
-instead. Both dictionaries live in `src/locales/`; add another language
-by copying `en.ts`'s keys.
+One locale at a time. It defaults to `"zh-TW"`. Want English? Set
+`locale: "en"` in `src/config.ts`. Everything switches.
+
+Both dictionaries live in `src/locales/`. Add a language by copying
+`en.ts`'s keys.
 
 ## 🗺️ Roadmap
 
-Big items already done: the home landing page, the `/projects/` portfolio
-page, whole-site search, and 100 across all four Lighthouse categories on
-every page. What's next and any known issues live in the
-[open issues](../../../issues) — suggestions welcome.
+Done: the home landing, the `/projects/` page, whole-site search, and 100
+across all four Lighthouse categories on every page.
+
+What's next, and any known issues, live in the
+[open issues](../../../issues). Suggestions welcome.
 
 ## 🤝 Contributing
 
-Issues and pull requests are welcome. Bug reports and feature ideas go
-through the [issue forms](../../../issues/new/choose); small fixes can go
-straight to a PR, and it's worth opening an issue first for anything
-bigger so we can agree on the shape before you build it.
+Issues and PRs, both welcome. Bug reports and feature ideas go through the
+[issue forms](../../../issues/new/choose). Small fixes can go straight to a
+PR; for anything bigger, open an issue first so we can agree on the shape.
 
 [CONTRIBUTING.md](../CONTRIBUTING.md) covers the dev setup, repo map, and
-conventions; the PR form walks you through the rest. CI runs the same
-three checks you can run locally:
+conventions. CI runs the same three checks you run locally:
 `npm run check && npm run build && npm test`.
 
 ## 📄 License
@@ -344,5 +340,5 @@ Project link: <https://github.com/nagameTW/astro-flipside>
 
 ## 🙏 Acknowledgments
 
-Built on [Tocas UI](https://tocas-ui.com/). Blog scaffolding follows the
-official Astro blog starter.
+Built on [Tocas UI](https://tocas-ui.com/). The blog scaffolding follows
+the official Astro blog starter.
