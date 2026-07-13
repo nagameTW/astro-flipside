@@ -126,6 +126,52 @@ const mermaidClient = () => ({
   },
 });
 
+// Search during `astro dev`: the Pagefind index is a postbuild artifact
+// (pagefind --site dist), so the dev server 404s /pagefind/* and
+// Search.astro's dynamic import degrades into a silent no-op — search
+// looks broken in dev while working fine on any built deploy. This
+// middleware serves dist/pagefind/ on that path in dev. Run `npm run
+// build` once to (re)generate the index; new posts appear after the next
+// build. Dev-server hook only: build output is untouched.
+/** @type {() => import("astro").AstroIntegration} */
+const pagefindDev = () => ({
+  name: "pagefind-dev",
+  hooks: {
+    "astro:server:setup": ({ server }) => {
+      const mime = {
+        ".js": "text/javascript",
+        ".css": "text/css",
+        ".json": "application/json",
+        ".wasm": "application/wasm",
+      };
+      server.middlewares.use((req, res, next) => {
+        // Vite's own base middleware strips the base prefix before this
+        // runs (the dev log shows bare /pagefind/* URLs), but strip it
+        // ourselves too in case ordering ever changes.
+        let path = (req.url ?? "").split("?")[0];
+        if (SITE.base && path.startsWith(SITE.base))
+          path = path.slice(SITE.base.length);
+        if (!path.startsWith("/pagefind/") || path.includes(".."))
+          return next();
+        const file = fileURLToPath(
+          new URL(`dist${path}`, import.meta.url),
+        );
+        readFile(file)
+          .then((buf) => {
+            const ext = path.slice(path.lastIndexOf("."));
+            res.setHeader(
+              "Content-Type",
+              mime[/** @type {keyof mime} */ (ext)] ??
+                "application/octet-stream",
+            );
+            res.end(buf);
+          })
+          .catch(() => next());
+      });
+    },
+  },
+});
+
 // https://astro.build/config
 export default defineConfig({
   output: "static",
@@ -216,6 +262,7 @@ export default defineConfig({
     mdx(),
     sitemap(),
     notoFonts(),
+    pagefindDev(),
     ...(SITE.features.math ? [katexAssets()] : []),
     ...(SITE.features.mermaid ? [mermaidClient()] : []),
   ],

@@ -619,6 +619,13 @@ html.lenis body {
      the measured scrollbar width instead (set in Layout.astro's script;
      0px on overlay-scrollbar platforms). */
   padding-right: var(--scrollbar-w, 0px);
+  /* Chrome's caret-ensure-visible scroll honors scroll-padding-top even
+     while the page is locked. With the search input inside the sticky
+     header's panel (caret at ~97px, the padding demanding 112px),
+     scrolling can never satisfy it, so every keystroke shoved the page
+     up another 8px. No anchor jumps happen behind an open modal — zero
+     it for the lock's duration. */
+  scroll-padding-top: 0;
 }
 /* Card lightboxes (Cards.astro) reuse dialog.gallery-modal below — one
    full-viewport dark stage site-wide. No card-specific rules needed. */
