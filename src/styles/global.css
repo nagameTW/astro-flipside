@@ -1754,6 +1754,12 @@ dialog.search-dialog {
   margin-left: 0.5rem;
   color: #fff;
 }
+/* The dark band doubles as the landing's footer. */
+.landing-cta-copyright {
+  margin: 3rem 0 0;
+  font-size: var(--ts-font-size-small);
+  color: rgb(236 239 244 / 0.5);
+}
 @media (max-width: 767px) {
   .landing-hero {
     padding: 2.5rem 0 2rem;
