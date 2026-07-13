@@ -57,10 +57,10 @@ const isActive = (href: string) => {
       downward, at the header's z-level. */}
   <Search />
 </header>
-{/* Click-catching dim layer for the search panel. Lives OUTSIDE the header
-    because .site-header's backdrop-filter would trap a position:fixed child;
-    z 99 keeps it one notch under the header, so header + panel stay crisp
-    while the page dims. */}
+{/* Click-catching dim layer for the search panel. A sibling of the header so
+    it can cover the whole viewport (position:fixed) at its own z-index — z 99
+    keeps it one notch under the header, so header + panel stay crisp while the
+    page dims. */}
 <div id="search-veil" class="search-veil" aria-hidden="true" hidden></div>
 
 <script is:inline>

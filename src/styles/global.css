@@ -120,26 +120,12 @@ html.lenis body {
   position: sticky;
   top: 0;
   z-index: 100; /* below Tocas --ts-z-mask (101) */
-  /* No bottom border: the blurred backdrop already separates the header from
-     the content passing under it. */
-  /* Opaque first: browsers with backdrop-filter but no color-mix (iOS Safari
-     15, Firefox 103-112) drop the next line and would otherwise render the
-     header fully transparent, since the @supports rule below never fires. */
+  /* Solid, not frosted glass. A backdrop-filter bar flickers during the
+     navigation repaint on iOS Safari (and every iOS browser uses that
+     engine) — owner call 2026-07-14 to drop the blur for a plain opaque bar.
+     A hairline bottom border separates it from the content scrolling under. */
   background: var(--ts-page-background-default);
-  background: color-mix(
-    in srgb,
-    var(--ts-page-background-default) 70%,
-    transparent
-  );
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-}
-@supports not (
-  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
-) {
-  .site-header {
-    background: var(--ts-page-background-default);
-  }
+  border-bottom: 1px solid var(--ts-gray-200);
 }
 /* Brand wordmark, larger than the default header size. */
 .site-header a.ts-header {
@@ -1480,13 +1466,6 @@ a.gear-card {
 }
 .search-veil[hidden] {
   display: none;
-}
-/* One slab: while the panel is open the header drops its translucency so
-   no seam shows where the panel begins. */
-:root:has(dialog.search-dialog[open]) .site-header {
-  background: var(--ts-page-background-default);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 dialog.search-dialog {
   position: absolute;
