@@ -108,9 +108,62 @@ git commit -m "first deploy"
 git push        # Actions 自動建置，約一分鐘後網站上線
 ```
 
-之後每次 push 到 `main` 都會自動重新部署。部署後如果樣式或圖片全部消失，回第 3 步檢查 `base`。內容都住在[專案結構](#-專案結構)標了箭頭的三個地方。`src/config.ts` 的其餘欄位都有註解，照著填就行。範例文章讀完就可以刪。
+之後每次 push 到 `main` 都會自動重新部署。部署後如果樣式或圖片全部消失，回第 3 步檢查 `base`。內容怎麼加，照著[新增內容](#-新增內容)的三個範例就行；`src/config.ts` 的其餘欄位都有註解。範例內容讀完就可以刪。
 
 想部署到 Netlify、Vercel 或 Cloudflare Pages 也可以。模板是純靜態輸出，匯入 repo 就能用，`base` 留 `""`，做法見 [Astro 部署指南](https://docs.astro.build/en/guides/deploy/)。
+
+## ✍️ 新增內容
+
+三種內容各有固定位置：文章在 `src/content/blog/`，專案在 `src/data/projects.ts`，相簿在 `src/data/gallery.ts`。存檔後 `npm run dev` 立刻更新。
+
+**寫一篇文章**
+
+在 `src/content/blog/` 新增 `.md` 或 `.mdx` 檔，圖片放在文章旁邊、用相對路徑引用：
+
+```md
+---
+title: "文章標題"
+description: "列表與搜尋結果顯示的摘要" # 可省略
+pubDate: 2026-07-13
+updatedDate: 2026-07-20 # 可省略
+heroImage: "./cover.jpg" # 可省略；文章頁大圖，兼列表縮圖
+tags: ["life", "music"] # 可省略
+draft: true # 草稿只在 dev 顯示，建置自動排除
+---
+
+內文就是一般 Markdown。相對路徑的圖片 `![說明](./photo.jpg)` 會自動轉
+webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是內建。
+```
+
+範例文章「功能總覽」（`src/content/blog/kitchen-sink-zh.md`）示範了所有支援的排版，對照著寫最快。
+
+**加一個專案**
+
+在 `src/data/projects.ts` 的 `PROJECTS` 陣列加一筆：
+
+```ts
+{
+  name: "專案名稱",
+  description: "一句話說明。",
+  tech: ["Astro", "TypeScript"],       // 顯示成技術標籤
+  url: "https://github.com/you/repo",  // 整個區塊都連到這裡
+  img: cover,                          // 可省略；檔案頂部 import 的圖或 https URL
+},
+```
+
+**加一張照片**
+
+圖檔放進 `src/assets/gallery/`，在 `src/data/gallery.ts` import 後加一筆：
+
+```ts
+{
+  src: photo,                        // import 的圖或 https URL
+  alt: "給讀屏器與搜尋引擎的描述",   // 必填
+  caption: "圖下與燈箱顯示的說明",   // 可省略
+},
+```
+
+陣列順序就是顯示順序。
 
 ## ✨ 功能總覽
 
@@ -119,12 +172,13 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 - 大字標語、網站拼貼圖，加上關於、文章、相簿、專案的預覽區塊與深色收尾
 - 區塊底色交替與捲動進場動畫，仿留白系企業官網的節奏
 
+<img src="docs/screenshots/home.webp" alt="首頁的大字標語與拼貼圖">
+
 **會翻面的關於頁**
 
 - Work/Life 切換鈕，附 3D 大頭貼翻轉動畫
 - 兩個面都用同一組九種通用內容區塊組成，型別名稱是 text、chips、kv、timeline、highlights、cards、stats、links 和 markdown
 - Work 面資料在 `src/data/about.ts`，Life 面資料在 `src/data/life.ts`
-- `src/data/projects.ts` 和 `ProjectCard.astro` 是為未來 `/projects/` 頁面準備的骨架，目前還沒接上任何路由
 
 <img src="docs/screenshots/about.webp" alt="關於頁的 Life 面">
 
@@ -136,7 +190,7 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 - 標籤與標籤索引頁、分頁、文章間的上一篇與下一篇導覽
 - RSS feed
 - 在 frontmatter 設 `draft: true` 的草稿只會在 `astro dev` 顯示，正式建置與 RSS 都會自動排除
-- frontmatter 的 `heroImage` 一魚兩吃，同一張圖也會當作部落格列表中該篇文章卡片的方形縮圖
+- frontmatter 的 `heroImage` 一魚兩吃，同一張圖也會當作部落格列表裡該篇文章的縮圖
 
 <img src="docs/screenshots/post.webp" alt="文章頁，左側目錄與程式碼區塊">
 
@@ -147,6 +201,13 @@ git push        # Actions 自動建置，約一分鐘後網站上線
 - 點圖片會用燈箱放大顯示
 
 <img src="docs/screenshots/gallery.webp" alt="相簿的瀑布流版面">
+
+**專案**
+
+- 作品集頁面：名稱、說明、技術標籤、連結和封面圖，資料在 `src/data/projects.ts`
+- 3 欄格線、整個區塊都可以點，每 9 筆換頁；每頁筆數在 `src/config.ts` 的 `pageSize` 調
+
+<img src="docs/screenshots/projects.webp" alt="專案頁的 3 欄格線">
 
 **全站共用**
 
