@@ -23,5 +23,5 @@ const title = fill(t["blog.taggedWith"], { tag });
 ---
 
 <Layout title={title} description={t["blog.tagIndexDescription"]}>
-  <PostList page={page} title={title} />
+  <PostList page={page} title={title} activeTag={tag} />
 </Layout>
