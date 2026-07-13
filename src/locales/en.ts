@@ -5,7 +5,7 @@ const en = {
   "nav.gallery": "Gallery",
   "nav.projects": "Projects",
   "nav.themeToggle": "Toggle color theme",
-  "landing.tagline": "Flip it over, meet the other you.",
+  "landing.tagline": "Flip it over,\nmeet the other you.",
   "landing.latest": "Latest posts",
   "landing.allPosts": "All posts",
   "landing.aboutLabel": "Who I am",

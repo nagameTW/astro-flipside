@@ -7,7 +7,7 @@ const zhTW: UIStrings = {
   "nav.gallery": "相簿",
   "nav.projects": "專案",
   "nav.themeToggle": "切換深淺色主題",
-  "landing.tagline": "翻個面，認識另一個你。",
+  "landing.tagline": "翻個面，\n認識另一個你。",
   "landing.latest": "最新文章",
   "landing.allPosts": "查看全部",
   "landing.aboutLabel": "關於我",

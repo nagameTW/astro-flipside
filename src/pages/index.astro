@@ -17,7 +17,8 @@ import { getPosts } from "@/utils/posts";
 import { t } from "@/locales";
 import { url } from "@/utils/url";
 import { Image } from "astro:assets";
-import heroPhoto from "../assets/gallery/gallery-08.jpg";
+// The repo's own README hero — the site collage the owner composed.
+import heroPhoto from "../../docs/hero.jpg";
 
 const latest = (await getPosts()).slice(0, 3);
 const photos = GALLERY.slice(0, 4);
@@ -28,9 +29,6 @@ const isExternal = (u: string) => u.startsWith("http");
 <Layout description={SITE.description} hideFooter hideBackToTop>
   <section class="landing-hero">
     <h1 class="landing-title reveal">{t["landing.tagline"]}</h1>
-    <p class="ts-text is-secondary reveal" style="--ri: 1">
-      {SITE.description}
-    </p>
   </section>
 
   <div class="landing-photo-hero reveal">

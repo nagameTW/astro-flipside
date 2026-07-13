@@ -1579,6 +1579,8 @@ dialog.search-dialog {
   padding: 5rem 0 3rem;
 }
 .landing-title {
+  /* The tagline breaks where the locale string puts its \n. */
+  white-space: pre-line;
   font-size: clamp(2.5rem, 6vw, 4.25rem);
   font-weight: 700;
   line-height: 1.25;
@@ -1592,7 +1594,8 @@ dialog.search-dialog {
 .landing-photo-hero {
   border-radius: var(--ts-border-radius-container);
   overflow: hidden;
-  aspect-ratio: 21 / 9;
+  /* Matches docs/hero.jpg's native ratio — no crop. */
+  aspect-ratio: 16 / 9;
 }
 .landing-photo-hero img {
   width: 100%;
@@ -1753,9 +1756,6 @@ dialog.search-dialog {
 @media (max-width: 767px) {
   .landing-hero {
     padding: 2.5rem 0 2rem;
-  }
-  .landing-photo-hero {
-    aspect-ratio: 4 / 3;
   }
   .landing-section {
     grid-template-columns: 1fr;
