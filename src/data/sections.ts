@@ -3,6 +3,7 @@
 // below the fold is one of these, so both faces render as
 // `SECTIONS.map((s) => <Section section={s} />)` (see Section.astro).
 import type { ImageMetadata } from "astro";
+import type { IconName } from "@/components/icons";
 export type TimelineEntry = {
   title: string;
   subtitle?: string;
@@ -29,7 +30,7 @@ export type Section =
       // href makes the whole row card a link (e.g. to a store or product
       // page); external http(s) links open in a new tab. icon is a name
       // from src/components/Icon.astro.
-      rows: { label: string; value: string; icon?: string; href?: string }[];
+      rows: { label: string; value: string; icon?: IconName; href?: string }[];
     }
   | { type: "timeline"; title?: string; entries: TimelineEntry[] }
   | { type: "highlights"; title?: string; entries: HighlightEntry[] }

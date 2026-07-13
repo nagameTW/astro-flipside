@@ -9,6 +9,7 @@ import { Image } from "astro:assets";
 import FaceToggle from "@/components/FaceToggle.astro";
 import Section from "@/components/Section.astro";
 import Icon from "@/components/Icon.astro";
+import type { IconName } from "@/components/icons";
 import { isExternal } from "@/utils/url";
 
 interface Props {
@@ -25,7 +26,7 @@ interface Props {
    *  geometry identical, or the face cross-fade reads as the card
    *  shifting and flickering. */
   headline?: string;
-  socials: { name: string; icon: string; url?: string; copy?: string }[];
+  socials: { name: string; icon: IconName; url?: string; copy?: string }[];
   sections: SectionData[];
 }
 const {

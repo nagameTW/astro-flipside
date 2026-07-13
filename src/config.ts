@@ -1,4 +1,5 @@
 import type { UIStrings } from "@/locales/en";
+import type { IconName } from "@/components/icons";
 
 /**
  * astro-flipside — site configuration.
@@ -37,7 +38,7 @@ const SITE = {
       url: "https://example.com/threads/your-name",
     },
     { name: "Discord", icon: "discord", copy: "your-discord-handle" },
-  ] as { name: string; icon: string; url?: string; copy?: string }[],
+  ] satisfies { name: string; icon: IconName; url?: string; copy?: string }[],
   /** Work-face identity-card social buttons — same `url`/`copy` shape. */
   socialsWork: [
     {
@@ -55,7 +56,7 @@ const SITE = {
       icon: "soundcloud",
       url: "https://example.com/soundcloud/your-name",
     },
-  ] as { name: string; icon: string; url?: string; copy?: string }[],
+  ] satisfies { name: string; icon: IconName; url?: string; copy?: string }[],
   /** How many items each list surface shows — bump these to taste. */
   pageSize: {
     /** Blog list + tag pages (vertical rows since 2026-07). */
