@@ -9,6 +9,7 @@
 import "@/styles/global.css";
 import SITE from "@/config";
 import { url } from "@/utils/url";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -37,6 +38,7 @@ const imageURL = new URL(url(image), Astro.site);
   content="width=device-width, initial-scale=1, shrink-to-fit=no"
 />
 <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
+<ClientRouter />
 <meta name="generator" content={Astro.generator} />
 <link rel="sitemap" href={url("/sitemap-index.xml")} />
 <link
@@ -59,16 +61,20 @@ const imageURL = new URL(url(image), Astro.site);
   // @font-face declarations register. On pages with few assets, load can
   // fire BEFORE first paint — injecting there stalled the paint behind
   // the declaration parse + optional's invisibility window.
+  const injectFontCss = () => {
+    if (document.querySelector('link[href="' + fontCss + '"]')) return;
+    const l = document.createElement("link");
+    l.rel = "stylesheet";
+    l.href = fontCss;
+    document.head.append(l);
+  };
   addEventListener("load", () => {
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        const l = document.createElement("link");
-        l.rel = "stylesheet";
-        l.href = fontCss;
-        document.head.append(l);
-      }),
-    );
+    requestAnimationFrame(() => requestAnimationFrame(injectFontCss));
   });
+  // The ClientRouter diffs the new page's head on navigation and drops
+  // our dynamically added link (it isn't in the incoming SSG head), so
+  // put it back after every swap — by then the css is warm in cache.
+  document.addEventListener("astro:after-swap", injectFontCss);
 </script>
 <noscript>
   <link rel="stylesheet" href={url("/fonts/noto-sans-tc.css")} />

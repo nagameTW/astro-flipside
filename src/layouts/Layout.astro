@@ -102,21 +102,28 @@ const { title, description, noindex } = Astro.props;
         });
       }
 
-      const backToTop = document.getElementById("back-to-top")!;
+      // The ClientRouter swaps the DOM without re-running module scripts,
+      // so anything bound to page elements re-arms on astro:page-load
+      // (which also fires on the initial load). Listeners on document /
+      // window above this line register once and stay live.
       addEventListener(
         "scroll",
-        () => backToTop.classList.toggle("is-shown", scrollY > 400),
+        () =>
+          document
+            .getElementById("back-to-top")
+            ?.classList.toggle("is-shown", scrollY > 400),
         { passive: true },
       );
-      backToTop.addEventListener("click", () =>
-        lenis
-          ? lenis.scrollTo(0)
-          : scrollTo({ top: 0, behavior: "smooth" }),
-      );
+      document.addEventListener("click", (e) => {
+        if (!(e.target as Element).closest?.("#back-to-top")) return;
+        lenis ? lenis.scrollTo(0) : scrollTo({ top: 0, behavior: "smooth" });
+      });
 
       // Site-wide scroll entrances: reveal each .reveal once, the first
       // time 15% of it enters the viewport. Above-the-fold elements fire
-      // right away, so page tops play as an opening sequence.
+      // right away, so page tops play as an opening sequence. One observer
+      // instance outlives navigations; swapped-out nodes just never
+      // intersect again.
       const io = new IntersectionObserver(
         (entries) =>
           entries.forEach((e) => {
@@ -127,7 +134,20 @@ const { title, description, noindex } = Astro.props;
           }),
         { threshold: 0.15 },
       );
-      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      document.addEventListener("astro:page-load", () => {
+        document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      });
+
+      // After a swap the router has already set the real scrollTop (top
+      // for forward navs, restored for history). Lenis's internal value
+      // still points at the OLD page's position and would yank the page
+      // back on its next frame — sync it immediately, then remeasure for
+      // the new page's height.
+      document.addEventListener("astro:after-swap", () => {
+        if (!lenis) return;
+        lenis.scrollTo(window.scrollY, { immediate: true, force: true });
+        lenis.resize();
+      });
     </script>
   </body>
 </html>

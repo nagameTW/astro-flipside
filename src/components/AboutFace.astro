@@ -107,20 +107,21 @@ const isExternal = (href?: string) => !!href && href.startsWith("http");
   import { t } from "@/locales";
 
   // Copy-to-clipboard socials: flash a confirmation in the tooltip
-  // (aria-label drives the CSS tooltip). Astro dedupes this script — it
-  // runs once per page and covers both faces' [data-copy] buttons.
-  document
-    .querySelectorAll<HTMLElement>(".social-icons [data-copy]")
-    .forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(btn.dataset.copy!);
-          const prev = btn.getAttribute("aria-label")!;
-          btn.setAttribute("aria-label", t["life.copied"]);
-          setTimeout(() => btn.setAttribute("aria-label", prev), 1500);
-        } catch {
-          /* clipboard blocked — the handle still shows in the tooltip */
-        }
-      });
-    });
+  // (aria-label drives the CSS tooltip). Delegated through document so it
+  // survives ClientRouter swaps and covers every [data-copy] button on
+  // whatever page is current.
+  document.addEventListener("click", async (e) => {
+    const btn = (e.target as Element).closest?.<HTMLElement>(
+      ".social-icons [data-copy]",
+    );
+    if (!btn) return;
+    try {
+      await navigator.clipboard.writeText(btn.dataset.copy!);
+      const prev = btn.getAttribute("aria-label")!;
+      btn.setAttribute("aria-label", t["life.copied"]);
+      setTimeout(() => btn.setAttribute("aria-label", prev), 1500);
+    } catch {
+      /* clipboard blocked — the handle still shows in the tooltip */
+    }
+  });
 </script>

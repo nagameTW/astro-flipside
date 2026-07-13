@@ -68,7 +68,10 @@ const SWITCH_LABELS = {
   console.log("%c" + title, "font-size:24px;font-weight:800;color:#1f2430");
 </script>
 
-<script is:inline define:vars={{ SWITCH_LABELS }}>
+{/* data-astro-rerun: inline scripts don't re-execute after a ClientRouter
+    swap by default, but this one binds the fresh page's toggle buttons and
+    reads ?face= — it must run on every visit to this page. */}
+<script is:inline data-astro-rerun define:vars={{ SWITCH_LABELS }}>
   const faces = document.querySelectorAll(".faces .face");
   const toggles = document.querySelectorAll(".face-toggle");
   const showFace = (next, focusToggle) => {

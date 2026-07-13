@@ -107,19 +107,23 @@ const slug = (title ?? "cards").replace(/\s+/g, "-");
 
 <script>
   import { wireModalOpeners } from "@/utils/dialogs";
-  // Opening is the shared wiring (queries the whole document, so any number
-  // of Cards instances work); closing matches the gallery stage — the whole
-  // dialog is the dark backdrop, so any click off the figure closes. Esc is
-  // native. Scoped to card modals so the gallery page's own dialogs (wired
-  // in gallery/index.astro) aren't double-bound.
-  wireModalOpeners(".trophy-item[data-modal]");
-  document
-    .querySelectorAll<HTMLDialogElement>(
-      'dialog.gallery-modal[id^="card-modal-"]',
-    )
-    .forEach((d) => {
-      d.addEventListener("click", (e) => {
-        if (!(e.target as Element).closest(".gallery-modal-figure")) d.close();
+  // Re-armed per navigation: every binding here is on that page's own
+  // elements. Opening is the shared wiring (queries the whole document,
+  // so any number of Cards instances work); closing matches the gallery
+  // stage — the whole dialog is the dark backdrop, so any click off the
+  // figure closes. Esc is native. Scoped to card modals so the gallery
+  // page's own dialogs (wired in gallery/index.astro) aren't double-bound.
+  document.addEventListener("astro:page-load", () => {
+    wireModalOpeners(".trophy-item[data-modal]");
+    document
+      .querySelectorAll<HTMLDialogElement>(
+        'dialog.gallery-modal[id^="card-modal-"]',
+      )
+      .forEach((d) => {
+        d.addEventListener("click", (e) => {
+          if (!(e.target as Element).closest(".gallery-modal-figure"))
+            d.close();
+        });
       });
-    });
+  });
 </script>

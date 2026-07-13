@@ -1631,6 +1631,41 @@ dialog.search-dialog {
   margin-top: 1.5rem;
   color: inherit;
 }
+/* View-all links follow the site-wide link rule (underline on hover or
+   focus only), and their arrow turns from up-right to right as a little
+   "this way" nudge — the nagi micro-interaction. Same for the project
+   rows' corner arrows and the dark band's about link. */
+.landing-side-link,
+.landing-cta-about {
+  text-decoration: none;
+}
+.landing-side-link:hover,
+.landing-side-link:focus-visible,
+.landing-cta-about:hover,
+.landing-cta-about:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.landing-side-link span,
+.landing-cta-about span,
+.landing-project-top span:last-child {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.landing-side-link:hover span,
+.landing-side-link:focus-visible span,
+.landing-cta-about:hover span,
+.landing-cta-about:focus-visible span,
+.landing-project:hover .landing-project-top span:last-child {
+  transform: rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-side-link span,
+  .landing-cta-about span,
+  .landing-project-top span:last-child {
+    transition: none;
+  }
+}
 .landing-blurb {
   font-size: var(--ts-font-size-large);
   line-height: 1.9;

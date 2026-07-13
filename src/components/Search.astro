@@ -84,6 +84,15 @@ import Icon from "@/components/Icon.astro";
   // do not re-add `base` to `d.url`.
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
+  // Everything below binds to per-page elements, so it re-arms on every
+  // ClientRouter navigation (astro:page-load also fires on first load).
+  // Esc lives on document — registered once, delegating to the current
+  // page's closePanel through this slot.
+  let currentClose: (() => void) | undefined;
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") currentClose?.();
+  });
+  const init = () => {
   const dialog = document.getElementById("search-dialog") as HTMLDialogElement;
   const input = document.getElementById("search-input") as HTMLInputElement;
   const list = document.getElementById("search-results")!;
@@ -172,9 +181,7 @@ import Icon from "@/components/Icon.astro";
     dialog.open ? closePanel() : openPanel(),
   );
   veil.addEventListener("click", closePanel);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && dialog.open) closePanel();
-  });
+  currentClose = closePanel;
   // Auto-collapse when the mouse leaves the header+panel area, with a small
   // grace window so grazing the boundary doesn't slam it shut. Mouse-only
   // by nature (mouseleave) — keyboard and touch flows are unaffected.
@@ -234,4 +241,6 @@ import Icon from "@/components/Icon.astro";
             )
             .join("");
   });
+  };
+  document.addEventListener("astro:page-load", init);
 </script>
