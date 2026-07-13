@@ -1,6 +1,7 @@
 // @ts-check
 import { cp, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
+import { resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
@@ -144,18 +145,32 @@ const pagefindDev = () => ({
         ".json": "application/json",
         ".wasm": "application/wasm",
       };
+      // No trailing slash: `root + sep` below is the containment prefix,
+      // and a trailing slash here would make it `…/pagefind//` and reject
+      // every real asset.
+      const root = fileURLToPath(new URL("dist/pagefind", import.meta.url));
       server.middlewares.use((req, res, next) => {
         // Vite's own base middleware strips the base prefix before this
         // runs (the dev log shows bare /pagefind/* URLs), but strip it
         // ourselves too in case ordering ever changes.
-        let path = (req.url ?? "").split("?")[0];
+        let path = decodeURIComponent((req.url ?? "").split("?")[0]);
         if (SITE.base && path.startsWith(SITE.base))
           path = path.slice(SITE.base.length);
-        if (!path.startsWith("/pagefind/") || path.includes(".."))
-          return next();
-        const file = fileURLToPath(
-          new URL(`dist${path}`, import.meta.url),
-        );
+        if (!path.startsWith("/pagefind/")) return next();
+        // /pagefind/* is entirely this middleware's namespace — resolve
+        // the request against root and serve from dist/pagefind/, or 404.
+        // Never fall through to Vite on a miss: Vite would happily serve a
+        // `/pagefind/../../src/config.ts` by normalizing the `..` up out of
+        // the directory (arbitrary project-file read on the dev server).
+        // A string `..` check can't guard this alone — it runs before
+        // percent-decoding, so `%2e%2e` slips past it; resolve + a root
+        // prefix check is what actually confines the path.
+        const send404 = () => {
+          res.statusCode = 404;
+          res.end("Not found");
+        };
+        const file = resolve(root, "." + path.slice("/pagefind".length));
+        if (file !== root && !file.startsWith(root + sep)) return send404();
         readFile(file)
           .then((buf) => {
             const ext = path.slice(path.lastIndexOf("."));
@@ -166,7 +181,7 @@ const pagefindDev = () => ({
             );
             res.end(buf);
           })
-          .catch(() => next());
+          .catch(send404);
       });
     },
   },
