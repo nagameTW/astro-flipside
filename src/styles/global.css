@@ -1834,6 +1834,18 @@ dialog.search-dialog {
   align-items: flex-start;
   gap: 0.75rem;
 }
+.project-item-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--ts-border-radius-element);
+  margin-bottom: 0.25rem;
+}
+.project-item-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .project-item .ts-header {
   font-size: 1.2rem;
 }

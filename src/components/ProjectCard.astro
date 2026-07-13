@@ -3,6 +3,7 @@
 // look, per owner): name, description, tech chips, and a GitHub text
 // link with the site's arrow interaction. No card chrome.
 import type { Project } from "@/data/projects";
+import SmartImage from "@/components/SmartImage.astro";
 
 interface Props {
   project: Project;
@@ -12,6 +13,19 @@ const { project } = Astro.props;
 ---
 
 <div class="project-item">
+  {
+    project.img && (
+      <div class="project-item-cover">
+        <SmartImage
+          src={project.img}
+          alt=""
+          loading="lazy"
+          widths={[400, 800]}
+          sizes="(max-width: 767px) 94vw, 370px"
+        />
+      </div>
+    )
+  }
   <div class="ts-header is-heavy">{project.name}</div>
   <p class="ts-text is-secondary">{project.description}</p>
   <div class="ts-wrap">
