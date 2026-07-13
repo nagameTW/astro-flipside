@@ -198,8 +198,6 @@ Array order is display order.
       about, blog, gallery, and projects sections, closed by a dark band
 - [x] Alternating section tints and scroll-entrance animations
 
-<img src="screenshots/home.webp" alt="The landing page: big tagline and site collage">
-
 **Dual-face about**
 
 - [x] Work/Life toggle with a 3D avatar flip
@@ -207,8 +205,6 @@ Array order is display order.
       key-value, timeline, highlights, cards, stats, links, freeform markdown
 - [x] Work face data in `src/data/about.ts`, Life face data in
       `src/data/life.ts`
-
-<img src="screenshots/about.webp" alt="The About page, Life face">
 
 **Blog**
 
@@ -224,8 +220,6 @@ Array order is display order.
 - [x] `heroImage` in frontmatter doubles as the post's cover image on the
       blog index
 
-<img src="screenshots/post.webp" alt="A post page with the ToC rail and code frames">
-
 **Gallery**
 
 - [x] Pinterest-style masonry layout: CSS multi-column, so photos keep their
@@ -233,16 +227,12 @@ Array order is display order.
 - [x] Data-driven: drop the files in `src/assets/gallery/`, import and list them in `src/data/gallery.ts` (auto webp + responsive sizes)
 - [x] Click a photo to open it full-size in a lightbox
 
-<img src="screenshots/gallery.webp" alt="The masonry gallery">
-
 **Projects**
 
 - [x] Portfolio page — name, description, tech tags, link, and cover image,
       all from `src/data/projects.ts`
 - [x] 3-up grid of fully clickable blocks, paginated every 9 entries; the
       page size lives in `src/config.ts` under `pageSize`
-
-<img src="screenshots/projects.webp" alt="The projects page, 3-up grid">
 
 **Everywhere**
 
@@ -255,10 +245,6 @@ Array order is display order.
 - [x] Base-path support for GitHub project pages
 - [x] Fully static output: zero secrets, zero server
 - [x] Mobile Lighthouse on the home page: 100 in all four categories
-
-<img src="screenshots/lighthouse.webp" alt="Lighthouse report: 100 for performance, accessibility, best practices, and SEO">
-
-<img src="screenshots/dark.webp" alt="The About page in dark mode">
 
 ## 🧰 Commands
 

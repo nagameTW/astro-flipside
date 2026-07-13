@@ -172,15 +172,11 @@ webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是
 - 大字標語、網站拼貼圖，加上關於、文章、相簿、專案的預覽區塊與深色收尾
 - 區塊底色交替與捲動進場動畫，仿留白系企業官網的節奏
 
-<img src="docs/screenshots/home.webp" alt="首頁的大字標語與拼貼圖">
-
 **會翻面的關於頁**
 
 - Work/Life 切換鈕，附 3D 大頭貼翻轉動畫
 - 兩個面都用同一組九種通用內容區塊組成，型別名稱是 text、chips、kv、timeline、highlights、cards、stats、links 和 markdown
 - Work 面資料在 `src/data/about.ts`，Life 面資料在 `src/data/life.ts`
-
-<img src="docs/screenshots/about.webp" alt="關於頁的 Life 面">
 
 **部落格**
 
@@ -192,22 +188,16 @@ webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是
 - 在 frontmatter 設 `draft: true` 的草稿只會在 `astro dev` 顯示，正式建置與 RSS 都會自動排除
 - frontmatter 的 `heroImage` 一魚兩吃，同一張圖也會當作部落格列表裡該篇文章的縮圖
 
-<img src="docs/screenshots/post.webp" alt="文章頁，左側目錄與程式碼區塊">
-
 **相簿**
 
 - Pinterest 風格的 masonry 版面，用 CSS 多欄排版，照片保留原本的長寬比
 - 資料驅動，檔案放 `src/assets/gallery/`，在 `src/data/gallery.ts` import 後列出，自動轉 webp 與產生響應式尺寸
 - 點圖片會用燈箱放大顯示
 
-<img src="docs/screenshots/gallery.webp" alt="相簿的瀑布流版面">
-
 **專案**
 
 - 作品集頁面：名稱、說明、技術標籤、連結和封面圖，資料在 `src/data/projects.ts`
 - 3 欄格線、整個區塊都可以點，每 9 筆換頁；每頁筆數在 `src/config.ts` 的 `pageSize` 調
-
-<img src="docs/screenshots/projects.webp" alt="專案頁的 3 欄格線">
 
 **全站共用**
 
@@ -219,10 +209,6 @@ webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是
 - 支援 GitHub project page 的 base 路徑
 - 完全靜態輸出，零密鑰、零伺服器
 - 行動版 Lighthouse 首頁四項全部 100 分
-
-<img src="docs/screenshots/lighthouse.webp" alt="Lighthouse 報告，效能、無障礙、最佳實踐與 SEO 皆 100 分">
-
-<img src="docs/screenshots/dark.webp" alt="暗色模式下的關於頁">
 
 ## 🧰 指令
 
