@@ -54,11 +54,20 @@ const imageURL = new URL(url(image), Astro.site);
     font-display:optional means a cold visit paints with the system font
     either way, so deferring costs nothing visible. */}
 <script is:inline define:vars={{ fontCss: url("/fonts/noto-sans-tc.css") }}>
+  // Double-rAF after load: rAF callbacks run on paint frames, so two of
+  // them guarantee the first paint is already on screen before the 315
+  // @font-face declarations register. On pages with few assets, load can
+  // fire BEFORE first paint — injecting there stalled the paint behind
+  // the declaration parse + optional's invisibility window.
   addEventListener("load", () => {
-    const l = document.createElement("link");
-    l.rel = "stylesheet";
-    l.href = fontCss;
-    document.head.append(l);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        const l = document.createElement("link");
+        l.rel = "stylesheet";
+        l.href = fontCss;
+        document.head.append(l);
+      }),
+    );
   });
 </script>
 <noscript>
