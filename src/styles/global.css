@@ -1663,6 +1663,13 @@ dialog.search-dialog {
   padding-block: 4rem;
   background: var(--ts-gray-75);
 }
+/* On the near-white tint (--ts-gray-75), the secondary gray (--ts-gray-500,
+   #767676) drops to 4.35:1 — under WCAG AA. Step it to --ts-gray-600 here
+   (still a Tocas token, so it flips correctly in dark mode); on the white
+   sections is-secondary already clears 4.5:1, so this stays scoped to tint. */
+.landing-section.is-tinted .ts-text.is-secondary {
+  color: var(--ts-gray-600);
+}
 /* Stacked variant: label above, content below, no rail column. */
 .landing-section.is-stacked {
   grid-template-columns: 1fr;
@@ -1845,27 +1852,32 @@ dialog.search-dialog {
   }
 }
 
-/* Apple-style scroll entrances. Armed only under html.js (set inline on
-   the landing page before first paint) so no-JS visitors see everything,
-   and only when the visitor is fine with motion. --ri staggers siblings. */
+/* Apple-style scroll entrances. Armed only under html.js (set inline before
+   first paint) so no-JS visitors see everything, and only when the visitor is
+   fine with motion. --ri staggers siblings.
+
+   A .reveal is VISIBLE by default; the script (Layout.astro) adds .is-pending
+   — the hidden, pre-animation state — only to elements that load below the
+   fold, then removes it when they scroll in (the transition plays the
+   entrance). Above-the-fold content is never hidden, so a page's LCP image
+   paints with the document instead of waiting for this script; gating it on
+   the observer pushed LCP several seconds out under throttling. */
 @media (prefers-reduced-motion: no-preference) {
   .js .reveal {
-    opacity: 0;
-    transform: translateY(34px);
     transition:
       opacity 0.85s cubic-bezier(0.2, 0.6, 0.2, 1),
       transform 0.85s cubic-bezier(0.2, 0.6, 0.2, 1);
     transition-delay: calc(var(--ri, 0) * 120ms);
   }
-  .js .reveal.from-left {
+  .js .reveal.is-pending {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+  .js .reveal.from-left.is-pending {
     transform: translateX(-32px);
   }
-  .js .reveal.from-right {
+  .js .reveal.from-right.is-pending {
     transform: translateX(32px);
-  }
-  .js .reveal.is-in {
-    opacity: 1;
-    transform: none;
   }
 }
 

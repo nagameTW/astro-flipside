@@ -57,6 +57,7 @@ const zhTW: UIStrings = {
   "search.noResults": "沒有符合的結果。",
   "post.footnotesLabel": "註腳",
   "post.backToList": "返回文章列表",
+  "post.taskLabel": "任務", // aria-label for GFM task-list checkboxes
   "lightbox.label": "圖片放大檢視",
   "notFound.message": "找不到這個頁面。",
   "notFound.home": "回首頁",

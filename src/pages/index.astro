@@ -17,16 +17,37 @@ import { GALLERY } from "@/data/gallery";
 import { getPosts } from "@/utils/posts";
 import { t } from "@/locales";
 import { url } from "@/utils/url";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 // The repo's own README hero — the site collage the owner composed.
 import heroPhoto from "../../docs/hero.jpg";
 
 const latest = (await getPosts()).slice(0, SITE.pageSize.home);
 const photos = GALLERY.slice(0, SITE.pageSize.home);
 const projects = PROJECTS.slice(0, SITE.pageSize.home);
+
+// The hero is the page's LCP element. Without a preload the browser only
+// discovers it after the CSS parses, and on a throttled connection the LCP
+// lands seconds late. Precompute the same responsive set the <Image> below
+// emits and preload it in <head> (via Layout's head slot) so the fetch
+// starts with the document, not after render.
+const heroWidths = [900, 1600, 2400];
+const heroSizes = "(max-width: 1220px) 96vw, 1180px";
+const heroPreload = await getImage({
+  src: heroPhoto,
+  widths: heroWidths,
+  format: "webp",
+});
 ---
 
 <Layout description={SITE.description} hideBackToTop>
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    type="image/webp"
+    imagesrcset={heroPreload.srcSet.attribute}
+    imagesizes={heroSizes}
+  />
   <section class="landing-hero">
     <h1 class="landing-title">
       {
@@ -41,12 +62,12 @@ const projects = PROJECTS.slice(0, SITE.pageSize.home);
     </h1>
   </section>
 
-  <div class="landing-photo-hero reveal" style="--ri: 2">
+  <div class="landing-photo-hero reveal">
     <Image
       src={heroPhoto}
       alt=""
-      widths={[900, 1600, 2400]}
-      sizes="(max-width: 1220px) 96vw, 1180px"
+      widths={heroWidths}
+      sizes={heroSizes}
       loading="eager"
       fetchpriority="high"
     />

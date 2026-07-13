@@ -57,6 +57,7 @@ const en = {
   "search.noResults": "No matching results.",
   "post.footnotesLabel": "Footnotes",
   "post.backToList": "Back to posts",
+  "post.taskLabel": "task", // aria-label for GFM task-list checkboxes
   "lightbox.label": "Enlarged image",
   "notFound.message": "This page does not exist.",
   "notFound.home": "Back to home",

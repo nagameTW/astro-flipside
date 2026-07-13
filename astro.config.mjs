@@ -13,6 +13,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { remarkReadingTime } from "./plugins/remark-reading-time.mjs";
 import { remarkMermaid } from "./plugins/remark-mermaid.mjs";
+import { rehypeTaskListA11y } from "./plugins/rehype-task-list-a11y.mjs";
 import SITE from "./src/config.ts";
 // Works from config-land because src/locales uses relative imports only —
 // the config loader does not resolve the `@/` alias.
@@ -211,6 +212,8 @@ export default defineConfig({
       // the hover "#" anchor a rehype-autolink-headings setup would add
       // (owner removed it 2026-07-12).
       rehypeSlug,
+      // Names GFM task-list checkboxes so they pass the a11y label check.
+      [rehypeTaskListA11y, t["post.taskLabel"]],
       ...(SITE.features.math ? [rehypeKatex] : []),
     ],
   },

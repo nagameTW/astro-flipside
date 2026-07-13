@@ -25,6 +25,8 @@ const { title, description, noindex, hideBackToTop } = Astro.props;
 <html lang={LOCALE} class="is-large">
   <head>
     <BaseHead title={title} description={description} noindex={noindex} />
+    {/* Per-page <head> extras — e.g. an LCP image preload (index.astro). */}
+    <slot name="head" />
     <script is:inline>
       (() => {
         const saved = localStorage.getItem("theme");
@@ -126,23 +128,32 @@ const { title, description, noindex, hideBackToTop } = Astro.props;
         lenis ? lenis.scrollTo(0) : scrollTo({ top: 0, behavior: "smooth" });
       });
 
-      // Site-wide scroll entrances: reveal each .reveal once, the first
-      // time 15% of it enters the viewport. Above-the-fold elements fire
-      // right away, so page tops play as an opening sequence. One observer
-      // instance outlives navigations; swapped-out nodes just never
-      // intersect again.
+      // Site-wide scroll entrances. A .reveal is visible by default; only
+      // elements that load below the fold get hidden (.is-pending) and then
+      // animate in the first time 15% of them enters the viewport. Anything
+      // already on screen at load is left painted — an above-the-fold LCP
+      // image must not wait for this observer (that pushed LCP seconds out
+      // under throttling). One observer instance outlives navigations.
       const io = new IntersectionObserver(
         (entries) =>
           entries.forEach((e) => {
             if (e.isIntersecting) {
-              e.target.classList.add("is-in");
+              e.target.classList.remove("is-pending");
               io.unobserve(e.target);
             }
           }),
         { threshold: 0.15 },
       );
       document.addEventListener("astro:page-load", () => {
-        document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+        // Below the fold = its top sits past 90% of the viewport height.
+        // Those are the only ones hidden + animated; the brief pre-hide
+        // frame is off-screen, so no flash is visible.
+        const fold = window.innerHeight * 0.9;
+        document.querySelectorAll(".reveal").forEach((el) => {
+          if (el.getBoundingClientRect().top < fold) return;
+          el.classList.add("is-pending");
+          io.observe(el);
+        });
       });
 
       document.addEventListener("astro:after-swap", () => {
