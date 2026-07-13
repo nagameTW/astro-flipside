@@ -1603,6 +1603,15 @@ dialog.search-dialog {
   object-fit: cover;
 }
 
+/* Centered intro line under the hero photo. */
+.landing-intro {
+  text-align: center;
+  font-size: var(--ts-font-size-large);
+  letter-spacing: 0.04em;
+  max-width: 36rem;
+  margin: 5rem auto 0;
+}
+
 /* Section shell: sticky label rail left, content right. */
 .landing-section {
   display: grid;
@@ -1618,6 +1627,14 @@ dialog.search-dialog {
   padding-inline: calc(50vw - 50%);
   padding-block: 4rem;
   background: var(--ts-gray-75);
+}
+/* Stacked variant: label above, content below, no rail column. */
+.landing-section.is-stacked {
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+.landing-section.is-stacked .landing-side {
+  position: static;
 }
 .landing-side {
   position: sticky;

@@ -42,7 +42,9 @@ const isExternal = (u: string) => u.startsWith("http");
     />
   </div>
 
-  <section class="landing-section is-tinted">
+  <p class="landing-intro reveal">{SITE.description}</p>
+
+  <section class="landing-section is-tinted is-stacked">
     <div class="landing-side reveal">
       <h2 class="landing-side-en">About</h2>
       <div class="ts-text is-secondary">{t["landing.aboutLabel"]}</div>
@@ -50,11 +52,6 @@ const isExternal = (u: string) => u.startsWith("http");
     </div>
     <div class="landing-body">
       <p class="landing-blurb reveal">{t["landing.aboutBlurb"]}</p>
-    </div>
-    <div class="landing-more reveal">
-      <a class="landing-side-link" href={url("/about/")}>
-        {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
-      </a>
     </div>
   </section>
 
