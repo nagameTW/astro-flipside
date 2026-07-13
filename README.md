@@ -249,4 +249,4 @@ MIT。詳見 [LICENSE](LICENSE)。
 
 ## 🙏 致謝
 
-底層是 [Tocas UI](https://tocas-ui.com/)。部落格骨架，依循 Astro 官方 blog starter。
+底層是 [Tocas UI](https://tocas-ui.com/)。部落格骨架依循 Astro 官方 blog starter。
