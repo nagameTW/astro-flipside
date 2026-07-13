@@ -216,7 +216,7 @@ src/
 
 匯入 repo 就好，設定不用動。
 
-到 [vercel.com](https://vercel.com) 用 GitHub 登入，**Add New → Project**，匯入 repo，按 **Deploy**。Vercel 自動認出 Astro、跑 `astro build`；`base` 自動切成根目錄、`site` 用 Vercel 網址（靠建置時的 `VERCEL` 變數判斷，見 `astro.config.mjs`；`src/config.ts` 的值留給 GitHub Pages）。
+到 [vercel.com](https://vercel.com) 用 GitHub 登入，**Add New → Project**，匯入 repo，按 **Deploy**。
 
 push 到 `main`，自動重新部署。開 PR，附預覽網址。純靜態，免費 Hobby 方案就夠，不用 adapter。
 
