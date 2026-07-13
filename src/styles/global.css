@@ -1823,9 +1823,36 @@ dialog.search-dialog {
   }
 }
 
-/* Projects grid: auto-fill card columns, same rhythm as .cards-grid. */
+/* Projects grid: auto-fill card columns, same rhythm as .cards-grid.
+   Grid stretch keeps every card in a row the same height; the card's
+   internal column layout below pins the button row to the bottom no
+   matter how long the description runs. */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
   gap: 1.5rem;
+  align-items: stretch;
+}
+.project-card {
+  height: 100%;
+  display: flex;
+}
+.project-card .ts-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+/* gap owns the rhythm — cancel the generic row-spacing rule. */
+.project-card .ts-content > * + * {
+  margin-top: 0;
+}
+.project-card p {
+  /* The description soaks up the leftover height, pushing chips and
+     the button to a consistent bottom line across the row. */
+  flex: 1;
+  margin: 0;
+}
+.project-card .ts-header {
+  font-size: 1.2rem;
 }
