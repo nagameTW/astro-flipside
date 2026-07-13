@@ -6,9 +6,9 @@
 import SITE from "@/config";
 import Icon from "@/components/Icon.astro";
 import { t } from "@/locales";
+import { isExternal } from "@/utils/url";
 
 const year = new Date().getFullYear();
-const isExternal = (u: string) => u.startsWith("http");
 ---
 
 <footer class="footer-band reveal">

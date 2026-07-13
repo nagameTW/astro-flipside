@@ -8,13 +8,13 @@
 // received here because the modal ids are namespaced by it.
 import type { CardEntry } from "@/data/sections";
 import SmartImage from "@/components/SmartImage.astro";
+import { isExternal } from "@/utils/url";
 
 interface Props {
   title?: string;
   cards: CardEntry[];
 }
 const { title, cards } = Astro.props;
-const isExternal = (u?: string) => !!u && u.startsWith("http");
 // Modal ids must be unique across the whole page — both faces (and every
 // Cards usage on them) are in the DOM at once — so they're namespaced by
 // this block's own title rather than a bare per-card index. HTML ids allow

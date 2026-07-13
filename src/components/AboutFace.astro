@@ -9,6 +9,7 @@ import { Image } from "astro:assets";
 import FaceToggle from "@/components/FaceToggle.astro";
 import Section from "@/components/Section.astro";
 import Icon from "@/components/Icon.astro";
+import { isExternal } from "@/utils/url";
 
 interface Props {
   face: "personal" | "professional";
@@ -37,7 +38,6 @@ const {
   socials,
   sections,
 } = Astro.props;
-const isExternal = (href?: string) => !!href && href.startsWith("http");
 ---
 
 <div

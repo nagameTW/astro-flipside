@@ -5,12 +5,12 @@
 // the link (e.g. to a store page).
 // Shell, heading, and empty-guard live in Section.astro.
 import Icon from "@/components/Icon.astro";
+import { isExternal } from "@/utils/url";
 
 interface Props {
   rows: { label: string; value: string; icon?: string; href?: string }[];
 }
 const { rows } = Astro.props;
-const isExternal = (u: string) => u.startsWith("http");
 ---
 
 <div class="gear-grid">
