@@ -244,7 +244,7 @@ Array order is display order.
       comments, each at zero bundle cost when off
 - [x] Base-path support for GitHub project pages
 - [x] Fully static output: zero secrets, zero server
-- [x] Mobile Lighthouse on the home page: 100 in all four categories
+- [x] Every page scores 100 on mobile Lighthouse: performance, accessibility, best practices, and SEO
 
 ## 🧰 Commands
 
