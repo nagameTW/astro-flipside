@@ -1,70 +1,148 @@
 ---
-// Landing page — the coin standing on its edge. The visitor picks a face:
-// the Work card deep-links to /about/?face=work, the Life card to /about/
-// (Life is the about page's default). Below the fold: the three latest
-// posts. Prototype: layout and copy are up for owner iteration.
+// Landing page — the coin standing on its edge. A photo hero up top, then
+// two text-only cards (the visitor picks a face: Work deep-links to
+// /about/?face=work, Life to /about/), then previews of the blog, the
+// gallery, and the projects. Sections slide in on scroll, Apple-style:
+// see the .reveal styles in global.css and the observer below.
+// Prototype: layout and copy are up for owner iteration.
 import Layout from "@/layouts/Layout.astro";
 import PostCard from "@/components/PostCard.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import SmartImage from "@/components/SmartImage.astro";
 import SITE from "@/config";
-import { AVATAR } from "@/data/life";
-import { AVATAR_WORK, PROFILE } from "@/data/about";
+import { PROFILE } from "@/data/about";
+import { PROJECTS } from "@/data/projects";
+import { GALLERY } from "@/data/gallery";
 import { getPosts } from "@/utils/posts";
 import { t } from "@/locales";
 import { url } from "@/utils/url";
 import { Image } from "astro:assets";
+import heroBg from "../assets/gallery/gallery-01.jpg";
 
 const latest = (await getPosts()).slice(0, 3);
+const photos = GALLERY.slice(0, 4);
+const projects = PROJECTS.slice(0, 3);
 ---
 
+{/* Inline and first thing on the page: the reveal styles only arm when
+    <html> carries .js, so a no-JS visitor sees everything immediately —
+    and because this runs during parse, elements are hidden BEFORE first
+    paint (a module script would flash them visible first). */}
+<script is:inline>
+  document.documentElement.classList.add("js");
+</script>
+
 <Layout description={SITE.description}>
-  <section class="landing-hero">
-    <h1 class="ts-header is-massive is-heavy">{SITE.title}</h1>
-    <p class="ts-text is-secondary landing-tagline">{t["landing.tagline"]}</p>
+  <section class="landing-hero reveal">
+    <div class="landing-hero-bg" aria-hidden="true">
+      <Image
+        src={heroBg}
+        alt=""
+        widths={[900, 1600]}
+        sizes="(max-width: 1220px) 96vw, 1180px"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="landing-hero-text">
+      <h1 class="ts-header is-massive is-heavy">{SITE.title}</h1>
+      <p class="landing-tagline">{t["landing.tagline"]}</p>
+    </div>
   </section>
 
   <div class="landing-faces">
-    <a class="landing-card" href={url("/about/?face=work")}>
-      <Image
-        src={AVATAR_WORK}
-        alt=""
-        width={160}
-        densities={[1, 2]}
-        loading="eager"
-      />
-      <div class="landing-card-name ts-header is-large is-heavy">
-        {PROFILE.name}
-      </div>
-      {
-        PROFILE.headline && (
-          <div class="ts-text is-secondary">{PROFILE.headline}</div>
-        )
-      }
-      <span class="landing-card-face ts-text is-bold">{t["face.work"]}</span>
+    <a class="landing-card reveal from-left" href={url("/about/?face=work")}>
+      <span class="landing-card-face">{t["face.work"]}</span>
+      <span class="landing-card-sub ts-text is-secondary">
+        {PROFILE.name}{PROFILE.headline && ` · ${PROFILE.headline}`}
+      </span>
     </a>
-    <a class="landing-card" href={url("/about/")}>
-      <Image src={AVATAR} alt="" width={160} densities={[1, 2]} loading="eager" />
-      <div class="landing-card-name ts-header is-large is-heavy">
-        {SITE.title}
-      </div>
-      <span class="landing-card-face ts-text is-bold">{t["face.life"]}</span>
+    <a class="landing-card reveal from-right" href={url("/about/")}>
+      <span class="landing-card-face">{t["face.life"]}</span>
+      <span class="landing-card-sub ts-text is-secondary">{SITE.title}</span>
     </a>
   </div>
 
   {
     latest.length > 0 && (
-      <section class="landing-latest">
-        <div class="section-title">
+      <section class="landing-section">
+        <div class="section-title reveal">
           <h2 class="ts-header is-big is-heavy">{t["landing.latest"]}</h2>
           <a class="ts-text is-secondary" href={url("/blog/")}>
             {t["landing.allPosts"]}
           </a>
         </div>
         <div class="cards-grid is-wide">
-          {latest.map((post) => (
-            <PostCard post={post} />
+          {latest.map((post, i) => (
+            <div class="reveal" style={`--ri: ${i}`}>
+              <PostCard post={post} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    photos.length > 0 && (
+      <section class="landing-section">
+        <div class="section-title reveal">
+          <h2 class="ts-header is-big is-heavy">{t["nav.gallery"]}</h2>
+          <a class="ts-text is-secondary" href={url("/gallery/")}>
+            {t["landing.allPosts"]}
+          </a>
+        </div>
+        <a class="landing-gallery" href={url("/gallery/")}>
+          {photos.map((photo, i) => (
+            <div class="landing-photo reveal" style={`--ri: ${i}`}>
+              <SmartImage
+                src={photo.src}
+                alt={photo.alt}
+                loading="lazy"
+                widths={[400, 800]}
+                sizes="(max-width: 767px) 46vw, 280px"
+              />
+            </div>
+          ))}
+        </a>
+      </section>
+    )
+  }
+
+  {
+    projects.length > 0 && (
+      <section class="landing-section">
+        <div class="section-title reveal">
+          <h2 class="ts-header is-big is-heavy">{t["nav.projects"]}</h2>
+          <a class="ts-text is-secondary" href={url("/projects/")}>
+            {t["landing.allPosts"]}
+          </a>
+        </div>
+        <div class="projects-grid">
+          {projects.map((project, i) => (
+            <div class="reveal" style={`--ri: ${i}`}>
+              <ProjectCard project={project} />
+            </div>
           ))}
         </div>
       </section>
     )
   }
 </Layout>
+
+<script>
+  // Scroll-driven entrances: reveal each .reveal once, the first time 15%
+  // of it enters the viewport. Above-the-fold elements fire immediately on
+  // load, so the hero and face cards play as an opening sequence.
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-in");
+          io.unobserve(e.target);
+        }
+      }),
+    { threshold: 0.15 },
+  );
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+</script>
