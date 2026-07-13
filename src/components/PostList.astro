@@ -15,7 +15,7 @@ interface Props {
 const { page, title } = Astro.props;
 ---
 
-<div class="section-title">
+<div class="section-title reveal">
   <h1 class="ts-header is-big is-heavy">{title}</h1>
   <span class="ts-text is-description"
     >{fill(t["blog.count"], { n: page.total })}</span
@@ -27,7 +27,9 @@ const { page, title } = Astro.props;
   ) : (
     <div class="cards-grid is-wide">
       {page.data.map((post, i) => (
-        <PostCard post={post} eager={i === 0} />
+        <div class="reveal" style={`--ri: ${i % 4}`}>
+          <PostCard post={post} eager={i === 0} />
+        </div>
       ))}
     </div>
   )

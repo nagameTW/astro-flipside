@@ -46,7 +46,7 @@ const hasToc = headings.some(
 
 <Layout title={title} description={description}>
   <article class="ts-container is-narrow" data-pagefind-body>
-    <header class="post-header">
+    <header class="post-header reveal">
       <a class="post-back" href={url("/blog/")}>
         <Icon name="arrow-left" />
         {t["post.backToList"]}
@@ -92,7 +92,7 @@ const hasToc = headings.some(
     {
       heroImage && (
         <SmartImage
-          class="post-hero"
+          class="post-hero reveal"
           src={heroImage}
           alt=""
           loading="eager"

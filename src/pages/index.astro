@@ -1,100 +1,177 @@
 ---
+// Landing page, redesigned after the owner's reference (nagi-6tu — a
+// Japanese corporate-minimal look): a big left-aligned wordmark hero in
+// whitespace, one large rounded photo, then sections with a sticky
+// bilingual label rail on the left (big English word, small locale line,
+// an arrow link) and the content flowing on the right. Projects render
+// as numbered rows, and a dark brand-colored card closes the page with
+// the social links. Scroll entrances come from the site-wide .reveal
+// machinery in Layout.
 import Layout from "@/layouts/Layout.astro";
-import AboutFace from "@/components/AboutFace.astro";
+import SmartImage from "@/components/SmartImage.astro";
+import Icon from "@/components/Icon.astro";
 import SITE from "@/config";
-import { AVATAR, PERSONAL_SECTIONS } from "@/data/life";
-import {
-  AVATAR_WORK,
-  PROFILE,
-  PROFESSIONAL_SECTIONS,
-} from "@/data/about";
-import { t, fill } from "@/locales";
-// The ASCII art is a two-way easter egg: a real HTML comment at the top of
-// the page (view-source), and logged to the console below (F12). `set:html`
-// is required — an Astro `{/* */}` comment never reaches the built output.
-import art from "@/data/ascii-art.txt?raw";
+import { PROJECTS } from "@/data/projects";
+import { GALLERY } from "@/data/gallery";
+import { getPosts } from "@/utils/posts";
+import { t } from "@/locales";
+import { url } from "@/utils/url";
+import { Image } from "astro:assets";
+// The repo's own README hero — the site collage the owner composed.
+import heroPhoto from "../../docs/hero.jpg";
 
-// Prebuilt once per locale — the toggle script below is plain inline JS
-// (no module imports), so it receives the finished strings via define:vars
-// instead of calling fill() itself.
-const SWITCH_LABELS = {
-  professional: fill(t["face.switchTo"], { name: t["face.work"] }),
-  personal: fill(t["face.switchTo"], { name: t["face.life"] }),
-};
+const latest = (await getPosts()).slice(0, 3);
+const photos = GALLERY.slice(0, 4);
+const projects = PROJECTS.slice(0, 4);
+const isExternal = (u: string) => u.startsWith("http");
 ---
 
-<Layout title={t["nav.about"]} description={SITE.description}>
-  <Fragment set:html={`<!--\n${art}\n-->`} />
-  <!-- Both faces are in the DOM (SSG). `.is-hidden` (statically on the
-       professional face) overlays the hidden face on the visible one and
-       drives the flip/fade transitions — no FOUC, works before JS. Each
-       face carries its own FaceToggle copy in the identity card. -->
-  {/* data-pagefind-body: the about faces are searchable alongside blog
-      posts (once the attribute exists anywhere, ONLY tagged pages are
-      indexed — listing/tag/404 pages stay out). The meta pins the result
-      title to the nav's about label instead of a guessed heading. */}
-  <div
-    class="faces"
-    data-pagefind-body
-    data-pagefind-meta={`title:${t["nav.about"]}`}
-  >
-    {/* One AboutFace layout, two data sets. The personal face is the
-        default; the professional one ships hidden + inert so it never
-        flashes before JS runs. */}
-    <AboutFace
-      face="personal"
-      priority
-      avatar={AVATAR}
-      name={SITE.title}
-      socials={SITE.socials}
-      sections={PERSONAL_SECTIONS}
-    />
-    <AboutFace
-      face="professional"
-      hidden
-      avatar={AVATAR_WORK}
-      name={PROFILE.name}
-      headline={PROFILE.headline}
-      socials={SITE.socialsWork}
-      sections={PROFESSIONAL_SECTIONS}
+<Layout description={SITE.description} hideFooter hideBackToTop>
+  <section class="landing-hero">
+    <h1 class="landing-title reveal">{t["landing.tagline"]}</h1>
+  </section>
+
+  <div class="landing-photo-hero reveal">
+    <Image
+      src={heroPhoto}
+      alt=""
+      widths={[900, 1600, 2400]}
+      sizes="(max-width: 1220px) 96vw, 1180px"
+      loading="eager"
+      fetchpriority="high"
     />
   </div>
+
+  <p class="landing-intro reveal">{SITE.description}</p>
+
+  <section class="landing-section is-tinted is-stacked">
+    <div class="landing-side reveal">
+      <h2 class="landing-side-en">About</h2>
+      <div class="ts-text is-secondary">{t["landing.aboutLabel"]}</div>
+
+    </div>
+    <div class="landing-body">
+      <p class="landing-blurb reveal">{t["landing.aboutBlurb"]}</p>
+    </div>
+  </section>
+
+  {
+    latest.length > 0 && (
+      <section class="landing-section">
+        <div class="landing-side reveal">
+          <h2 class="landing-side-en">Blog</h2>
+          <div class="ts-text is-secondary">{t["landing.latest"]}</div>
+        </div>
+        <div class="landing-body landing-rows">
+          {latest.map((post, i) => (
+            <a
+              class="landing-row reveal"
+              style={`--ri: ${i % 2}`}
+              href={url(`/blog/${post.id}/`)}
+            >
+              <div class="landing-row-top ts-text is-secondary">
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                <span aria-hidden="true">↗</span>
+              </div>
+              <div class="ts-header is-large is-heavy">{post.data.title}</div>
+              {post.data.description && (
+                <p class="ts-text is-secondary">{post.data.description}</p>
+              )}
+            </a>
+          ))}
+        </div>
+        <div class="landing-more reveal">
+          <a class="landing-side-link" href={url("/blog/")}>
+            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    photos.length > 0 && (
+      <section class="landing-section is-tinted">
+        <div class="landing-side reveal">
+          <h2 class="landing-side-en">Gallery</h2>
+          <div class="ts-text is-secondary">{t["nav.gallery"]}</div>
+        </div>
+        <a class="landing-body landing-gallery" href={url("/gallery/")}>
+          {photos.map((photo, i) => (
+            <div class="landing-photo reveal" style={`--ri: ${i}`}>
+              <SmartImage
+                src={photo.src}
+                alt={photo.alt}
+                loading="lazy"
+                widths={[400, 800]}
+                sizes="(max-width: 767px) 46vw, 280px"
+              />
+            </div>
+          ))}
+        </a>
+        <div class="landing-more reveal">
+          <a class="landing-side-link" href={url("/gallery/")}>
+            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    projects.length > 0 && (
+      <section class="landing-section">
+        <div class="landing-side reveal">
+          <h2 class="landing-side-en">Projects</h2>
+          <div class="ts-text is-secondary">{t["nav.projects"]}</div>
+        </div>
+        <div class="landing-body landing-rows">
+          {projects.map((project, i) => (
+            <a
+              class="landing-row reveal"
+              style={`--ri: ${i % 2}`}
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="landing-row-top ts-text is-secondary">
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                <span aria-hidden="true">↗</span>
+              </div>
+              <div class="ts-header is-large is-heavy">{project.name}</div>
+              <p class="ts-text is-secondary">{project.description}</p>
+            </a>
+          ))}
+        </div>
+        <div class="landing-more reveal">
+          <a class="landing-side-link" href={url("/projects/")}>
+            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="landing-cta reveal">
+    <h2 class="landing-side-en">Say hello</h2>
+    <p class="landing-cta-line">{t["landing.hello"]}</p>
+    <div class="landing-cta-links">
+      {
+        SITE.socials.map((l) =>
+          l.url ? (
+            <a
+              class="ts-button is-icon is-circular"
+              href={l.url}
+              aria-label={l.name}
+              target={isExternal(l.url) ? "_blank" : undefined}
+              rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
+            >
+              <Icon name={l.icon} />
+            </a>
+          ) : null
+        )
+      }
+    </div>
+    <p class="landing-cta-copyright">© {new Date().getFullYear()} {SITE.title}</p>
+  </section>
 </Layout>
-
-<!-- Print the ASCII art to the console so it shows the moment DevTools
-     (F12) opens, not only in view-source. -->
-<script is:inline define:vars={{ art, title: SITE.title }}>
-  console.log("%c" + art, "font-family:monospace;line-height:1.1");
-  console.log("%c" + title, "font-size:24px;font-weight:800;color:#1f2430");
-</script>
-
-<script is:inline define:vars={{ SWITCH_LABELS }}>
-  const faces = document.querySelectorAll(".faces .face");
-  const toggles = document.querySelectorAll(".face-toggle");
-  toggles.forEach((toggle) =>
-    toggle.addEventListener("click", () => {
-      // One button, two faces: whichever is hidden now is the one to show.
-      const next = document.querySelector(".face.is-hidden").dataset.face;
-      const other = next === "professional" ? "personal" : "professional";
-      faces.forEach((f) => {
-        const hidden = f.dataset.face !== next;
-        f.classList.toggle("is-hidden", hidden);
-        // `inert` drops the leaving face from the tab order and a11y tree
-        // right away — CSS `visibility` only catches up when the fade ends.
-        f.inert = hidden;
-      });
-      // Every face carries its own toggle copy — sync them all.
-      document
-        .querySelectorAll(".face-toggle .face-option")
-        .forEach((o) =>
-          o.classList.toggle("is-active", o.dataset.face === next),
-        );
-      toggles.forEach((btn) =>
-        btn.setAttribute("aria-label", SWITCH_LABELS[other]),
-      );
-      // The clicked copy just went inert with its face, which blurs it —
-      // hand focus to the copy in the face that is now visible.
-      document.querySelector(".face:not(.is-hidden) .face-toggle")?.focus();
-    }),
-  );
-</script>

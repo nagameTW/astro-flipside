@@ -17,9 +17,11 @@ const SITE = {
   locale: "zh-TW" as "en" | "zh-TW",
   /** Navigation. label is a locale key (see src/locales/). */
   nav: [
-    { label: "nav.about", href: "/" },
+    { label: "nav.home", href: "/" },
+    { label: "nav.about", href: "/about/" },
     { label: "nav.blog", href: "/blog/" },
     { label: "nav.gallery", href: "/gallery/" },
+    { label: "nav.projects", href: "/projects/" },
   ] satisfies { label: keyof UIStrings; href: string }[],
   /** Life-face identity-card social buttons. `url` opens; `copy` copies text
    *  (Discord-style). `icon` is a name from src/components/Icon.astro. */

@@ -17,23 +17,33 @@ import { t } from "@/locales";
 </dialog>
 
 <script>
-  const dialog = document.getElementById("image-lightbox") as HTMLDialogElement;
-  const img = dialog.querySelector("img")!;
-  const caption = dialog.querySelector("figcaption")!;
-  // Delegated so it covers images in any page's markdown without per-image
-  // wiring. Images inside links keep their link behavior; images already
-  // inside a dialog (gallery/trophy lightboxes) are excluded.
+  // One delegated listener that looks the dialog up at event time, so it
+  // survives ClientRouter swaps (the dialog is a fresh element on every
+  // page; this module runs once).
   document.addEventListener("click", (e) => {
     const el = e.target as Element;
+    const dialog = document.getElementById(
+      "image-lightbox",
+    ) as HTMLDialogElement | null;
+    if (!dialog) return;
+    // Click anywhere inside the open lightbox closes it, X/FB style
+    // (Esc comes free with showModal).
+    if (el.closest("#image-lightbox")) {
+      dialog.close();
+      return;
+    }
+    // Delegated open: covers images in any page's markdown without
+    // per-image wiring. Images inside links keep their link behavior;
+    // images already inside a dialog (gallery/trophy lightboxes) are
+    // excluded.
     if (!(el instanceof HTMLImageElement)) return;
     if (!el.matches(".md-content img, .post-hero")) return;
     if (el.closest("a, dialog")) return;
+    const img = dialog.querySelector("img")!;
+    const caption = dialog.querySelector("figcaption")!;
     img.src = el.currentSrc || el.src;
     img.alt = el.alt;
     caption.textContent = el.alt;
     dialog.showModal();
   });
-  // Same X/FB-style dismissal as the gallery: click anywhere closes
-  // (Esc comes free with showModal).
-  dialog.addEventListener("click", () => dialog.close());
 </script>

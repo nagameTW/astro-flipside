@@ -11,9 +11,16 @@ interface Props {
   description?: string;
   /** Keep this page out of search engines. */
   noindex?: boolean;
+  /** The landing page's dark closing band carries the copyright line
+   *  itself, so it drops the shared footer. */
+  hideFooter?: boolean;
+  /** Pages that provide their own ending (the landing) skip the
+   *  floating back-to-top button. */
+  hideBackToTop?: boolean;
 }
 
-const { title, description, noindex } = Astro.props;
+const { title, description, noindex, hideFooter, hideBackToTop } =
+  Astro.props;
 ---
 
 <!-- `is-large` roots the page at 16px rather than Tocas's default 15px. That is
@@ -28,6 +35,9 @@ const { title, description, noindex } = Astro.props;
         if (saved === "dark") document.documentElement.classList.add("is-dark");
         if (saved === "light")
           document.documentElement.classList.add("is-light");
+        // Arms the .reveal entrance styles before first paint; without JS
+        // the class never lands and everything is simply visible.
+        document.documentElement.classList.add("js");
       })();
     </script>
   </head>
@@ -39,16 +49,22 @@ const { title, description, noindex } = Astro.props;
     <main class="ts-container">
       <slot />
     </main>
-    <Footer />
+    {!hideFooter && <Footer />}
     <ImageLightbox />
-    <button
-      id="back-to-top"
-      class="ts-button is-icon is-circular is-secondary"
-      aria-label={t["layout.backToTop"]}
-    >
-      <Icon name="arrow-up" />
-    </button>
+    {
+      !hideBackToTop && (
+        <button
+          id="back-to-top"
+          class="ts-button is-icon is-circular is-secondary"
+          aria-label={t["layout.backToTop"]}
+        >
+          <Icon name="arrow-up" />
+        </button>
+      )
+    }
     <script>
+      import Lenis from "lenis";
+
       // Measured page-scrollbar width for the modal scroll-lock: while a
       // dialog is open, :root goes overflow:hidden and loses its scrollbar
       // gutter, so global.css pads the root by this amount to keep the page
@@ -57,15 +73,92 @@ const { title, description, noindex } = Astro.props;
         "--scrollbar-w",
         `${window.innerWidth - document.documentElement.clientWidth}px`,
       );
-      const backToTop = document.getElementById("back-to-top")!;
+
+      // Momentum smooth scrolling (the nagi reference): wheel input eases
+      // toward its target instead of jumping a notch. Touch stays native
+      // (Lenis's default — platform inertia beats simulation on phones)
+      // and reduced-motion visitors keep fully native scrolling.
+      let lenis: Lenis | undefined;
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        lenis = new Lenis({
+          autoRaf: true,
+          // Any open dialog freezes the page behind it. The CSS
+          // overflow:hidden lock alone can't stop Lenis: its virtual
+          // scroll writes scrollTop directly, and hidden scroll
+          // containers still scroll programmatically.
+          prevent: () => !!document.querySelector("dialog[open]"),
+        });
+        // Anchor glides. Hand-rolled instead of Lenis's anchors option:
+        // that one doesn't preventDefault, so the native instant jump
+        // races the glide. No offset here — Lenis reads the page's
+        // scroll-padding-top itself.
+        document.addEventListener("click", (e) => {
+          const a = (e.target as Element).closest?.('a[href^="#"]');
+          if (!(a instanceof HTMLAnchorElement)) return;
+          const el = document.getElementById(
+            decodeURIComponent(a.hash.slice(1)),
+          );
+          if (!el) return;
+          e.preventDefault();
+          history.pushState(null, "", a.hash);
+          // Remeasure first: Lenis snapshots the scroll limit at init,
+          // before lazy images finish, and clamps glides to that stale
+          // ceiling on cold loads.
+          lenis!.resize();
+          lenis!.scrollTo(el, {
+            // Lazy media loading mid-glide can shift the target; one
+            // instant correction on arrival (a no-op when nothing moved).
+            onComplete: () => lenis!.scrollTo(el, { immediate: true }),
+          });
+        });
+      }
+
+      // The ClientRouter swaps the DOM without re-running module scripts,
+      // so anything bound to page elements re-arms on astro:page-load
+      // (which also fires on the initial load). Listeners on document /
+      // window above this line register once and stay live.
       addEventListener(
         "scroll",
-        () => backToTop.classList.toggle("is-shown", scrollY > 400),
+        () =>
+          document
+            .getElementById("back-to-top")
+            ?.classList.toggle("is-shown", scrollY > 400),
         { passive: true },
       );
-      backToTop.addEventListener("click", () =>
-        scrollTo({ top: 0, behavior: "smooth" }),
+      document.addEventListener("click", (e) => {
+        if (!(e.target as Element).closest?.("#back-to-top")) return;
+        lenis ? lenis.scrollTo(0) : scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // Site-wide scroll entrances: reveal each .reveal once, the first
+      // time 15% of it enters the viewport. Above-the-fold elements fire
+      // right away, so page tops play as an opening sequence. One observer
+      // instance outlives navigations; swapped-out nodes just never
+      // intersect again.
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-in");
+              io.unobserve(e.target);
+            }
+          }),
+        { threshold: 0.15 },
       );
+      document.addEventListener("astro:page-load", () => {
+        document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      });
+
+      // After a swap the router has already set the real scrollTop (top
+      // for forward navs, restored for history). Lenis's internal value
+      // still points at the OLD page's position and would yank the page
+      // back on its next frame — sync it immediately, then remeasure for
+      // the new page's height.
+      document.addEventListener("astro:after-swap", () => {
+        if (!lenis) return;
+        lenis.scrollTo(window.scrollY, { immediate: true, force: true });
+        lenis.resize();
+      });
     </script>
   </body>
 </html>

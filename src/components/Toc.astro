@@ -42,24 +42,29 @@ const items = headings.filter(
   // Scroll-spy: mark the last heading above the viewport line as current.
   // Heading ids (from rehype-slug) may be non-ASCII (CJK headings), so the
   // lookup key is decoded from the link's hash rather than compared raw.
-  const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
-  const byId = new Map(
-    links.map((a) => [decodeURIComponent(a.hash.slice(1)), a]),
-  );
-  let current: HTMLAnchorElement | undefined;
-  const io = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (!e.isIntersecting) continue;
-        current?.classList.remove("is-current");
-        current = byId.get(e.target.id);
-        current?.classList.add("is-current");
-      }
-    },
-    { rootMargin: "0px 0px -75% 0px" },
-  );
-  byId.forEach((_, id) => {
-    const el = document.getElementById(id);
-    if (el) io.observe(el);
+  // Rebuilt per navigation (fresh links and headings each page); the old
+  // observer's nodes left the DOM with the previous page.
+  document.addEventListener("astro:page-load", () => {
+    const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
+    if (links.length === 0) return;
+    const byId = new Map(
+      links.map((a) => [decodeURIComponent(a.hash.slice(1)), a]),
+    );
+    let current: HTMLAnchorElement | undefined;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          current?.classList.remove("is-current");
+          current = byId.get(e.target.id);
+          current?.classList.add("is-current");
+        }
+      },
+      { rootMargin: "0px 0px -75% 0px" },
+    );
+    byId.forEach((_, id) => {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
   });
 </script>

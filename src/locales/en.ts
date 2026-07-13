@@ -1,8 +1,19 @@
 const en = {
+  "nav.home": "Home",
   "nav.about": "About",
   "nav.blog": "Blog",
   "nav.gallery": "Gallery",
+  "nav.projects": "Projects",
   "nav.themeToggle": "Toggle color theme",
+  "landing.tagline": "Flip it over,\nmeet the other you.",
+  "landing.latest": "Latest posts",
+  "landing.allPosts": "All posts",
+  "landing.aboutLabel": "Who I am",
+  "landing.aboutBlurb":
+    "Profession on the front, passion on the back. Both sides are the real me — flip the About page and pick the one you want to meet.",
+  "landing.hello": "Find me here",
+  "projects.description": "Selected works and side projects",
+  "projects.empty": "Nothing here yet.",
   "layout.backToTop": "Back to top",
   "face.switchTo": "Switch to {name}", // {name} replaced with Work/Life
   "face.work": "Work",

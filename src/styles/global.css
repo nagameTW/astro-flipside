@@ -1,10 +1,20 @@
 
-/* Anchor jumps (TOC, heading anchors) glide instead of teleporting —
-   skipped for users who prefer reduced motion. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+/* Momentum smooth scrolling is Lenis's (see Layout.astro), including
+   anchor glides — so NO scroll-behavior: smooth here: it would fight the
+   per-frame scrollTop writes. Reduced-motion visitors get no Lenis and
+   plain instant scrolling. These are Lenis's own hook styles: */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 /* Site styles on top of Tocas UI. Tocas has no prose styling, so
    .md-content maps rendered Markdown onto its design tokens.
@@ -131,7 +141,7 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 1rem 0;
+  padding: 1.5rem 0;
 }
 .site-header nav {
   display: flex;
@@ -166,7 +176,7 @@
    rather than hiding items behind a wrap. */
 @media (max-width: 767px) {
   .site-header .inner {
-    padding: 0.5rem 0;
+    padding: 0.75rem 0;
     gap: 0.5rem;
   }
   .site-header nav {
@@ -965,6 +975,13 @@ a.ts-box:hover,
   align-items: center;
   gap: 1rem;
 }
+/* The body soaks up all width the cover doesn't take, pinning the cover
+   to the card's right edge — without it the cover floats mid-card as
+   soon as the card is wider than its text (the landing's full-width
+   list showed it; narrow grid columns masked it). */
+.post-card.has-cover .post-card-body {
+  flex: 1;
+}
 /* .ts-content now lays its two children out with `gap`; cancel the
    generic margin-top so it doesn't also nudge the cover down. */
 .post-card.has-cover .ts-content > * + * {
@@ -1554,4 +1571,265 @@ dialog.search-dialog {
 }
 .post-tags {
   margin-top: 3rem;
+}
+
+/* Landing page, nagi-style: wordmark hero in whitespace, one big rounded
+   photo, sections with a sticky bilingual label rail on the left. */
+.landing-hero {
+  padding: 5rem 0 3rem;
+}
+.landing-title {
+  /* The tagline breaks where the locale string puts its \n. */
+  white-space: pre-line;
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  max-width: 22ch;
+  margin: 0 0 1rem;
+}
+.landing-hero .ts-text {
+  font-size: var(--ts-font-size-large);
+}
+.landing-photo-hero {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  /* Matches docs/hero.jpg's native ratio — no crop. */
+  aspect-ratio: 16 / 9;
+}
+.landing-photo-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Centered intro line under the hero photo. */
+.landing-intro {
+  text-align: center;
+  font-size: var(--ts-font-size-large);
+  letter-spacing: 0.04em;
+  max-width: 36rem;
+  margin: 5rem auto 0;
+}
+
+/* Section shell: sticky label rail left, content right. */
+.landing-section {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  gap: 2rem 4rem;
+  margin-top: 6rem;
+}
+/* Alternating full-bleed tint bands (the nagi rhythm): the background
+   bleeds to the viewport edges, the content stays on the container
+   grid. body's overflow-x: clip swallows the scrollbar overshoot. */
+.landing-section.is-tinted {
+  margin-inline: calc(50% - 50vw);
+  padding-inline: calc(50vw - 50%);
+  padding-block: 4rem;
+  background: var(--ts-gray-75);
+}
+/* Stacked variant: label above, content below, no rail column. */
+.landing-section.is-stacked {
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+.landing-section.is-stacked .landing-side {
+  position: static;
+}
+.landing-side {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+}
+.landing-side-en {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+.landing-side-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: inherit;
+}
+/* View-all links follow the site-wide link rule (underline on hover or
+   focus only), and their arrow turns from up-right to right as a little
+   "this way" nudge — the nagi micro-interaction. Same for the project
+   rows' corner arrows and the dark band's about link. */
+.landing-side-link {
+  text-decoration: none;
+}
+.landing-side-link:hover,
+.landing-side-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.landing-side-link span,
+.landing-row-top span:last-child {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.landing-side-link:hover span,
+.landing-side-link:focus-visible span,
+.landing-row:hover .landing-row-top span:last-child {
+  transform: rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-side-link span,
+  .landing-row-top span:last-child {
+    transition: none;
+  }
+}
+.landing-blurb {
+  font-size: var(--ts-font-size-large);
+  line-height: 1.9;
+  max-width: 38rem;
+  margin: 0;
+}
+/* Gallery preview: a 4-up strip of square crops, one link to /gallery/. */
+.landing-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  text-decoration: none;
+}
+.landing-photo {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--ts-border-radius-container);
+}
+.landing-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Numbered rows with a top rule and a corner arrow (nagi's services):
+   used by both the blog and the projects previews. */
+.landing-rows {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem 3rem;
+}
+.landing-row {
+  border-top: 1px solid var(--ts-gray-300);
+  padding-top: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+.landing-row-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.landing-row:hover .ts-header {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.landing-row p {
+  margin: 0.5rem 0 0;
+}
+/* Each section's view-all link sits at its bottom right. */
+.landing-more {
+  grid-column: 2;
+  justify-self: end;
+}
+
+/* Closing band: brand-dark, full-bleed, white text in both themes. */
+.landing-cta {
+  margin-top: 6rem;
+  margin-inline: calc(50% - 50vw);
+  padding-inline: calc(50vw - 50%);
+  padding-block: 4rem;
+  background: #1f2430;
+  color: #eceff4;
+}
+.landing-cta .landing-side-en {
+  color: #fff;
+}
+.landing-cta-line {
+  margin: 0.5rem 0 1.5rem;
+  color: rgb(236 239 244 / 0.75);
+}
+.landing-cta-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.landing-cta-links .ts-button {
+  background: rgb(255 255 255 / 0.1);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  color: #fff;
+}
+.landing-cta-links .ts-button:hover {
+  background: rgb(255 255 255 / 0.22);
+}
+/* The dark band doubles as the landing's footer. */
+.landing-cta-copyright {
+  margin: 3rem 0 0;
+  font-size: var(--ts-font-size-small);
+  color: rgb(236 239 244 / 0.5);
+}
+@media (max-width: 767px) {
+  .landing-hero {
+    padding: 2.5rem 0 2rem;
+  }
+  .landing-section {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+  .landing-side {
+    position: static;
+  }
+  .landing-side-link {
+    margin-top: 0.5rem;
+  }
+  .landing-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .landing-rows {
+    grid-template-columns: 1fr;
+  }
+  .landing-more {
+    grid-column: 1;
+  }
+  .landing-cta {
+    padding-block: 2.5rem;
+    margin-top: 4rem;
+  }
+  .landing-section.is-tinted {
+    padding-block: 2.5rem;
+  }
+}
+
+/* Apple-style scroll entrances. Armed only under html.js (set inline on
+   the landing page before first paint) so no-JS visitors see everything,
+   and only when the visitor is fine with motion. --ri staggers siblings. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.6s cubic-bezier(0.2, 0.6, 0.2, 1),
+      transform 0.6s cubic-bezier(0.2, 0.6, 0.2, 1);
+    transition-delay: calc(var(--ri, 0) * 90ms);
+  }
+  .js .reveal.from-left {
+    transform: translateX(-32px);
+  }
+  .js .reveal.from-right {
+    transform: translateX(32px);
+  }
+  .js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Projects grid: auto-fill card columns, same rhythm as .cards-grid. */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1.5rem;
 }

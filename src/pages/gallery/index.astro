@@ -10,7 +10,7 @@ import Icon from "@/components/Icon.astro";
 ---
 
 <Layout title={t["nav.gallery"]} description={t["gallery.description"]}>
-  <div class="section-title">
+  <div class="section-title reveal">
     <h1 class="ts-header is-big is-heavy">{t["nav.gallery"]}</h1>
     <span class="ts-text is-description"
       >{fill(t["gallery.count"], { n: GALLERY.length })}</span
@@ -28,7 +28,8 @@ import Icon from "@/components/Icon.astro";
         {GALLERY.map((photo, i) => (
           <button
             type="button"
-            class="gallery-item"
+            class="gallery-item reveal"
+            style={`--ri: ${i % 5}`}
             data-modal={`gallery-modal-${i}`}
           >
             <SmartImage
@@ -93,8 +94,11 @@ import Icon from "@/components/Icon.astro";
 
 <script>
   import { wireModalOpeners } from "@/utils/dialogs";
+  // Re-armed per navigation (every binding is on that page's elements).
   // Opening is the shared wiring (same as Cards.astro's trophy wall);
   // the stage-specific close and arrow-nav behavior stays below.
+  document.addEventListener("astro:page-load", () => {
+  if (!document.querySelector(".gallery-masonry")) return;
   wireModalOpeners(".gallery-item[data-modal]");
   document.querySelectorAll<HTMLButtonElement>(".gallery-nav").forEach((nav) => {
     nav.addEventListener("click", () => {
@@ -121,4 +125,5 @@ import Icon from "@/components/Icon.astro";
         if (dir) (d.querySelector(dir) as HTMLButtonElement | null)?.click();
       });
     });
+  });
 </script>
