@@ -210,8 +210,6 @@ src/
 | Project page     | 任意               | `"https://<user>.github.io"` | `"/<repo-name>"` | `https://<user>.github.io/<repo-name>/` |
 | 使用者／組織首頁 | `<user>.github.io` | `"https://<user>.github.io"` | `""`             | `https://<user>.github.io/`             |
 
-線上示範在 Vercel：<https://astro-flipside.vercel.app/>。repo 同時保留 GitHub Pages 的 Actions 部署。兩種，clone 的人都能用。
-
 ### 部署到 Vercel
 
 匯入 repo 就好，設定不用動。
