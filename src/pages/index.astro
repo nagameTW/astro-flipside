@@ -1,14 +1,16 @@
 ---
-// Landing page — the coin standing on its edge. A photo hero up top, then
-// two text-only cards (the visitor picks a face: Work deep-links to
-// /about/?face=work, Life to /about/), then previews of the blog, the
-// gallery, and the projects. Sections slide in on scroll, Apple-style:
-// see the .reveal styles in global.css and the observer below.
-// Prototype: layout and copy are up for owner iteration.
+// Landing page, redesigned after the owner's reference (nagi-6tu — a
+// Japanese corporate-minimal look): a big left-aligned wordmark hero in
+// whitespace, one large rounded photo, then sections with a sticky
+// bilingual label rail on the left (big English word, small locale line,
+// an arrow link) and the content flowing on the right. Projects render
+// as numbered rows, and a dark brand-colored card closes the page with
+// the social links. Scroll entrances come from the site-wide .reveal
+// machinery in Layout.
 import Layout from "@/layouts/Layout.astro";
 import PostCard from "@/components/PostCard.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
 import SmartImage from "@/components/SmartImage.astro";
+import Icon from "@/components/Icon.astro";
 import SITE from "@/config";
 import { PROJECTS } from "@/data/projects";
 import { GALLERY } from "@/data/gallery";
@@ -16,41 +18,57 @@ import { getPosts } from "@/utils/posts";
 import { t } from "@/locales";
 import { url } from "@/utils/url";
 import { Image } from "astro:assets";
-import heroBg from "../assets/gallery/gallery-01.jpg";
+import heroPhoto from "../assets/gallery/gallery-01.jpg";
 
 const latest = (await getPosts()).slice(0, 3);
 const photos = GALLERY.slice(0, 4);
-const projects = PROJECTS.slice(0, 3);
+const projects = PROJECTS.slice(0, 4);
+const isExternal = (u: string) => u.startsWith("http");
 ---
 
 <Layout description={SITE.description}>
-  <section class="landing-hero reveal">
-    <div class="landing-hero-bg" aria-hidden="true">
-      <Image
-        src={heroBg}
-        alt=""
-        widths={[900, 1600, 2400]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-      />
+  <section class="landing-hero">
+    <h1 class="landing-title reveal">{t["landing.tagline"]}</h1>
+    <p class="ts-text is-secondary reveal" style="--ri: 1">
+      {SITE.description}
+    </p>
+  </section>
+
+  <div class="landing-photo-hero reveal">
+    <Image
+      src={heroPhoto}
+      alt=""
+      widths={[900, 1600, 2400]}
+      sizes="(max-width: 1220px) 96vw, 1180px"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <section class="landing-section">
+    <div class="landing-side reveal">
+      <h2 class="landing-side-en">About</h2>
+      <div class="ts-text is-secondary">{t["landing.aboutLabel"]}</div>
+      <a class="landing-side-link" href={url("/about/")}
+        >{t["landing.allPosts"]} <span aria-hidden="true">↗</span></a
+      >
     </div>
-    <div class="landing-hero-text">
-      <h1 class="ts-header is-massive is-heavy">{SITE.title}</h1>
-      <p class="landing-tagline">{t["landing.tagline"]}</p>
+    <div class="landing-body">
+      <p class="landing-blurb reveal">{t["landing.aboutBlurb"]}</p>
     </div>
   </section>
 
   {
     latest.length > 0 && (
       <section class="landing-section">
-        <div class="section-title reveal">
-          <h2 class="ts-header is-big is-heavy">{t["landing.latest"]}</h2>
-          <a class="ts-text is-secondary" href={url("/blog/")}>
-            {t["landing.allPosts"]}
+        <div class="landing-side reveal">
+          <h2 class="landing-side-en">Blog</h2>
+          <div class="ts-text is-secondary">{t["landing.latest"]}</div>
+          <a class="landing-side-link" href={url("/blog/")}>
+            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
           </a>
         </div>
-        <div class="cards-grid is-wide">
+        <div class="landing-body landing-posts">
           {latest.map((post, i) => (
             <div class="reveal" style={`--ri: ${i}`}>
               <PostCard post={post} />
@@ -64,13 +82,14 @@ const projects = PROJECTS.slice(0, 3);
   {
     photos.length > 0 && (
       <section class="landing-section">
-        <div class="section-title reveal">
-          <h2 class="ts-header is-big is-heavy">{t["nav.gallery"]}</h2>
-          <a class="ts-text is-secondary" href={url("/gallery/")}>
-            {t["landing.allPosts"]}
+        <div class="landing-side reveal">
+          <h2 class="landing-side-en">Gallery</h2>
+          <div class="ts-text is-secondary">{t["nav.gallery"]}</div>
+          <a class="landing-side-link" href={url("/gallery/")}>
+            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
           </a>
         </div>
-        <a class="landing-gallery" href={url("/gallery/")}>
+        <a class="landing-body landing-gallery" href={url("/gallery/")}>
           {photos.map((photo, i) => (
             <div class="landing-photo reveal" style={`--ri: ${i}`}>
               <SmartImage
@@ -90,21 +109,57 @@ const projects = PROJECTS.slice(0, 3);
   {
     projects.length > 0 && (
       <section class="landing-section">
-        <div class="section-title reveal">
-          <h2 class="ts-header is-big is-heavy">{t["nav.projects"]}</h2>
-          <a class="ts-text is-secondary" href={url("/projects/")}>
-            {t["landing.allPosts"]}
+        <div class="landing-side reveal">
+          <h2 class="landing-side-en">Projects</h2>
+          <div class="ts-text is-secondary">{t["nav.projects"]}</div>
+          <a class="landing-side-link" href={url("/projects/")}>
+            {t["landing.allPosts"]} <span aria-hidden="true">↗</span>
           </a>
         </div>
-        <div class="projects-grid">
+        <div class="landing-body landing-projects">
           {projects.map((project, i) => (
-            <div class="reveal" style={`--ri: ${i}`}>
-              <ProjectCard project={project} />
-            </div>
+            <a
+              class="landing-project reveal"
+              style={`--ri: ${i % 2}`}
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="landing-project-top ts-text is-secondary">
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                <span aria-hidden="true">↗</span>
+              </div>
+              <div class="ts-header is-large is-heavy">{project.name}</div>
+              <p class="ts-text is-secondary">{project.description}</p>
+            </a>
           ))}
         </div>
       </section>
     )
   }
-</Layout>
 
+  <section class="landing-cta reveal">
+    <h2 class="landing-side-en">Say hello</h2>
+    <p class="landing-cta-line">{t["landing.hello"]}</p>
+    <div class="landing-cta-links">
+      {
+        SITE.socials.map((l) =>
+          l.url ? (
+            <a
+              class="ts-button is-icon is-circular"
+              href={l.url}
+              aria-label={l.name}
+              target={isExternal(l.url) ? "_blank" : undefined}
+              rel={isExternal(l.url) ? "noopener noreferrer" : undefined}
+            >
+              <Icon name={l.icon} />
+            </a>
+          ) : null
+        )
+      }
+      <a class="landing-cta-about" href={url("/about/")}>
+        {t["nav.about"]} <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+</Layout>

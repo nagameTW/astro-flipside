@@ -1556,52 +1556,66 @@ dialog.search-dialog {
   margin-top: 3rem;
 }
 
-/* Landing page (prototype): photo hero, text-only face cards, previews. */
+/* Landing page, nagi-style: wordmark hero in whitespace, one big rounded
+   photo, sections with a sticky bilingual label rail on the left. */
 .landing-hero {
-  position: relative;
+  padding: 5rem 0 3rem;
+}
+.landing-title {
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  max-width: 22ch;
+  margin: 0 0 1rem;
+}
+.landing-hero .ts-text {
+  font-size: var(--ts-font-size-large);
+}
+.landing-photo-hero {
+  border-radius: var(--ts-border-radius-container);
   overflow: hidden;
-  /* Full-bleed: pull out of the centered container to span the viewport.
-     The scrollbar-width overshoot of 100vw is swallowed by body's
-     overflow-x: clip (see the body rule up top). */
-  margin-inline: calc(50% - 50vw);
-  min-height: 56vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  aspect-ratio: 21 / 9;
 }
-.landing-hero-bg {
-  position: absolute;
-  inset: 0;
-}
-.landing-hero-bg img {
+.landing-photo-hero img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-/* Legibility scrim over the photo — white text stays readable in both
-   themes no matter what picture the user drops in. */
-.landing-hero-bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.55));
+
+/* Section shell: sticky label rail left, content right. */
+.landing-section {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  gap: 2rem 4rem;
+  margin-top: 6rem;
 }
-.landing-hero-text {
-  position: relative;
-  text-align: center;
-  padding: 4rem 1rem;
-  color: #fff;
+.landing-side {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
 }
-/* ts-header is a flex row, so text-align alone can't center it. */
-.landing-hero-text .ts-header {
-  color: #fff;
-  justify-content: center;
+.landing-side-en {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
 }
-.landing-tagline {
-  margin-top: 0.5rem;
+.landing-side-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: inherit;
+}
+.landing-blurb {
   font-size: var(--ts-font-size-large);
-  color: rgb(255 255 255 / 0.88);
+  line-height: 1.9;
+  max-width: 38rem;
+  margin: 0;
 }
+.landing-posts {
+  display: grid;
+  gap: 1.5rem;
+}
+
 /* Gallery preview: a 4-up strip of square crops, one link to /gallery/. */
 .landing-gallery {
   display: grid;
@@ -1619,15 +1633,92 @@ dialog.search-dialog {
   height: 100%;
   object-fit: cover;
 }
+
+/* Projects: numbered rows with a top rule and an arrow, nagi's services. */
+.landing-projects {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem 3rem;
+}
+.landing-project {
+  border-top: 1px solid var(--ts-gray-300);
+  padding-top: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+.landing-project-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.landing-project:hover .ts-header {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.landing-project p {
+  margin: 0.5rem 0 0;
+}
+
+/* Closing card: brand-dark, white text in both themes. */
+.landing-cta {
+  margin-top: 6rem;
+  padding: 3rem;
+  border-radius: var(--ts-border-radius-container);
+  background: #1f2430;
+  color: #eceff4;
+}
+.landing-cta .landing-side-en {
+  color: #fff;
+}
+.landing-cta-line {
+  margin: 0.5rem 0 1.5rem;
+  color: rgb(236 239 244 / 0.75);
+}
+.landing-cta-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.landing-cta-links .ts-button {
+  background: rgb(255 255 255 / 0.1);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  color: #fff;
+}
+.landing-cta-links .ts-button:hover {
+  background: rgb(255 255 255 / 0.22);
+}
+.landing-cta-about {
+  margin-left: 0.5rem;
+  color: #fff;
+}
 @media (max-width: 767px) {
   .landing-hero {
-    min-height: 46vh;
+    padding: 2.5rem 0 2rem;
   }
-  .landing-hero-text {
-    padding: 2.5rem 1rem;
+  .landing-photo-hero {
+    aspect-ratio: 4 / 3;
+  }
+  .landing-section {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+  .landing-side {
+    position: static;
+  }
+  .landing-side-link {
+    margin-top: 0.5rem;
   }
   .landing-gallery {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .landing-projects {
+    grid-template-columns: 1fr;
+  }
+  .landing-cta {
+    padding: 2rem 1.5rem;
+    margin-top: 4rem;
   }
 }
 
