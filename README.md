@@ -218,7 +218,7 @@ src/
 
 到 [vercel.com](https://vercel.com) 用 GitHub 登入，**Add New → Project**，匯入 repo，按 **Deploy**。
 
-push 到 `main`，自動重新部署。開 PR，附預覽網址。純靜態，免費 Hobby 方案就夠，不用 adapter。
+之後每次 push 到 `main` 自動重新部署，開 PR 會附一個預覽網址。純靜態輸出，免費的 Hobby 方案就夠，不需要任何 adapter。
 
 ## 🌐 語言
 
