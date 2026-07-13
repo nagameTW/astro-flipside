@@ -965,6 +965,13 @@ a.ts-box:hover,
   align-items: center;
   gap: 1rem;
 }
+/* The body soaks up all width the cover doesn't take, pinning the cover
+   to the card's right edge — without it the cover floats mid-card as
+   soon as the card is wider than its text (the landing's full-width
+   list showed it; narrow grid columns masked it). */
+.post-card.has-cover .post-card-body {
+  flex: 1;
+}
 /* .ts-content now lays its two children out with `gap`; cancel the
    generic margin-top so it doesn't also nudge the cover down. */
 .post-card.has-cover .ts-content > * + * {
