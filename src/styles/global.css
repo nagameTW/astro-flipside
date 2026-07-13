@@ -875,17 +875,36 @@ a.gear-card {
   align-items: baseline;
   gap: 0.5rem;
 }
-/* Text links site-wide (Links block, prose) show no underline at rest;
-   it appears on hover / keyboard focus. */
-.links-list a {
+/* Inline text links site-wide (the about Links block and prose links in
+   post/markdown bodies) grow the SAME center-out underline the linked titles
+   use — but via an animated background gradient, not a ::after. A scaleX
+   pseudo-element can't track a link that wraps across lines; a background
+   paints on every line fragment. Center bottom + width 0% -> 100% grows it
+   from the middle, matching .u-line's 0.25s. */
+.links-list a,
+.md-content a {
   color: inherit;
-  font-weight: 600;
   text-decoration: none;
-  text-underline-offset: 3px;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 50% calc(100% - 1px);
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition: background-size 0.25s ease;
 }
 .links-list a:hover,
-.links-list a:focus-visible {
-  text-decoration: underline;
+.links-list a:focus-visible,
+.md-content a:hover,
+.md-content a:focus-visible {
+  background-size: 100% 1.5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .links-list a,
+  .md-content a {
+    transition: none;
+  }
+}
+.links-list a {
+  font-weight: 600;
 }
 
 /* Life gear cards (label/value tiles, no image) keep their own slight
@@ -1313,17 +1332,8 @@ a.gear-card {
 .md-content li {
   text-align: justify;
 }
-/* Prose links match the site-wide text-link rule: underline only on
-   hover / keyboard focus. */
-.md-content a {
-  color: inherit;
-  text-decoration: none;
-  text-underline-offset: 3px;
-}
-.md-content a:hover,
-.md-content a:focus-visible {
-  text-decoration: underline;
-}
+/* Prose links use the site-wide center-out link underline (defined up by
+   .links-list a). Nothing extra needed here. */
 .md-content ul,
 .md-content ol {
   padding-inline-start: 1.5em;
@@ -1632,7 +1642,8 @@ dialog.search-dialog {
 /* ---- Medium-referenced reading experience (post pages) ---------------- */
 /* A big, tight title; an author meta row under it; larger body type in a
    ~660px measure (the 220px left rail + gap already sets the column). */
-/* Quiet way back to the list, above the title. */
+/* Quiet way back to the list, above the title. Same center-out underline as
+   every other link (gradient technique); it also darkens on hover. */
 .post-back {
   display: inline-flex;
   align-items: center;
@@ -1641,12 +1652,23 @@ dialog.search-dialog {
   color: var(--ts-gray-600);
   font-size: var(--ts-font-size-14px);
   text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 50% calc(100% - 1px);
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition:
+    background-size 0.25s ease,
+    color 0.2s ease;
 }
 .post-back:hover,
 .post-back:focus-visible {
   color: var(--ts-gray-800);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  background-size: 100% 1.5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .post-back {
+    transition: color 0.2s ease;
+  }
 }
 .post-title {
   font-size: 2.5rem;
