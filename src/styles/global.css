@@ -867,6 +867,32 @@ a.gear-card {
   grid-template-columns: repeat(auto-fill, minmax(min(384px, 100%), 1fr));
 }
 
+/* Center-out underline: the shared hover language for linked titles.
+   A scaleX ::after instead of text-decoration, growing from the middle.
+   Single-line, fit-content elements only — multi-line prose links keep
+   the plain underline. */
+.u-line {
+  position: relative;
+  width: fit-content;
+}
+.u-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.15em;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .u-line::after {
+    transition: none;
+  }
+}
+
 /* Blog list: Medium-style rows inside a filter shell. */
 .blog-shell {
   display: grid;
@@ -897,10 +923,9 @@ a.gear-card {
   text-decoration: none;
   width: fit-content;
 }
-.blog-filter-link:hover,
-.blog-filter-link:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+.blog-filter-link:hover::after,
+.blog-filter-link:focus-visible::after {
+  transform: scaleX(1);
 }
 .blog-filter-link.is-active {
   color: var(--ts-gray-800);
@@ -928,10 +953,9 @@ a.gear-card {
   font-weight: 700;
   line-height: 1.4;
 }
-.post-row-main:hover .post-row-title,
-.post-row-main:focus-visible .post-row-title {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+.post-row-main:hover .post-row-title::after,
+.post-row-main:focus-visible .post-row-title::after {
+  transform: scaleX(1);
 }
 .post-row-text p {
   margin: 0 0 0.75rem;
@@ -1649,11 +1673,6 @@ dialog.search-dialog {
 .landing-side-link {
   text-decoration: none;
 }
-.landing-side-link:hover,
-.landing-side-link:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
 .landing-side-link span {
   display: inline-block;
   transition: transform 0.2s ease;
@@ -1709,9 +1728,8 @@ dialog.search-dialog {
   justify-content: space-between;
   margin-bottom: 0.5rem;
 }
-.landing-row:hover .ts-header {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+.landing-row:hover .ts-header::after {
+  transform: scaleX(1);
 }
 .landing-row p {
   margin: 0.5rem 0 0;
@@ -1850,10 +1868,9 @@ dialog.search-dialog {
   transition: transform 0.35s ease;
 }
 /* Whole-block link: the same hover language as a blog row. */
-.project-item:hover .ts-header,
-.project-item:focus-visible .ts-header {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+.project-item:hover .ts-header::after,
+.project-item:focus-visible .ts-header::after {
+  transform: scaleX(1);
 }
 .project-item:hover .project-item-cover img,
 .project-item:focus-visible .project-item-cover img {

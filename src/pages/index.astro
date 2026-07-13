@@ -70,7 +70,7 @@ const projects = PROJECTS.slice(0, 4);
               <div class="landing-row-top ts-text is-secondary">
                 <span>{String(i + 1).padStart(2, "0")}</span>
               </div>
-              <div class="ts-header is-large is-heavy">{post.data.title}</div>
+              <div class="ts-header is-large is-heavy u-line">{post.data.title}</div>
               {post.data.description && (
                 <p class="ts-text is-secondary">{post.data.description}</p>
               )}
@@ -134,7 +134,7 @@ const projects = PROJECTS.slice(0, 4);
               <div class="landing-row-top ts-text is-secondary">
                 <span>{String(i + 1).padStart(2, "0")}</span>
               </div>
-              <div class="ts-header is-large is-heavy">{project.name}</div>
+              <div class="ts-header is-large is-heavy u-line">{project.name}</div>
               <p class="ts-text is-secondary">{project.description}</p>
             </a>
           ))}
