@@ -145,12 +145,25 @@ const { title, description, noindex, hideBackToTop } = Astro.props;
         document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
       });
 
-      // After a swap the router has already set the real scrollTop (top
-      // for forward navs, restored for history). Lenis's internal value
-      // still points at the OLD page's position and would yank the page
-      // back on its next frame — sync it immediately, then remeasure for
-      // the new page's height.
       document.addEventListener("astro:after-swap", () => {
+        // The swap replaces <html> with the incoming page's server-rendered
+        // element, whose class is just "is-large" — every runtime class is
+        // gone: the persisted theme (else the page flips back to light/OS
+        // on navigation) and the `js` reveal arm. Re-apply from the same
+        // source the inline head script uses, before the swapped page
+        // paints (after-swap runs pre-paint, so no flash). toggle with the
+        // boolean handles all three theme states, including null = follow OS.
+        const root = document.documentElement;
+        root.classList.add("js");
+        const saved = localStorage.getItem("theme");
+        root.classList.toggle("is-dark", saved === "dark");
+        root.classList.toggle("is-light", saved === "light");
+
+        // The router has already set the real scrollTop (top for forward
+        // navs, restored for history). Lenis's internal value still points
+        // at the OLD page's position and would yank the page back on its
+        // next frame — sync it immediately, then remeasure for the new
+        // page's height.
         if (!lenis) return;
         lenis.scrollTo(window.scrollY, { immediate: true, force: true });
         lenis.resize();
