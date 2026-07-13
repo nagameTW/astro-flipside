@@ -1,4 +1,5 @@
 import type { UIStrings } from "@/locales/en";
+import type { IconName } from "@/components/icons";
 
 /**
  * astro-flipside — site configuration.
@@ -6,8 +7,10 @@ import type { UIStrings } from "@/locales/en";
  * must edit. Keys marked (locale) take a key defined in src/locales/*.
  */
 const SITE = {
-  /** Deployment origin, no trailing slash. */
-  site: "https://example.github.io",
+  /** Deployment origin, no trailing slash — drives canonical/OG/sitemap URLs.
+   *  This is the GitHub Pages origin (paired with `base` below); on Vercel it
+   *  is overridden automatically with your Vercel URL (see astro.config.mjs). */
+  site: "https://nagametw.github.io",
   /** Sub-path when deployed as a GitHub project page, e.g. "/astro-flipside". "" for root. */
   base: "/astro-flipside",
   title: "Flipside",
@@ -37,7 +40,7 @@ const SITE = {
       url: "https://example.com/threads/your-name",
     },
     { name: "Discord", icon: "discord", copy: "your-discord-handle" },
-  ] as { name: string; icon: string; url?: string; copy?: string }[],
+  ] satisfies { name: string; icon: IconName; url?: string; copy?: string }[],
   /** Work-face identity-card social buttons — same `url`/`copy` shape. */
   socialsWork: [
     {
@@ -55,7 +58,18 @@ const SITE = {
       icon: "soundcloud",
       url: "https://example.com/soundcloud/your-name",
     },
-  ] as { name: string; icon: string; url?: string; copy?: string }[],
+  ] satisfies { name: string; icon: IconName; url?: string; copy?: string }[],
+  /** How many items each list surface shows — bump these to taste. */
+  pageSize: {
+    /** Blog list + tag pages (vertical rows since 2026-07). */
+    blog: 10,
+    /** Projects grid — multiples of 3 keep the 3-up rows full. */
+    projects: 9,
+    /** Recent items each homepage section previews (blog, projects,
+     *  gallery) before its "view all" link. The gallery is a 4-up strip,
+     *  so a multiple of 4 keeps its edge clean. */
+    home: 4,
+  },
   features: {
     /** KaTeX math ($…$ / $$…$$) in posts. */
     math: false,

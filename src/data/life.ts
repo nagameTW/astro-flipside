@@ -1,3 +1,4 @@
+import type { IconName } from "@/components/icons";
 import type { Section, CardEntry } from "@/data/sections";
 import { TROPHIES } from "@/data/trophies";
 
@@ -31,7 +32,7 @@ const INTERESTS = [
 // Placeholder gear cards, mic first then monitoring and instrument.
 // `href` is optional — with it the whole card links out (e.g. to a store
 // page); without it the card is a plain tile.
-const GEAR: { label: string; item: string; icon: string; href?: string }[] = [
+const GEAR: { label: string; item: string; icon: IconName; href?: string }[] = [
   {
     label: "麥克風",
     item: "聲學 AT-01 麥克風",

@@ -8,7 +8,7 @@ import Comments from "@/components/Comments.astro";
 import { t, fill } from "@/locales";
 import SmartImage from "@/components/SmartImage.astro";
 import Icon from "@/components/Icon.astro";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import { url } from "@/utils/url";
 import SITE from "@/config";
 // The byline wears the WORK avatar: posts are the musician identity's
@@ -42,9 +42,29 @@ const {
 const hasToc = headings.some(
   (h) => (h.depth === 2 || h.depth === 3) && h.slug !== "footnote-label",
 );
+// When a post has a hero, it's the LCP element — preload it (matching the
+// SmartImage widths/sizes below) so it fetches with the document instead of
+// after CSS parse, same as the landing hero. heroImage is always a local
+// ImageMetadata (the image() schema), so getImage can size it.
+const heroSizes = "(max-width: 767px) 100vw, min(1100px, 92vw)";
+const heroPreload = heroImage
+  ? await getImage({ src: heroImage, widths: [720, 1100, 1600], format: "webp" })
+  : null;
 ---
 
 <Layout title={title} description={description}>
+  {
+    heroPreload && (
+      <link
+        slot="head"
+        rel="preload"
+        as="image"
+        type="image/webp"
+        imagesrcset={heroPreload.srcSet.attribute}
+        imagesizes={heroSizes}
+      />
+    )
+  }
   <article class="ts-container is-narrow" data-pagefind-body>
     <header class="post-header reveal">
       <a class="post-back" href={url("/blog/")}>
@@ -134,7 +154,7 @@ const hasToc = headings.some(
     }
     {
       (prev || next) && (
-        <nav class="cards-grid post-nav">
+        <nav class="post-nav">
           {(
             [
               { rel: "prev", label: t["blog.prev"], post: prev },
@@ -143,10 +163,10 @@ const hasToc = headings.some(
           ).map(
             ({ rel, label, post }) =>
               post && (
-                <a class="ts-box" rel={rel} href={url(`/blog/${post.id}/`)}>
-                  <div class="ts-content">
-                    <div class="ts-text is-description">{label}</div>
-                    <div class="ts-header is-heavy">{post.title}</div>
+                <a class="post-nav-link" rel={rel} href={url(`/blog/${post.id}/`)}>
+                  <div class="ts-text is-description">{label}</div>
+                  <div class="ts-header is-heavy post-nav-title u-line">
+                    {post.title}
                   </div>
                 </a>
               ),

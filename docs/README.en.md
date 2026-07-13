@@ -121,15 +121,74 @@ git push        # Actions builds and deploys; live in about a minute
 ```
 
 Every later push to `main` redeploys automatically. If the site comes up
-unstyled or without images, go back to step 3 and check `base`. Your
-content lives in the three arrowed spots under
-[Project structure](#-project-structure); every other field in
-`src/config.ts` carries its own comment, so fill them in as you go.
-Delete the demo posts once you've read them.
+unstyled or without images, go back to step 3 and check `base`. For adding
+content, copy the three examples under
+[Adding content](#-adding-content); every other field in
+`src/config.ts` carries its own comment. Delete the demo content once
+you've read it.
 
 Netlify, Vercel, and Cloudflare Pages work too: the template is fully
 static, so importing the repo is enough (set `base` to `""`). See the
 [Astro deployment guide](https://docs.astro.build/en/guides/deploy/).
+
+## ✍️ Adding content
+
+Each kind of content has one place: posts in `src/content/blog/`,
+projects in `src/data/projects.ts`, photos in `src/data/gallery.ts`.
+Save, and `npm run dev` picks the change up immediately.
+
+**Write a post**
+
+Add a `.md` (or `.mdx`) file under `src/content/blog/`, keep its images
+next to the file, and reference them with relative paths:
+
+```md
+---
+title: "Post title"
+description: "Blurb for the list and search results" # optional
+pubDate: "2026-07-13"
+updatedDate: "2026-07-20" # optional
+heroImage: "./cover.jpg" # optional; post hero + list thumbnail
+tags: ["life", "music"] # optional
+draft: true # drafts render in dev only
+---
+
+The body is plain Markdown. Relative images like `![alt](./photo.jpg)`
+ship as responsive webp automatically; code frames, tables, the table
+of contents, and tags are all built in.
+```
+
+The "Kitchen sink" demo post (`src/content/blog/kitchen-sink.md`) shows
+every supported construct; copying it is the fastest start.
+
+**Add a project**
+
+Append an entry to `PROJECTS` in `src/data/projects.ts`:
+
+```ts
+{
+  name: "Project name",
+  description: "One line on what it is.",
+  tech: ["Astro", "TypeScript"],       // rendered as tech tags
+  url: "https://github.com/you/repo",  // the whole block links here
+  img: cover,                          // optional; a top-of-file import or an https URL
+},
+```
+
+**Add a photo**
+
+Drop the file into `src/assets/gallery/`, import it in
+`src/data/gallery.ts`, and add an entry:
+
+```ts
+{
+  src: photo,                     // an imported file or an https URL
+  alt: "Description for screen readers and search",  // required
+  caption: "Line shown under the photo and in the lightbox",  // optional
+},
+```
+
+Array order is display order.
 
 ## ✨ Features
 
@@ -146,10 +205,6 @@ static, so importing the repo is enough (set `base` to `""`). See the
       key-value, timeline, highlights, cards, stats, links, freeform markdown
 - [x] Work face data in `src/data/about.ts`, Life face data in
       `src/data/life.ts`
-- [x] `src/data/projects.ts` and `ProjectCard.astro` ship as a scaffold for a
-      future `/projects/` page, not wired into a route yet
-
-<img src="screenshots/about.webp" alt="The About page, Life face">
 
 **Blog**
 
@@ -165,8 +220,6 @@ static, so importing the repo is enough (set `base` to `""`). See the
 - [x] `heroImage` in frontmatter doubles as the post's cover image on the
       blog index
 
-<img src="screenshots/post.webp" alt="A post page with the ToC rail and code frames">
-
 **Gallery**
 
 - [x] Pinterest-style masonry layout: CSS multi-column, so photos keep their
@@ -174,7 +227,12 @@ static, so importing the repo is enough (set `base` to `""`). See the
 - [x] Data-driven: drop the files in `src/assets/gallery/`, import and list them in `src/data/gallery.ts` (auto webp + responsive sizes)
 - [x] Click a photo to open it full-size in a lightbox
 
-<img src="screenshots/gallery.webp" alt="The masonry gallery">
+**Projects**
+
+- [x] Portfolio page — name, description, tech tags, link, and cover image,
+      all from `src/data/projects.ts`
+- [x] 3-up grid of fully clickable blocks, paginated every 9 entries; the
+      page size lives in `src/config.ts` under `pageSize`
 
 **Everywhere**
 
@@ -186,11 +244,7 @@ static, so importing the repo is enough (set `base` to `""`). See the
       comments, each at zero bundle cost when off
 - [x] Base-path support for GitHub project pages
 - [x] Fully static output: zero secrets, zero server
-- [x] Mobile Lighthouse on the home page: 100 in all four categories
-
-<img src="screenshots/lighthouse.webp" alt="Lighthouse report: 100 for performance, accessibility, best practices, and SEO">
-
-<img src="screenshots/dark.webp" alt="The About page in dark mode">
+- [x] Every page scores 100 on mobile Lighthouse: performance, accessibility, best practices, and SEO
 
 ## 🧰 Commands
 
@@ -214,9 +268,9 @@ src/
 ├── data/          # ← About/Life copy, gallery, projects, trophies
 ├── layouts/       # Layout.astro, BlogPost.astro
 ├── locales/       # en.ts / zh-TW.ts UI string dictionaries
-├── pages/         # Routes: home, about, blog, tags, gallery, projects, RSS, sitemap
+├── pages/         # Routes: home, about, blog, tags, gallery, projects, RSS
 ├── styles/        # global.css
-├── utils/         # Reading time, timeline, URL helpers
+├── utils/         # Posts, timeline, URL, dialog helpers
 └── config.ts      # ← single source of site configuration
 ```
 
@@ -241,6 +295,17 @@ published:
 This repo deploys itself as a project page; the live demo is at
 <https://nagametw.github.io/astro-flipside/>.
 
+### Deploy to Vercel
+
+No config change needed — importing the repo is enough. At
+[vercel.com](https://vercel.com), sign in with GitHub, **Add New → Project**,
+import this repo, and **Deploy**. Vercel detects Astro, runs `astro build`,
+and (via the build-time `VERCEL` env — see `astro.config.mjs`) sets `base` to
+the domain root and derives the canonical `site` from your Vercel URL; the
+`src/config.ts` values stay for the GitHub Pages path. Every push to `main`
+redeploys, and PRs get preview URLs. Output is fully static, so the free
+Hobby plan covers it and no adapter is required.
+
 ## 🌐 Locale
 
 The UI reads one locale, and it defaults to `"zh-TW"`. Set
@@ -250,12 +315,10 @@ by copying `en.ts`'s keys.
 
 ## 🗺️ Roadmap
 
-- [x] Home page: a landing with a big tagline, the site collage, and
-      previews of every section
-- [x] `/projects/` portfolio page
-
-Planned work and known issues live in the
-[open issues](../../../issues).
+Big items already done: the home landing page, the `/projects/` portfolio
+page, whole-site search, and 100 across all four Lighthouse categories on
+every page. What's next and any known issues live in the
+[open issues](../../../issues) — suggestions welcome.
 
 ## 🤝 Contributing
 

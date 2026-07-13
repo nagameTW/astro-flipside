@@ -1,7 +1,7 @@
 ---
 title: "功能總覽"
 description: "這個範本支援的 Markdown 功能，濃縮在同一篇文章裡。"
-pubDate: 2026-01-03
+pubDate: "2026-01-03"
 tags: ["demo"]
 heroImage: "./hero-studio.jpg"
 # heroImage credit: Leo Wieling, https://unsplash.com/photos/Sby_GQz1-5E

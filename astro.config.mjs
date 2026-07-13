@@ -1,6 +1,7 @@
 // @ts-check
 import { cp, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
+import { resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
@@ -12,6 +13,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { remarkReadingTime } from "./plugins/remark-reading-time.mjs";
 import { remarkMermaid } from "./plugins/remark-mermaid.mjs";
+import { rehypeTaskListA11y } from "./plugins/rehype-task-list-a11y.mjs";
 import SITE from "./src/config.ts";
 // Works from config-land because src/locales uses relative imports only —
 // the config loader does not resolve the `@/` alias.
@@ -126,11 +128,83 @@ const mermaidClient = () => ({
   },
 });
 
+// Search during `astro dev`: the Pagefind index is a postbuild artifact
+// (pagefind --site dist), so the dev server 404s /pagefind/* and
+// Search.astro's dynamic import degrades into a silent no-op — search
+// looks broken in dev while working fine on any built deploy. This
+// middleware serves dist/pagefind/ on that path in dev. Run `npm run
+// build` once to (re)generate the index; new posts appear after the next
+// build. Dev-server hook only: build output is untouched.
+/** @type {() => import("astro").AstroIntegration} */
+const pagefindDev = () => ({
+  name: "pagefind-dev",
+  hooks: {
+    "astro:server:setup": ({ server }) => {
+      const mime = {
+        ".js": "text/javascript",
+        ".css": "text/css",
+        ".json": "application/json",
+        ".wasm": "application/wasm",
+      };
+      // No trailing slash: `root + sep` below is the containment prefix,
+      // and a trailing slash here would make it `…/pagefind//` and reject
+      // every real asset.
+      const root = fileURLToPath(new URL("dist/pagefind", import.meta.url));
+      server.middlewares.use((req, res, next) => {
+        // Vite's own base middleware strips the base prefix before this
+        // runs (the dev log shows bare /pagefind/* URLs), but strip it
+        // ourselves too in case ordering ever changes.
+        let path = decodeURIComponent((req.url ?? "").split("?")[0]);
+        if (SITE.base && path.startsWith(SITE.base))
+          path = path.slice(SITE.base.length);
+        if (!path.startsWith("/pagefind/")) return next();
+        // /pagefind/* is entirely this middleware's namespace — resolve
+        // the request against root and serve from dist/pagefind/, or 404.
+        // Never fall through to Vite on a miss: Vite would happily serve a
+        // `/pagefind/../../src/config.ts` by normalizing the `..` up out of
+        // the directory (arbitrary project-file read on the dev server).
+        // A string `..` check can't guard this alone — it runs before
+        // percent-decoding, so `%2e%2e` slips past it; resolve + a root
+        // prefix check is what actually confines the path.
+        const send404 = () => {
+          res.statusCode = 404;
+          res.end("Not found");
+        };
+        const file = resolve(root, "." + path.slice("/pagefind".length));
+        if (file !== root && !file.startsWith(root + sep)) return send404();
+        readFile(file)
+          .then((buf) => {
+            const ext = path.slice(path.lastIndexOf("."));
+            res.setHeader(
+              "Content-Type",
+              mime[/** @type {keyof mime} */ (ext)] ??
+                "application/octet-stream",
+            );
+            res.end(buf);
+          })
+          .catch(send404);
+      });
+    },
+  },
+});
+
+// Deploy-target-aware base + site. On Vercel (which sets VERCEL=1 during the
+// build) the site is served at the domain root, so base is "" and the
+// canonical origin is Vercel's production URL; a GitHub project page keeps
+// config.ts's "/repo" base and site. This is the ONLY switch needed — url()
+// reads import.meta.env.BASE_URL and BaseHead reads Astro.site, both of which
+// come from the values resolved here. Set config.ts's site/base for the
+// GitHub Pages path; Vercel fills its own in automatically.
+const onVercel = !!process.env.VERCEL;
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const resolvedSite = onVercel && vercelUrl ? `https://${vercelUrl}` : SITE.site;
+const resolvedBase = onVercel ? undefined : SITE.base || undefined;
+
 // https://astro.build/config
 export default defineConfig({
   output: "static",
-  site: SITE.site,
-  base: SITE.base || undefined,
+  site: resolvedSite,
+  base: resolvedBase,
   markdown: {
     // GFM footnotes ship an English sr-only "Footnotes" heading — localize
     // it. The ↩ back-reference link is hidden entirely in global.css
@@ -150,6 +224,8 @@ export default defineConfig({
       // the hover "#" anchor a rehype-autolink-headings setup would add
       // (owner removed it 2026-07-12).
       rehypeSlug,
+      // Names GFM task-list checkboxes so they pass the a11y label check.
+      [rehypeTaskListA11y, t["post.taskLabel"]],
       ...(SITE.features.math ? [rehypeKatex] : []),
     ],
   },
@@ -216,6 +292,7 @@ export default defineConfig({
     mdx(),
     sitemap(),
     notoFonts(),
+    pagefindDev(),
     ...(SITE.features.math ? [katexAssets()] : []),
     ...(SITE.features.mermaid ? [mermaidClient()] : []),
   ],

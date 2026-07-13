@@ -141,6 +141,10 @@ html.lenis body {
     background: var(--ts-page-background-default);
   }
 }
+/* Brand wordmark, larger than the default header size. */
+.site-header a.ts-header {
+  font-size: 1.45rem;
+}
 .site-header .inner {
   display: flex;
   align-items: center;
@@ -356,6 +360,24 @@ html.lenis body {
 .about-main .ts-timeline .aside {
   font-size: var(--ts-font-size-tiny);
 }
+/* Timeline node circle. Tocas drew it via `.indicator .ts-icon`, but that
+   class is icon-font-era (its base rule is visibility:hidden); the inline
+   <Icon> renders `.icon` instead, so the disc was lost and the smaller raw
+   glyph sat off the connecting line. Rebuild the 30px gray node here —
+   padding on the SVG puts the gray-100 disc behind a centered ~16px glyph,
+   matching Tocas's original marker. */
+.about-main .ts-timeline .item .indicator .icon {
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  padding: 7px;
+  border-radius: 100rem;
+  background: var(--ts-gray-100);
+  color: var(--ts-gray-600);
+  /* Flex-centered in the indicator, so the global baseline nudge (which
+     only matters for inline-in-text icons) must not apply here. */
+  vertical-align: initial;
+}
 /* Anything below the title and subtitle sits in its own tinted block. Tocas's
    tertiary background is darker than the page in both schemes (242 on 255,
    23 on 39), so the block reads as recessed either way. */
@@ -364,6 +386,23 @@ html.lenis body {
   padding: 1rem;
   border-radius: var(--ts-border-radius-container);
   background: var(--ts-page-background-tertiary);
+}
+/* Dark mode: tertiary (#171717) is near-black, and at these small block
+   sizes it reads harsher than the same value does across the full-width
+   footer band — too dark, per owner. Step the recessed about-page blocks
+   (timeline notes, gear cards) up one tier to secondary (#1e1e1e); light
+   mode keeps its light-gray tertiary. Mirrors Tocas's own dark selectors:
+   .is-dark for an explicit choice, :not(.is-light) + the media query for
+   OS-follow. */
+:root.is-dark .entry-note,
+:root.is-dark .gear-card {
+  background: var(--ts-page-background-secondary);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(.is-light) .entry-note,
+  :root:not(.is-light) .gear-card {
+    background: var(--ts-page-background-secondary);
+  }
 }
 .entry-note p {
   margin-top: 0.5rem;
@@ -591,14 +630,23 @@ html.lenis body {
   /* Paired with the width/height attributes the markup carries, height
      auto keeps the reserved box at the photo's real ratio (no CLS). */
   height: auto;
+}
+.gallery-item img {
   border-radius: var(--ts-border-radius-element);
 }
-/* Cards-block media (trophies, discography) crops to one fixed ratio —
-   the same 16:9 the .trophy-empty placeholder uses — so every card in the
-   grid is the same size. The gallery keeps natural ratios; its masonry
-   depends on them. */
-.trophy-grid img {
+/* Cards-block media (trophies, discography) sits in a fixed 16:9 frame that
+   CLIPS: the frame owns the ratio + rounded corners, and the image fills it,
+   so the shared hover-zoom above stays inside the frame — the same
+   zoom-within-frame the blog/project covers use, rather than the whole
+   rounded image scaling up. Same 16:9 the .trophy-empty placeholder uses, so
+   every card in the grid is one size; the gallery keeps natural ratios. */
+.trophy-media {
+  overflow: hidden;
+  border-radius: var(--ts-border-radius-element);
   aspect-ratio: 16 / 9;
+}
+.trophy-grid img {
+  height: 100%;
   object-fit: cover;
 }
 /* Any open modal locks the page behind it (native <dialog> doesn't). The
@@ -615,6 +663,13 @@ html.lenis body {
      the measured scrollbar width instead (set in Layout.astro's script;
      0px on overlay-scrollbar platforms). */
   padding-right: var(--scrollbar-w, 0px);
+  /* Chrome's caret-ensure-visible scroll honors scroll-padding-top even
+     while the page is locked. With the search input inside the sticky
+     header's panel (caret at ~97px, the padding demanding 112px),
+     scrolling can never satisfy it, so every keystroke shoved the page
+     up another 8px. No anchor jumps happen behind an open modal — zero
+     it for the lock's duration. */
+  scroll-padding-top: 0;
 }
 /* Card lightboxes (Cards.astro) reuse dialog.gallery-modal below — one
    full-viewport dark stage site-wide. No card-specific rules needed. */
@@ -702,8 +757,8 @@ dialog.gallery-modal::backdrop {
 }
 /* Placeholder card while the owner's screenshots are pending. */
 .trophy-empty {
-  aspect-ratio: 16 / 9;
-  border-radius: var(--ts-border-radius-element);
+  width: 100%;
+  height: 100%;
   background: var(--ts-gray-100);
 }
 
@@ -820,33 +875,49 @@ a.gear-card {
   align-items: baseline;
   gap: 0.5rem;
 }
-/* Text links site-wide (Links block, prose) show no underline at rest;
-   it appears on hover / keyboard focus. */
-.links-list a {
+/* Inline text links site-wide (the about Links block and prose links in
+   post/markdown bodies) grow the SAME center-out underline the linked titles
+   use — but via an animated background gradient, not a ::after. A scaleX
+   pseudo-element can't track a link that wraps across lines; a background
+   paints on every line fragment. Center bottom + width 0% -> 100% grows it
+   from the middle, matching .u-line's 0.25s. */
+.links-list a,
+.md-content a {
   color: inherit;
-  font-weight: 600;
   text-decoration: none;
-  text-underline-offset: 3px;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 50% calc(100% - 1px);
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition: background-size 0.25s ease;
 }
 .links-list a:hover,
-.links-list a:focus-visible {
-  text-decoration: underline;
+.links-list a:focus-visible,
+.md-content a:hover,
+.md-content a:focus-visible {
+  background-size: 100% 1.5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .links-list a,
+  .md-content a {
+    transition: none;
+  }
+}
+.links-list a {
+  font-weight: 600;
 }
 
-/* Hover feedback shared across the Life cards — a slight forward scale,
-   nothing else: no shadow, no tint (site-wide flat style, owner call
-   2026-07-12). (Gallery tiles opt out — their hover response is the
-   Pinterest scrim alone.) */
-.trophy-item img,
+/* Life gear cards (label/value tiles, no image) keep their own slight
+   forward scale — flat, no shadow or tint. The card IMAGES (.trophy-item
+   img) instead share the site-wide 1.06 image hover-zoom above, so every
+   image lifts the same amount. */
 .gear-card {
   transition: transform 0.15s ease;
 }
-.trophy-item:hover img,
 .gear-card:hover {
   transform: scale(1.02);
 }
 @media (prefers-reduced-motion: reduce) {
-  .trophy-item:hover img,
   .gear-card:hover {
     transform: none;
   }
@@ -861,6 +932,32 @@ a.gear-card {
 }
 .cards-grid.is-wide {
   grid-template-columns: repeat(auto-fill, minmax(min(384px, 100%), 1fr));
+}
+
+/* Center-out underline: the shared hover language for linked titles.
+   A scaleX ::after instead of text-decoration, growing from the middle.
+   Single-line, fit-content elements only — multi-line prose links keep
+   the plain underline. */
+.u-line {
+  position: relative;
+  width: fit-content;
+}
+.u-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.15em;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .u-line::after {
+    transition: none;
+  }
 }
 
 /* Blog list: Medium-style rows inside a filter shell. */
@@ -893,10 +990,9 @@ a.gear-card {
   text-decoration: none;
   width: fit-content;
 }
-.blog-filter-link:hover,
-.blog-filter-link:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+.blog-filter-link:hover::after,
+.blog-filter-link:focus-visible::after {
+  transform: scaleX(1);
 }
 .blog-filter-link.is-active {
   color: var(--ts-gray-800);
@@ -924,10 +1020,9 @@ a.gear-card {
   font-weight: 700;
   line-height: 1.4;
 }
-.post-row-main:hover .post-row-title,
-.post-row-main:focus-visible .post-row-title {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+.post-row-main:hover .post-row-title::after,
+.post-row-main:focus-visible .post-row-title::after {
+  transform: scaleX(1);
 }
 .post-row-text p {
   margin: 0 0 0.75rem;
@@ -943,21 +1038,45 @@ a.gear-card {
   overflow: hidden;
   border-radius: var(--ts-border-radius-element);
 }
-.post-row-cover {
+/* Cover fill for the fixed-size blog/project wraps. */
+.post-row-cover,
+.project-item-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+/* One image hover-zoom, site-wide: blog + project covers, the homepage
+   gallery strip, and the about-page card images all lift the same 1.06 on
+   hover. Each sits in an overflow-hidden wrap so the zoom clips. The gallery
+   PAGE opts out — its hover response is the Pinterest scrim alone (one effect
+   per image; stacking a zoom on the scrim reads as noise). The title
+   underline half of the blog/project hover is shared separately via .u-line. */
+.post-row-cover,
+.project-item-cover img,
+.landing-photo img,
+.trophy-item img {
   transition: transform 0.35s ease;
 }
 .post-row-main:hover .post-row-cover,
-.post-row-main:focus-visible .post-row-cover {
+.post-row-main:focus-visible .post-row-cover,
+.project-item:hover .project-item-cover img,
+.project-item:focus-visible .project-item-cover img,
+.landing-photo:hover img,
+.trophy-item:hover img,
+.trophy-item:focus-visible img {
   transform: scale(1.06);
 }
 @media (prefers-reduced-motion: reduce) {
-  .post-row-cover {
+  .post-row-cover,
+  .project-item-cover img,
+  .landing-photo img,
+  .trophy-item img {
     transition: none;
   }
-  .post-row-main:hover .post-row-cover {
+  .post-row-main:hover .post-row-cover,
+  .project-item:hover .project-item-cover img,
+  .landing-photo:hover img,
+  .trophy-item:hover img {
     transform: none;
   }
 }
@@ -1213,17 +1332,8 @@ a.gear-card {
 .md-content li {
   text-align: justify;
 }
-/* Prose links match the site-wide text-link rule: underline only on
-   hover / keyboard focus. */
-.md-content a {
-  color: inherit;
-  text-decoration: none;
-  text-underline-offset: 3px;
-}
-.md-content a:hover,
-.md-content a:focus-visible {
-  text-decoration: underline;
-}
+/* Prose links use the site-wide center-out link underline (defined up by
+   .links-list a). Nothing extra needed here. */
 .md-content ul,
 .md-content ol {
   padding-inline-start: 1.5em;
@@ -1307,10 +1417,35 @@ a.gear-card {
   border-top: 1px solid var(--ts-gray-300);
 }
 
-/* Prev/next post nav: reuses .cards-grid's responsive auto-fill columns.
-   PostCard is a .ts-box div with a stretched title link; hover lift comes from the site-wide .ts-box rules. */
+/* Prev/next post nav: borderless text links (no card), prev pinned left and
+   next right in a two-column grid so a missing side leaves its edge empty.
+   The label ("Previous/Next post") stays plain; hovering the whole link
+   grows the center-out underline (.u-line) under the post TITLE only. */
 .post-nav {
   margin-top: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.post-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: inherit;
+}
+.post-nav-link[rel="prev"] {
+  grid-column: 1;
+  align-items: flex-start;
+}
+.post-nav-link[rel="next"] {
+  grid-column: 2;
+  align-items: flex-end;
+  text-align: right;
+}
+.post-nav-link:hover .post-nav-title::after,
+.post-nav-link:focus-visible .post-nav-title::after {
+  transform: scaleX(1);
 }
 
 /* Search panel (Pagefind): an Apple-style header extension. The <dialog>
@@ -1507,7 +1642,8 @@ dialog.search-dialog {
 /* ---- Medium-referenced reading experience (post pages) ---------------- */
 /* A big, tight title; an author meta row under it; larger body type in a
    ~660px measure (the 220px left rail + gap already sets the column). */
-/* Quiet way back to the list, above the title. */
+/* Quiet way back to the list, above the title. Same center-out underline as
+   every other link (gradient technique); it also darkens on hover. */
 .post-back {
   display: inline-flex;
   align-items: center;
@@ -1516,12 +1652,23 @@ dialog.search-dialog {
   color: var(--ts-gray-600);
   font-size: var(--ts-font-size-14px);
   text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 50% calc(100% - 1px);
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition:
+    background-size 0.25s ease,
+    color 0.2s ease;
 }
 .post-back:hover,
 .post-back:focus-visible {
   color: var(--ts-gray-800);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  background-size: 100% 1.5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .post-back {
+    transition: color 0.2s ease;
+  }
 }
 .post-title {
   font-size: 2.5rem;
@@ -1566,14 +1713,18 @@ dialog.search-dialog {
   padding: 5rem 0 3rem;
 }
 .landing-title {
-  /* The tagline breaks where the locale string puts its \n. */
-  white-space: pre-line;
-  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  /* Each tagline line is its own .reveal block (index.astro splits on
+     the locale string's \n), so the two lines enter one after the
+     other instead of as one slab. */
+  font-size: clamp(1.9rem, 4.5vw, 3.25rem);
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: 0.08em;
   max-width: 22ch;
   margin: 0 0 1rem;
+}
+.landing-title-line {
+  display: block;
 }
 .landing-hero .ts-text {
   font-size: var(--ts-font-size-large);
@@ -1615,6 +1766,13 @@ dialog.search-dialog {
   padding-block: 4rem;
   background: var(--ts-gray-75);
 }
+/* On the near-white tint (--ts-gray-75), the secondary gray (--ts-gray-500,
+   #767676) drops to 4.35:1 — under WCAG AA. Step it to --ts-gray-600 here
+   (still a Tocas token, so it flips correctly in dark mode); on the white
+   sections is-secondary already clears 4.5:1, so this stays scoped to tint. */
+.landing-section.is-tinted .ts-text.is-secondary {
+  color: var(--ts-gray-600);
+}
 /* Stacked variant: label above, content below, no rail column. */
 .landing-section.is-stacked {
   grid-template-columns: 1fr;
@@ -1644,11 +1802,6 @@ dialog.search-dialog {
    rows' corner arrows and the dark band's about link. */
 .landing-side-link {
   text-decoration: none;
-}
-.landing-side-link:hover,
-.landing-side-link:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 .landing-side-link span {
   display: inline-block;
@@ -1705,9 +1858,8 @@ dialog.search-dialog {
   justify-content: space-between;
   margin-bottom: 0.5rem;
 }
-.landing-row:hover .ts-header {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+.landing-row:hover .ts-header::after {
+  transform: scaleX(1);
 }
 .landing-row p {
   margin: 0.5rem 0 0;
@@ -1752,6 +1904,24 @@ dialog.search-dialog {
   font-size: var(--ts-font-size-small);
   color: rgb(236 239 244 / 0.5);
 }
+/* Dark mode: the #1f2430 slate is barely darker than Tocas's near-black
+   page (#272727) and its blue tint clashes with the neutral-gray theme,
+   so the band blurs into the page. Drop to a deeper neutral and add a
+   hairline top border for a crisp edge — the band stays a distinct dark
+   closing zone. Tocas's dark grays only go lighter than the page (they're
+   elevation surfaces), hence the literal #171717. Both selectors mirror
+   Tocas's own scheme: .is-dark for an explicit choice, :not(.is-light) +
+   the media query for OS-follow. */
+:root.is-dark .footer-band {
+  background: #171717;
+  border-top: 1px solid var(--ts-gray-200);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(.is-light) .footer-band {
+    background: #171717;
+    border-top: 1px solid var(--ts-gray-200);
+  }
+}
 @media (max-width: 767px) {
   .landing-hero {
     padding: 2.5rem 0 2rem;
@@ -1785,27 +1955,32 @@ dialog.search-dialog {
   }
 }
 
-/* Apple-style scroll entrances. Armed only under html.js (set inline on
-   the landing page before first paint) so no-JS visitors see everything,
-   and only when the visitor is fine with motion. --ri staggers siblings. */
+/* Apple-style scroll entrances. Armed only under html.js (set inline before
+   first paint) so no-JS visitors see everything, and only when the visitor is
+   fine with motion. --ri staggers siblings.
+
+   A .reveal is VISIBLE by default; the script (Layout.astro) adds .is-pending
+   — the hidden, pre-animation state — only to elements that load below the
+   fold, then removes it when they scroll in (the transition plays the
+   entrance). Above-the-fold content is never hidden, so a page's LCP image
+   paints with the document instead of waiting for this script; gating it on
+   the observer pushed LCP several seconds out under throttling. */
 @media (prefers-reduced-motion: no-preference) {
   .js .reveal {
-    opacity: 0;
-    transform: translateY(28px);
     transition:
-      opacity 0.6s cubic-bezier(0.2, 0.6, 0.2, 1),
-      transform 0.6s cubic-bezier(0.2, 0.6, 0.2, 1);
-    transition-delay: calc(var(--ri, 0) * 90ms);
+      opacity 0.85s cubic-bezier(0.2, 0.6, 0.2, 1),
+      transform 0.85s cubic-bezier(0.2, 0.6, 0.2, 1);
+    transition-delay: calc(var(--ri, 0) * 120ms);
   }
-  .js .reveal.from-left {
+  .js .reveal.is-pending {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+  .js .reveal.from-left.is-pending {
     transform: translateX(-32px);
   }
-  .js .reveal.from-right {
+  .js .reveal.from-right.is-pending {
     transform: translateX(32px);
-  }
-  .js .reveal.is-in {
-    opacity: 1;
-    transform: none;
   }
 }
 
@@ -1829,6 +2004,21 @@ dialog.search-dialog {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+.project-item-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--ts-border-radius-element);
+  margin-bottom: 0.25rem;
+}
+/* Whole-block link, same hover language as a blog row: the underline
+   grows (below) and the cover zooms (shared rule up at .post-row-cover). */
+.project-item:hover .ts-header::after,
+.project-item:focus-visible .ts-header::after {
+  transform: scaleX(1);
 }
 .project-item .ts-header {
   font-size: 1.2rem;

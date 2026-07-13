@@ -5,9 +5,10 @@ import Layout from "@/layouts/Layout.astro";
 import PostList from "@/components/PostList.astro";
 import { getPosts } from "@/utils/posts";
 import { t } from "@/locales";
+import SITE from "@/config";
 
 export const getStaticPaths = (async ({ paginate }) =>
-  paginate(await getPosts(), { pageSize: 6 })) satisfies GetStaticPaths;
+  paginate(await getPosts(), { pageSize: SITE.pageSize.blog })) satisfies GetStaticPaths;
 
 const { page } = Astro.props as { page: Page<CollectionEntry<"blog">> };
 ---
