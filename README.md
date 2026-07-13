@@ -31,7 +31,6 @@
   <ol>
     <li><a href="#-關於-flipside">關於 Flipside</a></li>
     <li><a href="#-快速開始">快速開始</a></li>
-    <li><a href="#-功能總覽">功能總覽</a></li>
     <li><a href="#-指令">指令</a></li>
     <li><a href="#-專案結構">專案結構</a></li>
     <li><a href="#-部署">部署</a></li>
@@ -170,51 +169,6 @@ webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是
 ```
 
 陣列順序，就是顯示順序。
-
-## ✨ 功能總覽
-
-**首頁**
-
-- 大字標語、拼貼主圖、各區塊預覽，深色收尾。
-- 區塊底色交替。內容隨捲動一段一段浮現。
-
-**會翻面的關於頁**
-
-- 一個切換鈕。3D 大頭貼翻面。
-- 兩面，同一組九種內容區塊：text、chips、kv、timeline、highlights、cards、stats、links、markdown。
-- Work 面在 `src/data/about.ts`，Life 面在 `src/data/life.ts`。
-
-**部落格**
-
-- Expressive Code 程式碼區塊：檔名、行號、diff 高亮。
-- 目錄跟著捲動。標題錨點。中英文都準的閱讀時間。
-- 全文搜尋（Pagefind）。純靜態，不用伺服器。
-- 標籤、標籤頁、分頁、上一篇下一篇。
-- RSS。
-- `draft: true` 的草稿只在 dev 出現；build 和 RSS 自動略過。
-- `heroImage` 一張兩用：文章大圖，也是列表縮圖。
-
-**相簿**
-
-- Masonry 瀑布流。CSS 多欄，照片保留原比例。
-- 檔案放進 `src/assets/gallery/`，import、列出。自動 webp、響應式尺寸。
-- 點開，燈箱放大。
-
-**專案**
-
-- 作品集：名稱、說明、技術標籤、連結、封面。資料在 `src/data/projects.ts`。
-- 3 欄，整塊可點，每 9 筆換頁。頁數在 `src/config.ts` 的 `pageSize`。
-
-**全站共用**
-
-- 換頁不重載。平滑轉場。
-- 滾輪帶緩衝。設了減少動態，自動回原生。
-- 暗色模式跟隨系統，也能手動切、記住選擇。
-- en 與 zh-TW，改一個值就整批切換。
-- KaTeX、Mermaid、giscus，選用旗標，預設關閉。關掉，幾乎不佔 bundle。
-- 支援 GitHub project page 的 base 路徑。
-- 純靜態。零密鑰，零伺服器。
-- 每頁行動版 Lighthouse 滿分：效能、無障礙、最佳實踐、SEO，四項各 100。
 
 ## 🧰 指令
 

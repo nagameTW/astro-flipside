@@ -31,7 +31,6 @@
   <ol>
     <li><a href="#-about-flipside">About Flipside</a></li>
     <li><a href="#-getting-started">Getting started</a></li>
-    <li><a href="#-features">Features</a></li>
     <li><a href="#-commands">Commands</a></li>
     <li><a href="#-project-structure">Project structure</a></li>
     <li><a href="#-deploy">Deploy</a></li>
@@ -189,51 +188,6 @@ Drop the file into `src/assets/gallery/`, import it in
 ```
 
 Array order is display order.
-
-## ✨ Features
-
-**Home**
-
-- Big-tagline landing. The site collage. Previews of about, blog, gallery, projects. A dark band to close.
-- Section tints alternate. Content reveals as you scroll, a section at a time.
-
-**Dual-face about**
-
-- One toggle. A 3D avatar flip.
-- Both faces, the same 9 content blocks: text, chips, key-value, timeline, highlights, cards, stats, links, markdown.
-- Work face in `src/data/about.ts`. Life face in `src/data/life.ts`.
-
-**Blog**
-
-- Expressive Code frames: filenames, line numbers, diff highlighting.
-- A table of contents that follows the scroll. Heading anchors. CJK-aware reading time.
-- Full-text search (Pagefind). Static. No server.
-- Tags, a tag index, pagination, prev/next.
-- RSS.
-- `draft: true` shows in dev only. Builds and RSS skip it.
-- `heroImage` does double duty: the post hero, and its thumbnail in the list.
-
-**Gallery**
-
-- Masonry, in CSS multi-column. Photos keep their own ratio.
-- Drop files in `src/assets/gallery/`, import, list. Webp and responsive sizes, automatic.
-- Click a photo. It opens in a lightbox.
-
-**Projects**
-
-- A portfolio: name, description, tech tags, link, cover. All from `src/data/projects.ts`.
-- 3-up, whole block clickable, nine per page. The count lives in `src/config.ts` under `pageSize`.
-
-**Everywhere**
-
-- Navigations swap in place. No reload flash.
-- Momentum scrolling. Reduced-motion visitors get the native kind.
-- Dark mode follows the OS, or a toggle that remembers.
-- en and zh-TW. One flag switches everything.
-- KaTeX, Mermaid, giscus: optional flags, off by default. Off, they cost next to nothing.
-- Base-path support for GitHub project pages.
-- Fully static. Zero secrets, zero server.
-- 100 on mobile Lighthouse, every page: performance, accessibility, best practices, SEO.
 
 ## 🧰 Commands
 
