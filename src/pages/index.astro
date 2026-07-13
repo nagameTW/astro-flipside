@@ -26,10 +26,20 @@ const projects = PROJECTS.slice(0, 4);
 
 <Layout description={SITE.description} hideBackToTop>
   <section class="landing-hero">
-    <h1 class="landing-title reveal">{t["landing.tagline"]}</h1>
+    <h1 class="landing-title">
+      {
+        t["landing.tagline"]
+          .split("\n")
+          .map((line, i) => (
+            <span class="landing-title-line reveal" style={`--ri: ${i}`}>
+              {line}
+            </span>
+          ))
+      }
+    </h1>
   </section>
 
-  <div class="landing-photo-hero reveal">
+  <div class="landing-photo-hero reveal" style="--ri: 2">
     <Image
       src={heroPhoto}
       alt=""
@@ -40,16 +50,16 @@ const projects = PROJECTS.slice(0, 4);
     />
   </div>
 
-  <p class="landing-intro reveal">{SITE.description}</p>
+  <p class="landing-intro reveal" style="--ri: 3">{SITE.description}</p>
 
   <section class="landing-section is-tinted is-stacked">
-    <div class="landing-side reveal">
+    <div class="landing-side reveal" style="--ri: 0">
       <h2 class="landing-side-en">About</h2>
       <div class="ts-text is-secondary">{t["landing.aboutLabel"]}</div>
 
     </div>
     <div class="landing-body">
-      <p class="landing-blurb reveal">{t["landing.aboutBlurb"]}</p>
+      <p class="landing-blurb reveal" style="--ri: 1">{t["landing.aboutBlurb"]}</p>
     </div>
   </section>
 
@@ -64,7 +74,7 @@ const projects = PROJECTS.slice(0, 4);
           {latest.map((post, i) => (
             <a
               class="landing-row reveal"
-              style={`--ri: ${i % 2}`}
+              style={`--ri: ${i + 1}`}
               href={url(`/blog/${post.id}/`)}
             >
               <div class="landing-row-top ts-text is-secondary">
@@ -95,7 +105,7 @@ const projects = PROJECTS.slice(0, 4);
         </div>
         <a class="landing-body landing-gallery" href={url("/gallery/")}>
           {photos.map((photo, i) => (
-            <div class="landing-photo reveal" style={`--ri: ${i}`}>
+            <div class="landing-photo reveal" style={`--ri: ${i + 1}`}>
               <SmartImage
                 src={photo.src}
                 alt={photo.alt}
@@ -126,7 +136,7 @@ const projects = PROJECTS.slice(0, 4);
           {projects.map((project, i) => (
             <a
               class="landing-row reveal"
-              style={`--ri: ${i % 2}`}
+              style={`--ri: ${i + 1}`}
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
