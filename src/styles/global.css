@@ -107,6 +107,12 @@ html.lenis body {
 }
 :root body > main {
   flex: 1 0 auto;
+  /* Short pages (projects, a sparse gallery) keep the first screen free
+     of the dark footer band: the content area always spans at least a
+     viewport, so the band starts below the fold. svh tracks the real
+     visible height on phones; vh is the fallback. */
+  min-height: calc(100vh - 5rem);
+  min-height: calc(100svh - 5rem);
 }
 
 /* Header shell */
