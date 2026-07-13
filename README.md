@@ -232,9 +232,9 @@ src/
 ├── data/          # ← 關於／Life 頁內容、相簿、作品集、獎盃牆
 ├── layouts/       # Layout.astro、BlogPost.astro
 ├── locales/       # en.ts／zh-TW.ts 介面字串字典
-├── pages/         # 路由：首頁、關於、部落格、標籤、相簿、專案、RSS、sitemap
+├── pages/         # 路由：首頁、關於、部落格、標籤、相簿、專案、RSS
 ├── styles/        # global.css
-├── utils/         # 閱讀時間、時間軸、URL 工具函式
+├── utils/         # 文章、時間軸、URL、對話框工具函式
 └── config.ts      # ← 網站設定的唯一來源
 ```
 
@@ -263,7 +263,7 @@ src/
 
 ## 🗺️ 路線圖
 
-已經做完的大項目：首頁入口頁、`/projects/` 作品集頁、全站搜尋、四頁滿分的 Lighthouse。接下來想做什麼、還有哪些已知問題，都放在 [open issues](../../issues)，也歡迎你提。
+已經做完的大項目：首頁入口頁、`/projects/` 作品集頁、全站搜尋、每頁四項滿分的 Lighthouse。接下來想做什麼、還有哪些已知問題，都放在 [open issues](../../issues)，也歡迎你提。
 
 ## 🤝 參與貢獻
 

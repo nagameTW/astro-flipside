@@ -268,9 +268,9 @@ src/
 ├── data/          # ← About/Life copy, gallery, projects, trophies
 ├── layouts/       # Layout.astro, BlogPost.astro
 ├── locales/       # en.ts / zh-TW.ts UI string dictionaries
-├── pages/         # Routes: home, about, blog, tags, gallery, projects, RSS, sitemap
+├── pages/         # Routes: home, about, blog, tags, gallery, projects, RSS
 ├── styles/        # global.css
-├── utils/         # Reading time, timeline, URL helpers
+├── utils/         # Posts, timeline, URL, dialog helpers
 └── config.ts      # ← single source of site configuration
 ```
 
@@ -315,12 +315,10 @@ by copying `en.ts`'s keys.
 
 ## 🗺️ Roadmap
 
-- [x] Home page: a landing with a big tagline, the site collage, and
-      previews of every section
-- [x] `/projects/` portfolio page
-
-Planned work and known issues live in the
-[open issues](../../../issues).
+Big items already done: the home landing page, the `/projects/` portfolio
+page, whole-site search, and 100 across all four Lighthouse categories on
+every page. What's next and any known issues live in the
+[open issues](../../../issues) — suggestions welcome.
 
 ## 🤝 Contributing
 
