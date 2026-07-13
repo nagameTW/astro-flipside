@@ -49,10 +49,15 @@ const katexAssets = () => ({
 // 900 ms of LCP on a cold load). Instead this integration copies the
 // declarations + woff2 files into dist/fonts/ and BaseHead loads that
 // stylesheet ASYNC (media="print" swap): text paints immediately with
-// the system fallback and upgrades to Noto when the declarations land —
-// the same reflow font-display:swap already allowed. woff fallbacks are
-// dropped (every browser with @font-face unicode-range support does
-// woff2). Build-only like katexAssets: the dev server shows system fonts.
+// the system fallback. font-display is rewritten swap -> optional
+// (Google's guidance for CJK): with swap, a slow connection re-paints
+// the text whenever the 30-45 KB slices land, and since Chrome counts
+// that re-paint as the text's LCP, the mobile score sat at ~56 with a
+// 9.5 s LCP pinned to the font download. optional means a cold slow
+// visit just keeps the system font (no reflow, LCP = first paint) and
+// warm visits get Noto from cache. woff fallbacks are dropped (every
+// browser with @font-face unicode-range support does woff2).
+// Build-only like katexAssets: the dev server shows system fonts.
 /** @type {() => import("astro").AstroIntegration} */
 const notoFonts = () => ({
   name: "noto-fonts",
@@ -68,6 +73,7 @@ const notoFonts = () => ({
         /,\s*url\(\.\/files\/[^)]*\.woff\)\s*format\('woff'\)/g,
         "",
       );
+      css = css.replaceAll("font-display: swap;", "font-display: optional;");
       await writeFile(out + "noto-sans-tc.css", css);
       // Copy exactly the files the stripped CSS references — a filename
       // filter either drags in the unreferenced combined-CJK woff2s or,

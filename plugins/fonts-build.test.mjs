@@ -18,6 +18,11 @@ test("font css references only copied files, no woff fallbacks", { skip: !built 
   );
   assert.ok(referenced.length >= 300, `expected ~315 refs, got ${referenced.length}`);
   assert.equal(css.match(/format\('woff'\)/g), null, "woff fallbacks must be stripped");
+  assert.equal(css.match(/font-display: swap/g), null, "font-display must be optional, not swap");
+  assert.ok(
+    (css.match(/font-display: optional/g) || []).length >= 300,
+    "optional rewrite missing",
+  );
   const copied = new Set(readdirSync(FILES));
   const dangling = referenced.filter((f) => !copied.has(f));
   assert.deepEqual(dangling, [], "css references missing font files");
