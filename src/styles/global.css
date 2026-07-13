@@ -978,21 +978,30 @@ a.gear-card {
   overflow: hidden;
   border-radius: var(--ts-border-radius-element);
 }
-.post-row-cover {
+/* Cover fill + hover-zoom, shared by blog rows and project blocks — both
+   are whole-block links with an overflow-hidden cover wrap; only the wrap
+   sizes differ (.post-row-cover-wrap vs .project-item-cover). The
+   underline half of this hover language is shared separately via .u-line. */
+.post-row-cover,
+.project-item-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.35s ease;
 }
 .post-row-main:hover .post-row-cover,
-.post-row-main:focus-visible .post-row-cover {
+.post-row-main:focus-visible .post-row-cover,
+.project-item:hover .project-item-cover img,
+.project-item:focus-visible .project-item-cover img {
   transform: scale(1.06);
 }
 @media (prefers-reduced-motion: reduce) {
-  .post-row-cover {
+  .post-row-cover,
+  .project-item-cover img {
     transition: none;
   }
-  .post-row-main:hover .post-row-cover {
+  .post-row-main:hover .post-row-cover,
+  .project-item:hover .project-item-cover img {
     transform: none;
   }
 }
@@ -1890,28 +1899,11 @@ dialog.search-dialog {
   border-radius: var(--ts-border-radius-element);
   margin-bottom: 0.25rem;
 }
-.project-item-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.35s ease;
-}
-/* Whole-block link: the same hover language as a blog row. */
+/* Whole-block link, same hover language as a blog row: the underline
+   grows (below) and the cover zooms (shared rule up at .post-row-cover). */
 .project-item:hover .ts-header::after,
 .project-item:focus-visible .ts-header::after {
   transform: scaleX(1);
-}
-.project-item:hover .project-item-cover img,
-.project-item:focus-visible .project-item-cover img {
-  transform: scale(1.06);
-}
-@media (prefers-reduced-motion: reduce) {
-  .project-item-cover img {
-    transition: none;
-  }
-  .project-item:hover .project-item-cover img {
-    transform: none;
-  }
 }
 .project-item .ts-header {
   font-size: 1.2rem;
