@@ -29,20 +29,20 @@
 <details>
   <summary>Table of contents</summary>
   <ol>
-    <li><a href="#-about-flipside">About Flipside</a></li>
-    <li><a href="#-getting-started">Getting started</a></li>
-    <li><a href="#-commands">Commands</a></li>
-    <li><a href="#-project-structure">Project structure</a></li>
-    <li><a href="#-deploy">Deploy</a></li>
-    <li><a href="#-locale">Locale</a></li>
-    <li><a href="#-contributing">Contributing</a></li>
-    <li><a href="#-license">License</a></li>
-    <li><a href="#-contact">Contact</a></li>
-    <li><a href="#-acknowledgments">Acknowledgments</a></li>
+    <li><a href="#about-flipside">About Flipside</a></li>
+    <li><a href="#getting-started">Getting started</a></li>
+    <li><a href="#commands">Commands</a></li>
+    <li><a href="#project-structure">Project structure</a></li>
+    <li><a href="#deploy">Deploy</a></li>
+    <li><a href="#locale">Locale</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
-## 🪙 About Flipside
+## About Flipside
 
 By day you move between email and meetings, introducing yourself by
 the title on your business card. By night you practice guitar, play
@@ -67,14 +67,14 @@ profession and keeps what makes them who they are.
 
 <img src="hero.jpg" alt="Flipside at a glance: the Work and Life faces, gallery, post list, code frames, and the dark theme">
 
-### 🛠️ Built with
+### Built with
 
 - [Astro](https://astro.build/) — the static-output site framework
 - [Tocas UI](https://tocas-ui.com/) — a UI framework designed for Chinese
 - [Expressive Code](https://expressive-code.com/) — code frames
 - [Pagefind](https://pagefind.app/) — static full-text search
 
-## 🚀 Getting started
+## Getting started
 
 **1. Create your repo**
 
@@ -117,12 +117,12 @@ git push        # Actions builds and deploys; live in about a minute
 Every push to `main` redeploys, automatically.
 
 Site comes up unstyled or imageless? Back to step 3, check `base`. To add
-content, copy the three examples under [Adding content](#-adding-content).
+content, copy the three examples under [Adding content](#adding-content).
 
 Netlify, Vercel, Cloudflare Pages work too. See the
 [Astro deployment guide](https://docs.astro.build/en/guides/deploy/).
 
-## ✍️ Adding content
+## Adding content
 
 - Posts → `src/content/blog/`
 - Projects → `src/data/projects.ts`
@@ -183,7 +183,7 @@ Drop the file into `src/assets/gallery/`, import it in
 
 Array order is display order.
 
-## 🧰 Commands
+## Commands
 
 From the project root:
 
@@ -196,7 +196,7 @@ From the project root:
 | `npm test`        | Runs the plugin unit tests (`plugins/*.test.mjs`)                    |
 | `npm run fmt`     | Formats the codebase with Prettier                                   |
 
-## 🗂️ Project structure
+## Project structure
 
 ```
 src/
@@ -213,7 +213,7 @@ src/
 
 The arrows mark what you actually edit for a new site.
 
-## 🚢 Deploy
+## Deploy
 
 `.github/workflows/deploy.yml`: on every push to `main`, it runs
 `npm run check && npm run build`, then publishes through GitHub Pages'
@@ -237,14 +237,14 @@ Project**, import the repo, **Deploy**.
 
 Every push to `main` redeploys, and PRs get a preview URL. Fully static output, so the free Hobby plan covers it. No adapter needed.
 
-## 🌐 Locale
+## Locale
 
 Defaults to `"zh-TW"`. For English, set `locale: "en"` in `src/config.ts`.
 
 Both dictionaries live in `src/locales/`. Add a language by copying
 `en.ts`'s keys.
 
-## 🤝 Contributing
+## Contributing
 
 Issues and PRs welcome. Bug reports and feature ideas go through the
 [issue forms](../../../issues/new/choose). Small fixes can go straight to a
@@ -253,15 +253,15 @@ PR; for anything bigger, open an issue first so we can agree on the shape.
 [CONTRIBUTING.md](../CONTRIBUTING.md) covers the dev setup, repo map, and
 conventions.
 
-## 📄 License
+## License
 
 MIT. See [LICENSE](../LICENSE).
 
-## 📫 Contact
+## Contact
 
 Author: [nagameTW](https://github.com/nagameTW)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 Built on [Tocas UI](https://tocas-ui.com/). The blog scaffolding follows
 the official Astro blog starter.
