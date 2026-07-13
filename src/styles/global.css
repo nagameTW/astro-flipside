@@ -387,6 +387,23 @@ html.lenis body {
   border-radius: var(--ts-border-radius-container);
   background: var(--ts-page-background-tertiary);
 }
+/* Dark mode: tertiary (#171717) is near-black, and at these small block
+   sizes it reads harsher than the same value does across the full-width
+   footer band — too dark, per owner. Step the recessed about-page blocks
+   (timeline notes, gear cards) up one tier to secondary (#1e1e1e); light
+   mode keeps its light-gray tertiary. Mirrors Tocas's own dark selectors:
+   .is-dark for an explicit choice, :not(.is-light) + the media query for
+   OS-follow. */
+:root.is-dark .entry-note,
+:root.is-dark .gear-card {
+  background: var(--ts-page-background-secondary);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(.is-light) .entry-note,
+  :root:not(.is-light) .gear-card {
+    background: var(--ts-page-background-secondary);
+  }
+}
 .entry-note p {
   margin-top: 0.5rem;
 }
@@ -1390,10 +1407,35 @@ a.gear-card {
   border-top: 1px solid var(--ts-gray-300);
 }
 
-/* Prev/next post nav: reuses .cards-grid's responsive auto-fill columns.
-   PostCard is a .ts-box div with a stretched title link; hover lift comes from the site-wide .ts-box rules. */
+/* Prev/next post nav: borderless text links (no card), prev pinned left and
+   next right in a two-column grid so a missing side leaves its edge empty.
+   The label ("Previous/Next post") stays plain; hovering the whole link
+   grows the center-out underline (.u-line) under the post TITLE only. */
 .post-nav {
   margin-top: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.post-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: inherit;
+}
+.post-nav-link[rel="prev"] {
+  grid-column: 1;
+  align-items: flex-start;
+}
+.post-nav-link[rel="next"] {
+  grid-column: 2;
+  align-items: flex-end;
+  text-align: right;
+}
+.post-nav-link:hover .post-nav-title::after,
+.post-nav-link:focus-visible .post-nav-title::after {
+  transform: scaleX(1);
 }
 
 /* Search panel (Pagefind): an Apple-style header extension. The <dialog>

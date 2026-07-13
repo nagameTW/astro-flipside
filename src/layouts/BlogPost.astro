@@ -154,7 +154,7 @@ const heroPreload = heroImage
     }
     {
       (prev || next) && (
-        <nav class="cards-grid post-nav">
+        <nav class="post-nav">
           {(
             [
               { rel: "prev", label: t["blog.prev"], post: prev },
@@ -163,10 +163,10 @@ const heroPreload = heroImage
           ).map(
             ({ rel, label, post }) =>
               post && (
-                <a class="ts-box" rel={rel} href={url(`/blog/${post.id}/`)}>
-                  <div class="ts-content">
-                    <div class="ts-text is-description">{label}</div>
-                    <div class="ts-header is-heavy">{post.title}</div>
+                <a class="post-nav-link" rel={rel} href={url(`/blog/${post.id}/`)}>
+                  <div class="ts-text is-description">{label}</div>
+                  <div class="ts-header is-heavy post-nav-title u-line">
+                    {post.title}
                   </div>
                 </a>
               ),
