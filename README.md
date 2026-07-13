@@ -31,12 +31,10 @@
   <ol>
     <li><a href="#-關於-flipside">關於 Flipside</a></li>
     <li><a href="#-快速開始">快速開始</a></li>
-    <li><a href="#-功能總覽">功能總覽</a></li>
     <li><a href="#-指令">指令</a></li>
     <li><a href="#-專案結構">專案結構</a></li>
     <li><a href="#-部署">部署</a></li>
     <li><a href="#-語言">語言</a></li>
-    <li><a href="#-路線圖">路線圖</a></li>
     <li><a href="#-參與貢獻">參與貢獻</a></li>
     <li><a href="#-授權">授權</a></li>
     <li><a href="#-聯絡">聯絡</a></li>
@@ -77,9 +75,7 @@
 gh repo create my-site --template nagameTW/astro-flipside --public --clone
 ```
 
-repo 的名字決定網址。叫 `<帳號>.github.io`，網站就在 `https://<帳號>.github.io/`。叫其他名字，例如 `my-site`，網站就在 `https://<帳號>.github.io/my-site/`。
-
-**2. 本機跑起來**
+**2. 本機執行**
 
 ```bash
 cd my-site
@@ -108,13 +104,19 @@ git commit -m "first deploy"
 git push        # Actions 自動建置，約一分鐘後網站上線
 ```
 
-之後每次 push 到 `main` 都會自動重新部署。部署後如果樣式或圖片全部消失，回第 3 步檢查 `base`。內容怎麼加，照著[新增內容](#-新增內容)的三個範例就行；`src/config.ts` 的其餘欄位都有註解。範例內容讀完就可以刪。
+之後 push 到 `main`，自動重新部署。
 
-想部署到 Netlify、Vercel 或 Cloudflare Pages 也可以。模板是純靜態輸出，匯入 repo 就能用，`base` 留 `""`，做法見 [Astro 部署指南](https://docs.astro.build/en/guides/deploy/)。
+樣式或圖片全不見了？回第 3 步，檢查 `base`。內容怎麼加，看[新增內容](#-新增內容)的三個範例。
+
+Netlify、Vercel、Cloudflare Pages 也行。做法見 [Astro 部署指南](https://docs.astro.build/en/guides/deploy/)。
 
 ## ✍️ 新增內容
 
-三種內容各有固定位置：文章在 `src/content/blog/`，專案在 `src/data/projects.ts`，相簿在 `src/data/gallery.ts`。存檔後 `npm run dev` 立刻更新。
+- 文章 → `src/content/blog/`
+- 專案 → `src/data/projects.ts`
+- 相簿 → `src/data/gallery.ts`
+
+存檔後，`npm run dev` 立刻更新。
 
 **寫一篇文章**
 
@@ -135,7 +137,7 @@ draft: true # 草稿只在 dev 顯示，建置自動排除
 webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是內建。
 ```
 
-範例文章「功能總覽」（`src/content/blog/kitchen-sink-zh.md`）示範了所有支援的排版，對照著寫最快。
+想看全部排版，對照範例文章「功能總覽」（`src/content/blog/kitchen-sink-zh.md`）最快。
 
 **加一個專案**
 
@@ -165,54 +167,9 @@ webp 並產生響應式尺寸；程式碼區塊、表格、目錄、標籤都是
 
 陣列順序就是顯示順序。
 
-## ✨ 功能總覽
-
-**首頁**
-
-- 大字標語、網站拼貼圖，加上關於、文章、相簿、專案的預覽區塊與深色收尾
-- 每個區塊底色交替，內容隨著捲動一段一段浮現
-
-**會翻面的關於頁**
-
-- Work/Life 切換鈕，附 3D 大頭貼翻轉動畫
-- 兩個面都用同一組九種通用內容區塊組成，型別名稱是 text、chips、kv、timeline、highlights、cards、stats、links 和 markdown
-- Work 面資料在 `src/data/about.ts`，Life 面資料在 `src/data/life.ts`
-
-**部落格**
-
-- Expressive Code 程式碼區塊，有檔名標籤、行號和 diff 標記高亮
-- 自動產生的目錄會跟著捲動，另外有標題錨點和中英文皆準確的閱讀時間估算
-- Pagefind 全文搜尋，純靜態，不需要伺服器
-- 標籤與標籤索引頁、分頁、文章間的上一篇與下一篇導覽
-- RSS feed
-- 在 frontmatter 設 `draft: true` 的草稿只會在 `astro dev` 顯示，正式建置與 RSS 都會自動排除
-- frontmatter 的 `heroImage` 一魚兩吃，同一張圖也會當作部落格列表裡該篇文章的縮圖
-
-**相簿**
-
-- Pinterest 風格的 masonry 版面，用 CSS 多欄排版，照片保留原本的長寬比
-- 資料驅動，檔案放 `src/assets/gallery/`，在 `src/data/gallery.ts` import 後列出，自動轉 webp 與產生響應式尺寸
-- 點圖片會用燈箱放大顯示
-
-**專案**
-
-- 作品集頁面：名稱、說明、技術標籤、連結和封面圖，資料在 `src/data/projects.ts`
-- 3 欄格線、整個區塊都可以點，每 9 筆換頁；每頁筆數在 `src/config.ts` 的 `pageSize` 調
-
-**全站共用**
-
-- 換頁不重載，頁面之間平滑轉場
-- 滾輪帶緩衝的平滑捲動，設定減少動態的使用者自動改回原生行為
-- 暗色模式跟隨系統設定，也可以手動切換並記住選擇
-- 內建 en 與 zh-TW 介面字串，改一個設定值就能全部切換
-- KaTeX 數學公式、Mermaid 圖表和 giscus 留言是選用的功能旗標，預設關閉，關閉時不佔任何 bundle 大小
-- 支援 GitHub project page 的 base 路徑
-- 完全靜態輸出，零密鑰、零伺服器
-- 每一頁的行動版 Lighthouse 都是滿分：效能、無障礙、最佳實踐、SEO 四項各 100
-
 ## 🧰 指令
 
-所有指令都在專案根目錄的終端機執行：
+在專案根目錄執行：
 
 | 指令              | 說明                                             |
 | :---------------- | :----------------------------------------------- |
@@ -238,38 +195,38 @@ src/
 └── config.ts      # ← 網站設定的唯一來源
 ```
 
-三個箭頭標示的地方，是你架設新站時真正要編輯的內容。其餘都是範本內部的實作細節。
+箭頭標示的地方是架設新站時真正要編輯的內容。
 
 ## 🚢 部署
 
-`.github/workflows/deploy.yml` 會執行 `npm run check && npm run build`，再透過 GitHub Pages 原生的 Actions 部署發布，每次推上 `main` 都會觸發。只需要設定一次，位置在 **Settings → Pages → Build and deployment → Source: GitHub Actions**。
+`.github/workflows/deploy.yml`：每次 push 到 `main`，跑 `npm run check && npm run build`，再用 GitHub Pages 原生的 Actions 發布。設定一次就好：**Settings → Pages → Build and deployment → Source: GitHub Actions**。
 
-`src/config.ts` 裡的 `site` 和 `base` 要跟部署方式對應：
+`site` 和 `base` 要對上部署方式：
 
 | 部署方式         | Repo 名稱          | `site`                       | `base`           | 結果網址                                |
 | ---------------- | ------------------ | ---------------------------- | ---------------- | --------------------------------------- |
 | Project page     | 任意               | `"https://<user>.github.io"` | `"/<repo-name>"` | `https://<user>.github.io/<repo-name>/` |
 | 使用者／組織首頁 | `<user>.github.io` | `"https://<user>.github.io"` | `""`             | `https://<user>.github.io/`             |
 
-線上示範部署在 Vercel：<https://astro-flipside.vercel.app/>。這個 repo 也保留了 GitHub Pages 的 Actions 部署，讓 clone 的人兩種都能用。
-
 ### 部署到 Vercel
 
-匯入 repo 就好，設定不用動。到 [vercel.com](https://vercel.com) 用 GitHub 登入，**Add New → Project**，匯入這個 repo，按 **Deploy**。Vercel 會自動認出是 Astro、跑 `astro build`；`base` 會自動切成根目錄、`site` 會用 Vercel 給的網址（靠建置時的 `VERCEL` 環境變數判斷，見 `astro.config.mjs`，`src/config.ts` 的值留給 GitHub Pages 用即可）。之後每次 push 到 `main` 自動重新部署，開 PR 會附一個預覽網址。純靜態輸出，免費的 Hobby 方案就夠，不需要任何 adapter。
+匯入 repo 就好，設定不用動。
+
+到 [vercel.com](https://vercel.com) 用 GitHub 登入，**Add New → Project**，匯入 repo，按 **Deploy**。
+
+之後每次 push 到 `main` 自動重新部署，開 PR 會附一個預覽網址。純靜態輸出，免費的 Hobby 方案就夠，不需要任何 adapter。
 
 ## 🌐 語言
 
-介面只認一種語言，預設是 `"zh-TW"`。想改成英文的話，把 `src/config.ts` 的 `locale` 設成 `"en"` 即可，內建字串會整批切換。兩份字典都在 `src/locales/`。要加新語言，複製 `en.ts` 的 key 照著填就行。
+預設 `"zh-TW"`。想改英文的話，把 `src/config.ts` 的 `locale` 設成 `"en"` 即可。
 
-## 🗺️ 路線圖
-
-已經做完的大項目：首頁入口頁、`/projects/` 作品集頁、全站搜尋、每頁四項滿分的 Lighthouse。接下來想做什麼、還有哪些已知問題，都放在 [open issues](../../issues)，也歡迎你提。
+字典在 `src/locales/`。要加新語言，複製 `en.ts` 的 key，照著填就行。
 
 ## 🤝 參與貢獻
 
-歡迎 issue 和 PR。回報問題或提功能想法請走 [issue 表單](../../issues/new/choose)。小修正可以直接開 PR，較大的改動建議先開 issue 討論方向，確認再動手。
+歡迎 issue 和 PR。回報問題、許願功能請走 [issue 表單](../../issues/new/choose)。小修正直接開 PR；大改動則先開 issue 聊聊方向。
 
-開發環境、專案結構與慣例見 [CONTRIBUTING.md](CONTRIBUTING.md)。PR 表單會引導你填寫其餘內容。CI 跑的就是你在本地能跑的那三個檢查：`npm run check && npm run build && npm test`。
+開發環境與慣例，見 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 📄 授權
 
@@ -281,4 +238,4 @@ MIT。詳見 [LICENSE](LICENSE)。
 
 ## 🙏 致謝
 
-以 [Tocas UI](https://tocas-ui.com/) 打底。部落格的骨架依循 Astro 官方 blog starter 的做法。
+底層是 [Tocas UI](https://tocas-ui.com/)。部落格骨架依循 Astro 官方 blog starter。
