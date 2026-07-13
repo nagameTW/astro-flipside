@@ -360,6 +360,24 @@ html.lenis body {
 .about-main .ts-timeline .aside {
   font-size: var(--ts-font-size-tiny);
 }
+/* Timeline node circle. Tocas drew it via `.indicator .ts-icon`, but that
+   class is icon-font-era (its base rule is visibility:hidden); the inline
+   <Icon> renders `.icon` instead, so the disc was lost and the smaller raw
+   glyph sat off the connecting line. Rebuild the 30px gray node here —
+   padding on the SVG puts the gray-100 disc behind a centered ~16px glyph,
+   matching Tocas's original marker. */
+.about-main .ts-timeline .item .indicator .icon {
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  padding: 7px;
+  border-radius: 100rem;
+  background: var(--ts-gray-100);
+  color: var(--ts-gray-600);
+  /* Flex-centered in the indicator, so the global baseline nudge (which
+     only matters for inline-in-text icons) must not apply here. */
+  vertical-align: initial;
+}
 /* Anything below the title and subtitle sits in its own tinted block. Tocas's
    tertiary background is darker than the page in both schemes (242 on 255,
    23 on 39), so the block reads as recessed either way. */
