@@ -46,26 +46,26 @@
 
 ## 🪙 About Flipside
 
-At work you answer email, sit in meetings, put a job title on a
-business card. After hours you practice guitar, play ball, or log on
-under an ID only fellow fans would recognize.
+By day you move between email and meetings, introducing yourself by
+the title on your business card. By night you practice guitar, play
+ball, or slip into an ID only fellow fans would know.
 
-Both of these are you, yet they rarely show up in the same place.
+Both are you, yet they rarely show up in the same place.
 
 Most personal sites give you one layout and one way to tell your
 story, so you keep having to choose: show the profession, or share
 the passion? In the end, one side gets to stand for all of you.
 
-Flipside's core idea is simple: why compromise.
+But why compromise.
 
 Like a coin: profession on the front, passion on the back. Both sides
 are the real you. One flip, and visitors meet you from another angle.
 
-Flipside is a clean, Chinese-friendly Astro theme. It grew out of my
-personal site: everything private removed, the design thinking kept,
-shaped into a starting point you can use right away, so that more
-people can build a site that shows their profession without giving up
-what makes them who they are.
+This is Flipside, a clean, Chinese-friendly Astro theme. It grew out
+of my personal site: everything private removed, the design thinking
+kept, shaped into a starting point you can use right away, so that
+more people can build a space of their own that shows their
+profession and keeps what makes them who they are.
 
 <img src="hero.jpg" alt="Flipside at a glance: the Work and Life faces, gallery, post list, code frames, and the dark theme">
 
