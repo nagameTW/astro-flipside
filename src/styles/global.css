@@ -1607,6 +1607,15 @@ dialog.search-dialog {
   gap: 2rem 4rem;
   margin-top: 6rem;
 }
+/* Alternating full-bleed tint bands (the nagi rhythm): the background
+   bleeds to the viewport edges, the content stays on the container
+   grid. body's overflow-x: clip swallows the scrollbar overshoot. */
+.landing-section.is-tinted {
+  margin-inline: calc(50% - 50vw);
+  padding-inline: calc(50vw - 50%);
+  padding-block: 4rem;
+  background: var(--ts-gray-75);
+}
 .landing-side {
   position: sticky;
   top: 7rem;
@@ -1676,11 +1685,12 @@ dialog.search-dialog {
   margin: 0.5rem 0 0;
 }
 
-/* Closing card: brand-dark, white text in both themes. */
+/* Closing band: brand-dark, full-bleed, white text in both themes. */
 .landing-cta {
   margin-top: 6rem;
-  padding: 3rem;
-  border-radius: var(--ts-border-radius-container);
+  margin-inline: calc(50% - 50vw);
+  padding-inline: calc(50vw - 50%);
+  padding-block: 4rem;
   background: #1f2430;
   color: #eceff4;
 }
@@ -1734,8 +1744,11 @@ dialog.search-dialog {
     grid-template-columns: 1fr;
   }
   .landing-cta {
-    padding: 2rem 1.5rem;
+    padding-block: 2.5rem;
     margin-top: 4rem;
+  }
+  .landing-section.is-tinted {
+    padding-block: 2.5rem;
   }
 }
 
