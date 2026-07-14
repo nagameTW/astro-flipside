@@ -2034,7 +2034,13 @@ dialog.search-dialog {
   }
 }
 .page-enter {
-  animation: page-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* backwards, not both: main's resting style is already opacity 1 /
+     translateY 0, so keeping the `to` state would only leave a stray
+     transform — which turns <main> into a containing block + stacking context
+     for any position:fixed element a downstream page drops in, trapping it
+     under the sticky header. `backwards` still applies the `from` state before
+     the first frame; after the run, <main> reverts to no transform. */
+  animation: page-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 @media (prefers-reduced-motion: reduce) {
   .page-enter {
