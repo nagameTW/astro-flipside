@@ -38,7 +38,12 @@ const imageURL = new URL(url(image), Astro.site);
   content="width=device-width, initial-scale=1, shrink-to-fit=no"
 />
 <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
-<ClientRouter />
+{/* fallback="swap": browsers without the native View Transitions API
+    (iOS Safari < 18) swap instantly instead of running Astro's JS fade
+    simulation, which flickers the whole page on WebKit. Pairs with the
+    animation:none rule on ::view-transition(root) in global.css so native-VT
+    browsers get the same instant swap — no cross-fade anywhere. */}
+<ClientRouter fallback="swap" />
 <meta name="generator" content={Astro.generator} />
 <link rel="sitemap" href={url("/sitemap-index.xml")} />
 <link

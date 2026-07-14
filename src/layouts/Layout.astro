@@ -170,6 +170,12 @@ const { title, description, noindex, hideBackToTop } = Astro.props;
         root.classList.toggle("is-dark", saved === "dark");
         root.classList.toggle("is-light", saved === "light");
 
+        // Ease the incoming content up into place (see .page-enter in
+        // global.css). Fires only here, on navigation — never first load —
+        // so the LCP paint is untouched. The fresh <main> keeps the class;
+        // the animation plays once per swap because it is a new element.
+        document.querySelector("main")?.classList.add("page-enter");
+
         // The router has already set the real scrollTop (top for forward
         // navs, restored for history). Lenis's internal value still points
         // at the OLD page's position and would yank the page back on its
