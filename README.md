@@ -69,8 +69,6 @@
   </a>
 </p>
 
-<p align="center"><sub>線上示範的行動裝置實測，資料來自 PageSpeed Insights。點圖看即時報告。</sub></p>
-
 ## 快速開始
 
 **1. 建立你的 repo**
