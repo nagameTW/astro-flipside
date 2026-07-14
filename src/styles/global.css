@@ -123,9 +123,9 @@ html.lenis body {
   /* Solid, not frosted glass. A backdrop-filter bar flickers during the
      navigation repaint on iOS Safari (and every iOS browser uses that
      engine) — owner call 2026-07-14 to drop the blur for a plain opaque bar.
-     A hairline bottom border separates it from the content scrolling under. */
+     No bottom border: the bar shares the page background, so it reads seamless
+     with the content scrolling under it (owner call 2026-07-14). */
   background: var(--ts-page-background-default);
-  border-bottom: 1px solid var(--ts-gray-200);
 }
 /* Brand wordmark, larger than the default header size. */
 .site-header a.ts-header {
@@ -1885,20 +1885,18 @@ dialog.search-dialog {
 }
 /* Dark mode: the #1f2430 slate is barely darker than Tocas's near-black
    page (#272727) and its blue tint clashes with the neutral-gray theme,
-   so the band blurs into the page. Drop to a deeper neutral and add a
-   hairline top border for a crisp edge — the band stays a distinct dark
-   closing zone. Tocas's dark grays only go lighter than the page (they're
-   elevation surfaces), hence the literal #171717. Both selectors mirror
-   Tocas's own scheme: .is-dark for an explicit choice, :not(.is-light) +
-   the media query for OS-follow. */
+   so the band blurs into the page. Drop to a deeper neutral (#171717) so the
+   band still reads as a distinct dark closing zone without needing a border
+   (owner call 2026-07-14: no hairline). Tocas's dark grays only go lighter
+   than the page (they're elevation surfaces), hence the literal #171717. Both
+   selectors mirror Tocas's own scheme: .is-dark for an explicit choice,
+   :not(.is-light) + the media query for OS-follow. */
 :root.is-dark .footer-band {
   background: #171717;
-  border-top: 1px solid var(--ts-gray-200);
 }
 @media (prefers-color-scheme: dark) {
   :root:not(.is-light) .footer-band {
     background: #171717;
-    border-top: 1px solid var(--ts-gray-200);
   }
 }
 @media (max-width: 767px) {
@@ -2005,4 +2003,41 @@ dialog.search-dialog {
 .project-item p {
   flex: 1;
   margin: 0;
+}
+
+/* Instant page swaps — no cross-fade. ClientRouter's default view-transition
+   cross-fade repaints the whole page at completion on iOS Safari ("like a
+   refresh" flicker, reported on-device; not reproducible in Chromium).
+   Cancelling the root animation keeps the no-reload DOM swap but drops the
+   fade that flickers there. Reduced-motion users already got no animation. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* Incoming-page entrance. The instant swap above removed the cross-fade, so
+   navigation felt abrupt; this eases the new <main> up into place to give it
+   back some motion. A plain CSS animation, NOT a view transition, so it can't
+   reproduce the whole-page repaint flicker. Opacity starts at 0.5 (not 0) and
+   there is no fade-out of the old page: the content is already painted the
+   instant it swaps in, so the content area never blanks for a frame. Added to
+   the fresh <main> in Layout's astro:after-swap — never on first load, so the
+   LCP paint stays untouched. */
+@keyframes page-enter {
+  from {
+    opacity: 0.5;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.page-enter {
+  animation: page-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
 }
