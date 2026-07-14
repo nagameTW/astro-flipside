@@ -104,6 +104,15 @@ html.lenis body {
      horizontal overflow, and the pages have none. */
   overflow-x: visible;
   overflow-x: clip;
+  /* Tocas's font stack lists Noto Sans SC/HK/JP/KR right after the async,
+     first-visit-absent Noto Sans TC, so 於 (and other TC/SC-divergent glyphs)
+     flash a Simplified/JP variant on first paint. Put Traditional-Chinese
+     system fonts ahead of any SC/JP/KR font so the pre-Noto fallback is always
+     TC. This :root body rule beats Tocas's own body font-family. */
+  font-family:
+    "Noto Sans TC", "PingFang TC", "PingFang HK", "Microsoft JhengHei",
+    "微軟正黑體", "Noto Sans CJK TC", "Heiti TC", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
 }
 :root body > main {
   flex: 1 0 auto;
