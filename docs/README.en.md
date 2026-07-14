@@ -78,8 +78,6 @@ profession and keeps what makes them who they are.
   </a>
 </p>
 
-<p align="center"><sub>Mobile scores for the live demo, measured with PageSpeed Insights. Click for the live report.</sub></p>
-
 ## Getting started
 
 **1. Create your repo**
