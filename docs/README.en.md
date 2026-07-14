@@ -7,7 +7,7 @@
 ![i18n](https://img.shields.io/badge/i18n-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%20%7C%20English-2F3741?style=for-the-badge)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-2F3741?style=for-the-badge)](../CONTRIBUTING.md)
 
-<img src="../public/favicon.svg" alt="Flipside logo" width="80" height="80">
+<img src="hero.jpg" alt="Flipside at a glance: the Work and Life faces, gallery, post list, code frames, and the dark theme">
 
 <h3 align="center">Flipside</h3>
 
@@ -30,6 +30,7 @@
   <summary>Table of contents</summary>
   <ol>
     <li><a href="#about-flipside">About Flipside</a></li>
+    <li><a href="#lighthouse-score">Lighthouse Score</a></li>
     <li><a href="#getting-started">Getting started</a></li>
     <li><a href="#commands">Commands</a></li>
     <li><a href="#project-structure">Project structure</a></li>
@@ -37,7 +38,6 @@
     <li><a href="#locale">Locale</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
@@ -65,14 +65,20 @@ kept, shaped into a starting point you can use right away, so that
 more people can build a space of their own that shows their
 profession and keeps what makes them who they are.
 
-<img src="hero.jpg" alt="Flipside at a glance: the Work and Life faces, gallery, post list, code frames, and the dark theme">
-
-### Built with
-
 - [Astro](https://astro.build/) — the static-output site framework
 - [Tocas UI](https://tocas-ui.com/) — a UI framework designed for Chinese
 - [Expressive Code](https://expressive-code.com/) — code frames
 - [Pagefind](https://pagefind.app/) — static full-text search
+
+## Lighthouse Score
+
+<p align="center">
+  <a href="https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fastro-flipside.vercel.app%2F&form_factor=mobile">
+    <img width="720" alt="Lighthouse scores on mobile: Performance, Accessibility, Best Practices, and SEO all 100" src="lighthouse-score.svg">
+  </a>
+</p>
+
+<p align="center"><sub>Mobile scores for the live demo, measured with PageSpeed Insights. Click for the live report.</sub></p>
 
 ## Getting started
 
@@ -256,10 +262,6 @@ conventions.
 ## License
 
 MIT. See [LICENSE](../LICENSE).
-
-## Contact
-
-Author: [nagameTW](https://github.com/nagameTW)
 
 ## Acknowledgments
 

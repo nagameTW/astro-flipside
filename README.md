@@ -7,7 +7,7 @@
 ![i18n](https://img.shields.io/badge/i18n-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%20%7C%20English-2F3741?style=for-the-badge)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-2F3741?style=for-the-badge)](CONTRIBUTING.md)
 
-<img src="public/favicon.svg" alt="Flipside logo" width="80" height="80">
+<img src="docs/hero.jpg" alt="Flipside 頁面總覽，包含 Work 與 Life 兩面、相簿、文章列表、程式碼區塊與暗色主題">
 
 <h3 align="center">Flipside</h3>
 
@@ -30,6 +30,7 @@
   <summary>目錄</summary>
   <ol>
     <li><a href="#關於-flipside">關於 Flipside</a></li>
+    <li><a href="#lighthouse-分數">Lighthouse 分數</a></li>
     <li><a href="#快速開始">快速開始</a></li>
     <li><a href="#指令">指令</a></li>
     <li><a href="#專案結構">專案結構</a></li>
@@ -37,7 +38,6 @@
     <li><a href="#語言">語言</a></li>
     <li><a href="#參與貢獻">參與貢獻</a></li>
     <li><a href="#授權">授權</a></li>
-    <li><a href="#聯絡">聯絡</a></li>
     <li><a href="#致謝">致謝</a></li>
   </ol>
 </details>
@@ -56,14 +56,20 @@
 
 這就是 Flipside，一個簡潔、中文友善的 Astro 主題。它基於我的個人網站專案，移除了所有私人內容，保留開發過程中累積的設計思考，整理成一個可以直接使用的網站起點，希望讓更多人能打造一個既能展現專業，也能保留個人特色的專屬空間。
 
-<img src="docs/hero.jpg" alt="Flipside 頁面總覽，包含 Work 與 Life 兩面、相簿、文章列表、程式碼區塊與暗色主題">
-
-### 使用技術
-
 - [Astro](https://astro.build/) — 靜態輸出的網站框架
 - [Tocas UI](https://tocas-ui.com/) — 為中文設計的 UI 框架
 - [Expressive Code](https://expressive-code.com/) — 程式碼區塊
 - [Pagefind](https://pagefind.app/) — 純靜態全文搜尋
+
+## Lighthouse 分數
+
+<p align="center">
+  <a href="https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fastro-flipside.vercel.app%2F&form_factor=mobile">
+    <img width="720" alt="Lighthouse 行動裝置分數：效能、無障礙、最佳做法、SEO 皆為 100" src="docs/lighthouse-score.svg">
+  </a>
+</p>
+
+<p align="center"><sub>線上示範的行動裝置實測，資料來自 PageSpeed Insights。點圖看即時報告。</sub></p>
 
 ## 快速開始
 
@@ -231,10 +237,6 @@ src/
 ## 授權
 
 MIT。詳見 [LICENSE](LICENSE)。
-
-## 聯絡
-
-作者：[nagameTW](https://github.com/nagameTW)
 
 ## 致謝
 
