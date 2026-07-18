@@ -44,26 +44,30 @@
 
 ## About Flipside
 
-By day you move between email and meetings, introducing yourself by
-the title on your business card. By night you practice guitar, play
-ball, or slip into an ID only fellow fans would know.
+By day, you weave between emails and meetings, introducing yourself
+by the title on your business card; by night, you practice guitar,
+play ball, or log on under an ID only fellow fans would recognize.
 
-Both are you, yet they rarely show up in the same place.
+Both are the real you, yet they rarely get to coexist in the same
+space.
 
-Most personal sites give you one layout and one way to tell your
-story, so you keep having to choose: show the profession, or share
-the passion? In the end, one side gets to stand for all of you.
+Most personal sites are confined to a single layout and a single way
+of telling your story, forcing a trade-off: showcase the profession,
+or share the passion? In the end, one side usually has to stand for
+all of you.
 
-But why compromise.
+But why compromise?
 
-Like a coin: profession on the front, passion on the back. Both sides
-are the real you. One flip, and visitors meet you from another angle.
+Like a coin — profession on the front, passion on the back. Both
+faces are genuinely you; one gentle flip lets visitors see you from
+an entirely different angle and know you more completely.
 
-This is Flipside, a clean, Chinese-friendly Astro theme. It grew out
-of my personal site: everything private removed, the design thinking
-kept, shaped into a starting point you can use right away, so that
-more people can build a space of their own that shows their
-profession and keeps what makes them who they are.
+This is "Flipside", an Astro theme with a clean design and
+first-class care for Chinese typography. It grew out of my personal
+site: with the private content removed, the ideas gathered along the
+way were distilled into a ready-to-use starting point — so that more
+people can effortlessly build a space of their own that both shows
+their professional strength and lets their personality through.
 
 - [Astro](https://astro.build/) — the static-output site framework
 - [Tocas UI](https://tocas-ui.com/) — a UI framework designed for Chinese
