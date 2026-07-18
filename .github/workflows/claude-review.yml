@@ -59,8 +59,20 @@ jobs:
                  absolute paths break one of them.
                - PR title follows Conventional Commits (it becomes the
                  squash-merge commit message).
-            3. Security, for anything touching user input, inline scripts,
-               or the build pipeline.
+            3. Tests: a change to plugins/*.mjs must update its matching
+               *.test.mjs in the same PR. Any other behavior change that
+               ships with no test change: say in the summary how it could
+               have been verified, and flag it [warning] if a cheap unit
+               test was clearly possible.
+            4. Breaking changes for template users: if the diff changes
+               something existing users depend on (src/config.ts shape,
+               component props/slots, locale keys, build output paths,
+               npm scripts), the PR title must carry `!` and the body must
+               say what breaks and how to migrate. Flag [critical] if a
+               break is unmarked.
+            5. Security, for anything touching user input, inline scripts,
+               dependencies, or the build pipeline (.mjs plugins, astro
+               integrations, GitHub workflow files).
 
             Do NOT comment on:
             - anything Prettier, `astro check`, or CI already enforces
@@ -83,6 +95,13 @@ jobs:
             - Exactly one top-level comment via `gh pr comment` with the
               overall verdict; if nothing rises above a nit, say LGTM and
               stop.
+            - The verdict comment always ends with a "沒驗證到的部分 /
+              Not verified" line listing what this review could not check
+              (e.g. runtime/visual behavior, build output, cross-browser)
+              — the maintainer merges without a human review, so the
+              residual risk must be explicit, not implied. Keep it to
+              1-3 bullets; never claim a dimension was verified when it
+              was only read.
             - Only post GitHub comments — never submit review text as a
               plain message.
 
