@@ -1,0 +1,60 @@
+name: Claude PR Review
+
+# Auth: CLAUDE_CODE_OAUTH_TOKEN repo secret (from `claude setup-token`,
+# billed against the maintainer's subscription quota, not per-token).
+# No `synchronize` trigger on purpose — re-reviewing every push burns
+# quota; close/reopen the PR to request a fresh review.
+on:
+  pull_request:
+    types: [opened, ready_for_review, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+jobs:
+  review:
+    # Fork PRs can't read the secret; skip them instead of failing.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          track_progress: true
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            Review this pull request for a bilingual (zh-TW / en) Astro blog
+            template. Focus on real problems; skip style nitpicks that
+            Prettier or `astro check` would already catch.
+
+            Repo-specific rules (from CONTRIBUTING.md — read it if you need
+            detail):
+            - Any UI-string change must update BOTH src/locales/en.ts and
+              src/locales/zh-TW.ts in this same PR.
+            - No personal data anywhere (real names, employers, phone
+              numbers, IDs, links to real personal social/game profiles).
+              Demo content is deliberately fictional.
+            - .mdx content executes at build time — review added/changed
+              .mdx files as code, not as content.
+            - Block components stay data-driven (content from src/data/*.ts,
+              empty data renders nothing).
+            - The PR title must follow Conventional Commits; it becomes the
+              squash-merge commit message on main.
+            - Site must work on both deploy targets: GitHub Pages project
+              page (base = "/repo") and Vercel (base = ""). Watch for
+              hardcoded absolute paths that break one of them.
+
+            Use inline comments for specific issues, one top-level comment
+            for the overall verdict. Write findings in English; quote code
+            identifiers verbatim.
+
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
