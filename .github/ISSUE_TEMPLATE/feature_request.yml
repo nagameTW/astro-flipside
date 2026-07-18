@@ -1,34 +1,34 @@
-name: 功能建議
-description: 為這個範本提出新點子
+name: 功能建議 / Feature request
+description: 為這個範本提出新點子 / Suggest an idea for this template
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        Feel free to write in English.
+        感謝提出建議！中英文皆可。
 
-        感謝提出建議！
+        Thanks for the suggestion! Both Chinese and English are welcome.
   - type: textarea
     id: problem
     attributes:
-      label: 這個建議想解決什麼問題？
-      description: 你想做的事，範本現在還不支援的地方是什麼？
+      label: 這個建議想解決什麼問題？ / What problem does this solve?
+      description: 你想做的事，範本現在還不支援的地方是什麼？ / What are you trying to do that the template doesn't support yet?
     validations:
       required: true
   - type: textarea
     id: solution
     attributes:
-      label: 你建議的解法
+      label: 你建議的解法 / Proposed solution
     validations:
       required: true
   - type: textarea
     id: alternatives
     attributes:
-      label: 考慮過的替代方案
+      label: 考慮過的替代方案 / Alternatives considered
   - type: checkboxes
     id: would-you-pr
     attributes:
-      label: 貢獻意願
+      label: 貢獻意願 / Contribution
       options:
-        - label: 我願意為此開一個 PR
+        - label: 我願意為此開一個 PR / I'm willing to open a PR for this

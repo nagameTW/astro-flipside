@@ -1,25 +1,26 @@
-name: 錯誤回報
-description: 回報範本的問題
+name: 錯誤回報 / Bug report
+description: 回報範本的問題 / Report a problem with the template
 title: "[Bug]: "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Feel free to write in English.
+        感謝回報，請盡量填寫以下欄位，方便我們重現問題。中英文皆可。
 
-        感謝回報，請盡量填寫以下欄位，方便我們重現問題。
+        Thanks for the report! Fill in as much as you can so we can reproduce
+        the issue. Both Chinese and English are welcome.
   - type: textarea
     id: what-happened
     attributes:
-      label: 發生了什麼事？
-      description: 清楚描述這個錯誤。
+      label: 發生了什麼事？ / What happened?
+      description: 清楚描述這個錯誤。 / Describe the bug clearly.
     validations:
       required: true
   - type: textarea
     id: repro-steps
     attributes:
-      label: 重現步驟
+      label: 重現步驟 / Steps to reproduce
       placeholder: |
         1. ...
         2. ...
@@ -29,29 +30,30 @@ body:
   - type: textarea
     id: expected
     attributes:
-      label: 預期行為
+      label: 預期行為 / Expected behavior
   - type: input
     id: version
     attributes:
-      label: 範本版本／commit
-      description: 你使用的 git commit SHA 或標籤。
+      label: 範本版本／commit / Template version or commit
+      description: 你使用的 git commit SHA 或標籤。 / The git commit SHA or tag you are on.
   - type: dropdown
     id: deploy-target
     attributes:
-      label: 部署方式
+      label: 部署方式 / Deploy target
       options:
-        - 使用者頁面（username.github.io）
-        - Project 頁面（username.github.io/repo）
-        - 其他／本機開發
+        - 使用者頁面（username.github.io） / User page
+        - Project 頁面（username.github.io/repo） / Project page
+        - Vercel
+        - 其他／本機開發 / Other or local dev
   - type: dropdown
     id: locale
     attributes:
-      label: 語言設定
+      label: 語言設定 / Locale
       options:
         - en
         - zh-TW
   - type: textarea
     id: logs
     attributes:
-      label: 記錄／截圖
-      description: 主控台輸出、建置錯誤訊息，或截圖（如果相關的話）。
+      label: 記錄／截圖 / Logs or screenshots
+      description: 主控台輸出、建置錯誤訊息，或截圖（如果相關的話）。 / Console output, build errors, or screenshots (if relevant).
