@@ -1,10 +1,10 @@
-# 貢獻指南
-
-Feel free to write in English.
+# 貢獻指南 / Contributing guide
 
 感謝你願意為這個範本貢獻。
 
-## 開發環境設置
+Thanks for wanting to contribute to this template.
+
+## 開發環境設置 / Development setup
 
 ```bash
 npm install
@@ -12,6 +12,8 @@ npm run dev
 ```
 
 開 PR 之前，先在本機跑一次 CI 會跑的檢查：
+
+Before opening a PR, run the same checks CI runs, locally:
 
 ```bash
 npm run check && npm run build && npm test
@@ -21,7 +23,12 @@ npm run check && npm run build && npm test
 安全性建議，dependabot 每週會追蹤（`.github/dependabot.yml`）；只影響
 建置工具的項目可以等例行更新，不要用 `--force` 硬升。
 
-## 專案地圖
+`npm audit` should currently report 0 findings (cleared by the Astro 7
+upgrade). If new advisories appear, dependabot tracks them weekly
+(`.github/dependabot.yml`); advisories that only affect build tooling can
+wait for a routine update — never force through with `--force`.
+
+## 專案地圖 / Project map
 
 - `src/config.ts`：網站設定的唯一來源（標題、導覽列、功能旗標、社群連結）。
   大多數客製化都從這裡開始。
@@ -36,7 +43,23 @@ npm run check && npm run build && npm test
 - `plugins/*.mjs`：建置期的 remark 外掛（Mermaid fence、閱讀時間），
   每個都有對應的 `*.test.mjs`。
 
-## 慣例
+In English:
+
+- `src/config.ts`: the single source of site configuration (title, nav,
+  feature flags, social links). Most customization starts here.
+- `src/locales/en.ts`, `src/locales/zh-TW.ts`: every built-in UI string,
+  one dictionary per language. `SITE.locale` in `src/config.ts` decides
+  which one loads.
+- `src/data/*.ts`: content data — the work/life "about" copy (`about.ts`,
+  `life.ts`), portfolio items (`projects.ts`), and the shared block content
+  types (`sections.ts`).
+- `src/components/blocks/*.astro`: the generic content blocks shared by
+  both "about" faces (text, chips, timeline, cards, stats, …), fed by the
+  entries in `src/data/sections.ts`. Details under Conventions below.
+- `plugins/*.mjs`: build-time remark plugins (Mermaid fences, reading
+  time), each with a matching `*.test.mjs`.
+
+## 慣例 / Conventions
 
 - commit 訊息和 PR 標題使用 [Conventional Commits](https://www.conventionalcommits.org/)
   （`feat:`、`fix:`、`docs:` 等）。
@@ -52,6 +75,25 @@ npm run check && npm run build && npm test
   簽名列（例如 `Claude-Session:`、`Generated with ...`）。用什麼工具寫
   code 都可以，但進到 git 歷史的資訊只留人。
 
+In English:
+
+- Commit messages and PR titles follow
+  [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`,
+  `fix:`, `docs:`, …).
+- One change per branch; PRs target `main`.
+- Blocks stay data-driven: block components take their content from
+  `src/data/*.ts` and render nothing when the data is empty (e.g.
+  `cards.length > 0 && (...)` in `Cards.astro`). Never hardcode content
+  into a block component.
+- A UI-string change must update **both** `src/locales/en.ts` and
+  `src/locales/zh-TW.ts` in the same PR. Either dictionary silently
+  falling behind the other counts as a bug.
+- Commit messages, PR titles and bodies, and branch names must carry **no
+  AI-tool attribution or traces**: no AI `Co-authored-by`, no
+  tool-generated session links or signature lines (e.g. `Claude-Session:`,
+  `Generated with ...`). Write the code with whatever tool you like — what
+  enters git history stays human-only.
+
 ## Pull request
 
 小修正可以直接開 PR。功能或行為變更請先開 issue，討論好方向再動手。PR
@@ -59,7 +101,16 @@ npm run check && npm run build && npm test
 標題遵循 Conventional Commits，因為它會成為 squash-merge 後的 commit
 message。
 
-## 個人資料
+Small fixes can go straight to a PR. For features or behavior changes,
+open an issue first and settle the direction before writing code. The PR
+form asks for a description, the type of change, and how it was tested;
+visual changes need before/after screenshots. The PR title follows
+Conventional Commits because it becomes the commit message after
+squash-merge.
+
+<a id="個人資料"></a>
+
+## 個人資料 / Personal data
 
 這個範本內建的示範內容是刻意假造的（見 `src/data/life.ts`），確保範本
 維護者的個人資訊不會外流到你的 fork 裡。請不要在 `src/`、`public/`、
@@ -67,8 +118,19 @@ message。
 真實姓名、雇主／組織關係、電話號碼、政府或帳號 ID，或是真人社群／遊戲
 帳號的連結。
 
+The demo content shipped with this template is deliberately fictional
+(see `src/data/life.ts`), so the maintainer's personal information never
+leaks into your fork. Do not add real names, employer/organization ties,
+phone numbers, government or account IDs, or links to real personal
+social/gaming profiles anywhere under `src/`, `public/`, `.github/`,
+`package.json`, or `astro.config.mjs`.
+
 以下是這項檢查的簡化、可直接執行版本（能抓到不小心留下的真實社群連結；
 維護者審查時還會額外檢查幾個沒有列在這裡的專屬識別資訊）：
+
+A simplified, runnable version of that check (it catches accidentally
+kept real social links; the maintainer's review additionally covers a few
+identifiers not listed here):
 
 ```bash
 grep -rniE "steamcommunity|gravatar|instagram|facebook" src/ public/ .github/ package.json astro.config.mjs
@@ -78,14 +140,24 @@ grep -rniE "steamcommunity|gravatar|instagram|facebook" src/ public/ .github/ pa
 `public/vendor/tocas/tocas.min.css` 裡的圖示 class 名稱），絕不能是真實
 的個人頁面連結。
 
-## `.mdx` 內容的信任層級
+Anything the grep matches should be a vendor/generic reference (like icon
+class names inside `public/vendor/tocas/tocas.min.css`), never a link to
+a real personal page.
+
+## `.mdx` 內容的信任層級 / Trust level of `.mdx` content
 
 部落格文章可以是 `.md` 或 `.mdx`。跟 `.md` 不同，`.mdx` 檔案在建置時會
 以 JavaScript/JSX 執行，所以新增或修改 `.mdx` 檔案的 PR，需要跟原始碼
 變更一樣的程式碼層級審查，不能只當內容改動略讀過去。（這個範本的示範
 文章刻意全部使用 `.md`。）
 
-## 視覺檢查
+Blog posts can be `.md` or `.mdx`. Unlike `.md`, an `.mdx` file executes
+as JavaScript/JSX at build time, so a PR that adds or changes `.mdx`
+files needs the same code-level review as a source change — never skim it
+as a content edit. (This template's own demo posts deliberately use `.md`
+only.)
+
+## 視覺檢查 / Visual check
 
 ```bash
 npm run build && npm run preview
@@ -93,3 +165,7 @@ npm run build && npm run preview
 
 打開印出來的本機網址，檢查你改動到的頁面：亮色＋暗色主題都看一遍，
 如果動到介面字串，兩種語言都要看。
+
+Open the printed local URL and check the pages you touched: look at both
+the light and dark themes, and if you changed any UI string, check both
+languages.
