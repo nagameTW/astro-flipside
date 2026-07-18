@@ -9,10 +9,13 @@
 // anything into the Vite graph when the flag is off.
 //
 // The script tag below is a sibling of the conditional section markup, not
-// nested inside it, and always renders; `if (!g) return;` is the actual
-// on/off switch. That's safe because Astro wraps every define:vars script
-// body in an IIFE (confirmed against built dist output), so the guard runs
-// in real function scope. The previous shape — the script tag nested inside
+// nested inside it, and always renders; the mount-element check is the
+// actual on/off switch. No define:vars: the v7 compiler drops a define:vars
+// script's other attributes — including the data-astro-rerun this script
+// needs — so the giscus config rides on #giscus's data attribute instead,
+// and the bare block scopes the consts (nothing wraps the script anymore,
+// and a re-run redeclaring a top-level `const` would throw). The previous
+// shape — the script tag nested inside
 // `{g && (...)}`, plus a stray literal mention of the tag name earlier in
 // this very comment block — made Vite's cold-start dependency scan (a
 // regex-based pass over the raw file text, not a real parse) misidentify
@@ -33,44 +36,51 @@ const g = SITE.features.giscus;
 {
   g && (
     <section class="comments has-top-spaced">
-      <div id="giscus" />
+      <div id="giscus" data-giscus={JSON.stringify(g)} />
     </section>
   )
 }
-{/* data-astro-rerun: each ClientRouter navigation swaps in a fresh empty
+{
+  /* data-astro-rerun: each ClientRouter navigation swaps in a fresh empty
     #giscus mount, so the embed must re-inject per visit — without the
-    attribute an inline script runs only once per session. */}
-<script is:inline data-astro-rerun define:vars={{ g }}>
-  if (!g) return;
-  const dark = () =>
-    document.documentElement.classList.contains("is-dark") ||
-    (!document.documentElement.classList.contains("is-light") &&
-      matchMedia("(prefers-color-scheme: dark)").matches);
-  const s = document.createElement("script");
-  s.src = "https://giscus.app/client.js";
-  s.dataset.repo = g.repo;
-  s.dataset.repoId = g.repoId;
-  s.dataset.category = g.category;
-  s.dataset.categoryId = g.categoryId;
-  s.dataset.mapping = "pathname";
-  s.dataset.reactionsEnabled = "1";
-  s.dataset.inputPosition = "bottom";
-  s.dataset.lang = document.documentElement.lang;
-  s.dataset.theme = dark() ? "dark" : "light";
-  s.crossOrigin = "anonymous";
-  s.async = true;
-  document.getElementById("giscus").appendChild(s);
-  // The script re-runs per navigation now — register the theme bridge
-  // once; it looks the current iframe up at event time.
-  if (!window.__giscusThemeBound) {
-    window.__giscusThemeBound = true;
-    window.addEventListener("themechange", () => {
-      document
-        .querySelector("iframe.giscus-frame")
-        ?.contentWindow?.postMessage(
-          { giscus: { setConfig: { theme: dark() ? "dark" : "light" } } },
-          "https://giscus.app",
-        );
-    });
+    attribute an inline script runs only once per session. */
+}
+<script is:inline data-astro-rerun>
+  {
+    const mount = document.getElementById("giscus");
+    if (mount) {
+      const g = JSON.parse(mount.dataset.giscus);
+      const dark = () =>
+        document.documentElement.classList.contains("is-dark") ||
+        (!document.documentElement.classList.contains("is-light") &&
+          matchMedia("(prefers-color-scheme: dark)").matches);
+      const s = document.createElement("script");
+      s.src = "https://giscus.app/client.js";
+      s.dataset.repo = g.repo;
+      s.dataset.repoId = g.repoId;
+      s.dataset.category = g.category;
+      s.dataset.categoryId = g.categoryId;
+      s.dataset.mapping = "pathname";
+      s.dataset.reactionsEnabled = "1";
+      s.dataset.inputPosition = "bottom";
+      s.dataset.lang = document.documentElement.lang;
+      s.dataset.theme = dark() ? "dark" : "light";
+      s.crossOrigin = "anonymous";
+      s.async = true;
+      mount.appendChild(s);
+      // The script re-runs per navigation now — register the theme bridge
+      // once; it looks the current iframe up at event time.
+      if (!window.__giscusThemeBound) {
+        window.__giscusThemeBound = true;
+        window.addEventListener("themechange", () => {
+          document
+            .querySelector("iframe.giscus-frame")
+            ?.contentWindow?.postMessage(
+              { giscus: { setConfig: { theme: dark() ? "dark" : "light" } } },
+              "https://giscus.app",
+            );
+        });
+      }
+    }
   }
 </script>

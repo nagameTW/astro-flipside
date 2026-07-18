@@ -1,5 +1,6 @@
 import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 
 // A calendar date. QUOTE dates in frontmatter (pubDate: "2026-07-13", as the
 // demo posts do): a quoted value reaches this schema as a string and is
@@ -15,7 +16,7 @@ const calendarDate = z.union([z.string(), z.date()]).transform((v, ctx) => {
   const d = v instanceof Date ? v : new Date(v);
   if (Number.isNaN(d.getTime())) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: `not a valid date: ${JSON.stringify(v)}`,
     });
     return z.NEVER;
@@ -30,7 +31,7 @@ const calendarDate = z.union([z.string(), z.date()]).transform((v, ctx) => {
       d.getUTCDate() !== +ymd[3])
   ) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: `not a real calendar date: ${v}`,
     });
     return z.NEVER;

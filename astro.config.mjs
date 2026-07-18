@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import expressiveCode from "astro-expressive-code";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import mdx from "@astrojs/mdx";
@@ -206,28 +207,34 @@ export default defineConfig({
   site: resolvedSite,
   base: resolvedBase,
   markdown: {
-    // GFM footnotes ship an English sr-only "Footnotes" heading — localize
-    // it. The ↩ back-reference link is hidden entirely in global.css
-    // (owner: redundant on posts this short).
-    remarkRehype: {
-      footnoteLabel: t["post.footnotesLabel"],
-    },
-    // remarkMermaid goes first: it must turn ```mermaid fences into a raw
-    // <div> before expressive-code's own remark-time processing sees them.
-    remarkPlugins: [
-      ...(SITE.features.mermaid ? [remarkMermaid] : []),
-      remarkReadingTime,
-      ...(SITE.features.math ? [remarkMath] : []),
-    ],
-    rehypePlugins: [
-      // rehypeSlug alone: heading ids for the TOC's deep links, without
-      // the hover "#" anchor a rehype-autolink-headings setup would add
-      // (owner removed it 2026-07-12).
-      rehypeSlug,
-      // Names GFM task-list checkboxes so they pass the a11y label check.
-      [rehypeTaskListA11y, t["post.taskLabel"]],
-      ...(SITE.features.math ? [rehypeKatex] : []),
-    ],
+    // Astro 7's default Markdown processor (Sätteri) has no remark/rehype
+    // pipeline; unified() opts back into the remark-based processor the
+    // plugins below require. The top-level remarkPlugins/rehypePlugins/
+    // remarkRehype options are deprecated — they live inside unified() now.
+    processor: unified({
+      // GFM footnotes ship an English sr-only "Footnotes" heading — localize
+      // it. The ↩ back-reference link is hidden entirely in global.css
+      // (owner: redundant on posts this short).
+      remarkRehype: {
+        footnoteLabel: t["post.footnotesLabel"],
+      },
+      // remarkMermaid goes first: it must turn ```mermaid fences into a raw
+      // <div> before expressive-code's own remark-time processing sees them.
+      remarkPlugins: [
+        ...(SITE.features.mermaid ? [remarkMermaid] : []),
+        remarkReadingTime,
+        ...(SITE.features.math ? [remarkMath] : []),
+      ],
+      rehypePlugins: [
+        // rehypeSlug alone: heading ids for the TOC's deep links, without
+        // the hover "#" anchor a rehype-autolink-headings setup would add
+        // (owner removed it 2026-07-12).
+        rehypeSlug,
+        // Names GFM task-list checkboxes so they pass the a11y label check.
+        [rehypeTaskListA11y, t["post.taskLabel"]],
+        ...(SITE.features.math ? [rehypeKatex] : []),
+      ],
+    }),
   },
   integrations: [
     // Must precede mdx() so it can claim ```fenced blocks before MDX's own
