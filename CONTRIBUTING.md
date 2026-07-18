@@ -17,10 +17,9 @@ npm run dev
 npm run check && npm run build && npm test
 ```
 
-`npm audit` 可能還是會列出 `astro`／`esbuild` 的安全性建議：要清掉這些
-需要一次會破壞相容性的大版本升級，所以刻意留給日後有計畫的升級處理，
-而不是直接 `--force`。這些都只影響建置工具本身（範本輸出的靜態網站不
-受影響），而且 dependabot 已經每週追蹤（`.github/dependabot.yml`）。
+`npm audit` 目前應該回報 0 筆問題（Astro 7 升級後已清空）。若有新的
+安全性建議，dependabot 每週會追蹤（`.github/dependabot.yml`）；只影響
+建置工具的項目可以等例行更新，不要用 `--force` 硬升。
 
 ## 專案地圖
 
