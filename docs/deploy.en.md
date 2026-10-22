@@ -2,7 +2,7 @@
 
 ## GitHub Pages
 
-On every push to `main`, `.github/workflows/deploy.yml` runs `npm run check && npm run build`. Then it publishes with the native GitHub Pages Actions deploy. The first time, open **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
+On every push to `main`, `.github/workflows/deploy.yml` runs `npm run check && npm run build`. Then it publishes with the native GitHub Pages Actions deploy (`actions/deploy-pages`). The first time, open **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
 
 The first two fields at the top of `src/config.ts` must match how you publish. The first field is the URL. The second field is `base` (the sub-path).
 

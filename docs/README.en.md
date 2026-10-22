@@ -8,13 +8,12 @@
   <p><a href="../README.md">繁體中文</a> | <a href="README.en.md">English</a></p>
 </div>
 
-Flipside is an Astro template for a personal web page and blog. The page has two faces, Work and Life. A visitor flips between them to know one person from two sides.
+Flipside is an [Astro](https://astro.build/) template for a personal web page and blog. The page has two faces, Work and Life. A visitor flips between them to see one person from two sides.
 
-The interface language is zh-TW by default, and en is also available. The layout handles zh-TW text well. The output is static files. It has posts, projects, a photo gallery, tags, RSS and full-text search built in. You can deploy it to GitHub Pages, Vercel and other hosts. The template grew out of the author's own website. The demo content is fictional. Try the [live demo](https://astro-flipside.vercel.app/).
+The interface language is zh-TW by default. English is also available. The layout handles zh-TW text well. The output is static files. It has posts, projects, a photo gallery, tags, RSS and full-text search built in. You can deploy it to GitHub Pages, Vercel and other hosts. The template grew out of the author's own website. The demo content is fictional. See the [live demo](https://astro-flipside.vercel.app/).
 
-It uses these packages:
+It also uses these packages:
 
-- [Astro](https://astro.build/): the static-output web framework
 - [Tocas UI](https://tocas-ui.com/): a UI framework designed for zh-TW text
 - [Expressive Code](https://expressive-code.com/): code blocks
 - [Pagefind](https://pagefind.app/): static full-text search
@@ -71,13 +70,14 @@ Open **Settings → Pages** in the repo. Set **Source** to **GitHub Actions**. Y
 ```bash
 git add -A
 git commit -m "first deploy"
-git push        # Actions builds and deploys; it is live in about a minute
+git push        # Actions builds and deploys. It is live in about a minute.
 ```
 
 Every push to `main` deploys again. If the page has no styles or images, check `base`.
 
 ## Documents
 
+- [About Flipside](about.en.md): the idea behind it
 - [Adding content](adding-content.en.md): posts, projects, photos
 - [Deploy](deploy.en.md): GitHub Pages and Vercel settings, other hosts
 - [CONTRIBUTING.md](../CONTRIBUTING.md): development setup and conventions
@@ -114,8 +114,10 @@ The default is `"zh-TW"`. For English, set `locale` to `"en"` in `src/config.ts`
 │   └── config.ts      # ← the one source of settings
 ├── plugins/           # Build-time remark and rehype plugins, with unit tests
 ├── docs/
+│   ├── about.en.md           # About Flipside
 │   ├── adding-content.en.md  # Add posts, projects, photos
 │   ├── deploy.en.md          # Deploy settings
+│   ├── *.md                  # zh-TW versions of the documents
 │   └── README.en.md          # This file
 ├── CONTRIBUTING.md    # How to contribute
 └── SECURITY.md        # Security policy
@@ -125,7 +127,7 @@ The arrows mark what you edit to set up a new website.
 
 ## Contributing
 
-Issues and PRs are welcome. Use the [issue forms](../../../issues/new/choose) for bug reports and feature requests. You can open a PR for a small fix. For a larger change, open an issue first to agree on the direction. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+Issues and PRs are welcome. Use the [issue forms](../../../issues/new/choose) for bug reports and feature requests. Open a PR for a small fix. For a larger change, open an issue first to agree on the direction. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## License
 

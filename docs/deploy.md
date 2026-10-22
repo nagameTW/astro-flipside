@@ -2,7 +2,7 @@
 
 ## GitHub Pages
 
-`.github/workflows/deploy.yml` 在每次推送到 `main` 時執行 `npm run check && npm run build`，再用 GitHub Pages 原生的 Actions 發布。第一次使用時，到 **Settings → Pages → Build and deployment**，將 **Source** 設為 **GitHub Actions**。
+`.github/workflows/deploy.yml` 在每次推送到 `main` 時執行 `npm run check && npm run build`，再用 GitHub Pages 原生的 Actions 發布（`actions/deploy-pages`）。第一次使用時，到 **Settings → Pages → Build and deployment**，將 **Source** 設為 **GitHub Actions**。
 
 `src/config.ts` 最上方的兩個欄位要符合發布方式。第一欄是網址，第二欄是 `base`（子路徑）。
 

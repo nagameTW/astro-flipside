@@ -8,13 +8,12 @@
   <p><a href="README.md">繁體中文</a> | <a href="docs/README.en.md">English</a></p>
 </div>
 
-Flipside 是 Astro 的個人網頁與部落格範本。網頁有 Work 與 Life 兩個面向，訪客可以切換，從不同角度認識同一個人。
+Flipside 是 [Astro](https://astro.build/) 的個人網頁與部落格範本。網頁有 Work 與 Life 兩個面向，訪客可以切換，從不同角度認識同一個人。
 
-介面預設為繁體中文，也提供英文，排版對中文友善。輸出為靜態檔案，內建文章、專案、相簿、標籤、RSS 與全文搜尋，可部署到 GitHub Pages、Vercel 等平台。範本源自作者的個人網站，示範內容為虛構。可以先看[線上示範](https://astro-flipside.vercel.app/)。
+介面預設為繁體中文，也提供英文，排版對中文友善。輸出為靜態檔案，內建文章、專案、相簿、標籤、RSS 與全文搜尋，可部署到 GitHub Pages、Vercel 等平台。範本源自作者的個人網站，示範內容為虛構。可以先瀏覽[線上示範](https://astro-flipside.vercel.app/)。
 
-使用的套件：
+另使用以下套件：
 
-- [Astro](https://astro.build/)：靜態輸出的網站框架
 - [Tocas UI](https://tocas-ui.com/)：為中文設計的 UI 框架
 - [Expressive Code](https://expressive-code.com/)：程式碼區塊
 - [Pagefind](https://pagefind.app/)：純靜態全文搜尋
@@ -38,7 +37,7 @@ Flipside 是 Astro 的個人網頁與部落格範本。網頁有 Work 與 Life �
 
 ## 快速開始
 
-**1. 建立你的 repo**
+**1. 建立 repo**
 
 選取 GitHub 頁面上方的 **Use this template**，或執行：
 
@@ -78,6 +77,7 @@ git push        # Actions 自動建置，約一分鐘後上線
 
 ## 文件
 
+- [關於 Flipside](docs/about.md)：設計理念
 - [新增內容](docs/adding-content.md)：文章、專案、相簿
 - [部署](docs/deploy.md)：GitHub Pages 與 Vercel 的設定，其他平台
 - [CONTRIBUTING.md](CONTRIBUTING.md)：開發環境與慣例
@@ -114,8 +114,10 @@ git push        # Actions 自動建置，約一分鐘後上線
 │   └── config.ts      # ← 網站設定的唯一來源
 ├── plugins/           # 建置期 remark 與 rehype 外掛，附單元測試
 ├── docs/
-│   ├── adding-content.md  # 新增文章、專案、相片
+│   ├── about.md           # 關於 Flipside
+│   ├── adding-content.md  # 新增文章、專案、相簿
 │   ├── deploy.md          # 部署設定
+│   ├── *.en.md            # 各文件的英文版
 │   └── README.en.md       # English README
 ├── CONTRIBUTING.md    # 如何貢獻
 └── SECURITY.md        # 安全政策
@@ -125,7 +127,7 @@ git push        # Actions 自動建置，約一分鐘後上線
 
 ## 參與貢獻
 
-歡迎 issue 與 PR。回報問題與功能建議請用 [issue 表單](../../issues/new/choose)。小修正可以直接開 PR。大改動請先開 issue 討論方向。詳見 [CONTRIBUTING.md](CONTRIBUTING.md)。
+歡迎 issue 與 PR。回報問題與功能建議請用 [issue 表單](../../issues/new/choose)。小修正可以開 PR。大改動請先開 issue 討論方向。詳見 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 授權
 

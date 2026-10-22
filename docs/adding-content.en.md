@@ -18,7 +18,7 @@ title: "Post title"
 description: "Summary for the list and search results" # optional
 pubDate: "2026-07-13"
 updatedDate: "2026-07-20" # optional
-heroImage: "./cover.jpg" # optional; post hero and list thumbnail
+heroImage: "./cover.jpg" # optional. Post hero and list thumbnail
 tags: ["life", "music"] # optional
 draft: true # drafts show in dev only and are left out of the build
 ---
@@ -40,7 +40,7 @@ Add an entry to `PROJECTS` in `src/data/projects.ts`:
   description: "One line on what it is.",
   tech: ["Astro", "TypeScript"],       // shown as tech tags
   url: "https://github.com/you/repo",  // the whole block links here
-  img: cover,                          // optional; an image imported at the top of the file, or an https URL
+  img: cover,                          // optional. An image imported at the top of the file, or an https URL
 },
 ```
 
