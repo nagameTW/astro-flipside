@@ -55,7 +55,7 @@ npm run dev     # 開啟 http://localhost:4321，存檔後即時更新
 
 **3. 設定網址**
 
-編輯 `src/config.ts` 最上方的兩個欄位。第一欄填網址，例如 `https://<帳號>.github.io`。第二欄 `base` 填 repo 子路徑。若 repo 名稱為 `<帳號>.github.io`，`base` 留空字串。
+編輯 `src/config.ts` 最上方的兩個欄位。`site` 填網址，例如 `https://<帳號>.github.io`。`base` 填 repo 子路徑。若 repo 名稱為 `<帳號>.github.io`，`base` 留空字串。
 
 ```ts
 base: "/my-flipside",

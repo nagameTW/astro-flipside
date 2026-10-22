@@ -55,7 +55,7 @@ npm run dev     # opens http://localhost:4321 and reloads when you save
 
 **3. Set your URL**
 
-Edit the first two fields at the top of `src/config.ts`. In the first field, write your URL, for example `https://<user>.github.io`. In the second field, `base`, write the repo sub-path. If the repo is named `<user>.github.io`, leave `base` as an empty string.
+Edit the first two fields at the top of `src/config.ts`. In `site`, write your URL, for example `https://<user>.github.io`. In `base`, write the repo sub-path. If the repo is named `<user>.github.io`, leave `base` as an empty string.
 
 ```ts
 base: "/my-flipside",
